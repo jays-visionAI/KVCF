@@ -1,0 +1,30 @@
+/* Align the visible RGBA logo mark to the same left gutter as the hero copy. */
+.site-modern header .logo .header-brand-mark{width:214px}
+.site-modern header .logo .header-brand-mark img{left:-20px}
+@media(max-width:1200px){
+  .site-modern header .logo .header-brand-mark{width:180px}
+  .site-modern header .logo .header-brand-mark img{left:-17px}
+}
+@media(max-width:900px){
+  .site-modern header .logo .header-brand-mark{width:154px}
+  .site-modern header .logo .header-brand-mark img{left:-15px}
+}
+@media(max-width:380px){
+  .site-modern header .logo .header-brand-mark{width:138px}
+  .site-modern header .logo .header-brand-mark img{left:-13px}
+}
+/* Place the black colour field in the upper hero; the registered colours still animate. */
+.site-modern #p-home .nh-hero{
+  background-image:linear-gradient(
+    180deg,
+    #0c1425 0%,
+    #0c1425 4%,
+    var(--kvcf-flow-dark) 20%,
+    var(--kvcf-flow-teal) 44%,
+    color-mix(in srgb,var(--kvcf-flow-blue) 82%,#07101b) 65%,
+    color-mix(in srgb,var(--kvcf-flow-light) 45%,#07101b) 73%,
+    #0a1722 83%,
+    #050b13 92%,
+    #010308 100%
+  );
+}

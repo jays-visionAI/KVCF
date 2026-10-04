@@ -1,0 +1,42 @@
+{
+  "host": "kvcf",
+  "domain": "kvcf.example.com",
+  "branch": "main",
+  "build_command": "npm run build",
+  "output_dir": "out",
+  "description": "한국바이브클럽름협회(KVCF) 공식 포털",
+  "framework": "next-static",
+  "node_version": "20",
+  "headers": {
+      "/_next/static/**": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      },
+      "/assets/**": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      },
+      "/index.html": {
+        "Cache-Control": "public, max-age=0, must-revalidate"
+      },
+      "/*.html": {
+        "Cache-Control": "public, max-age=0, must-revalidate"
+      },
+      "/*.css": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      },
+      "/*.js": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+  },
+  "spa_fallback": "index.html",
+  "clean_urls": true,
+  "trailing_slash": "always",
+  "redirects": [
+    { "from": "/home", "to": "/" },
+    { "from": "/index.html", "to": "/" }
+  ],
+  "environment": {
+    "NEXT_PUBLIC_FORGEDB_URL": "https://forgedb.cloud",
+    "NEXT_PUBLIC_FORGEDB_PROJECT_ID": "kvcf",
+    "NEXT_PUBLIC_SITE_DOMAIN": "kvcf.example.com"
+  }
+}

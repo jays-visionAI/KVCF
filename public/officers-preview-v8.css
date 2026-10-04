@@ -1,0 +1,17 @@
+/* Larger two-column officer profiles; the honorary chair remains off the reporting chart. */
+.site-modern #p-org .offgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.site-modern #p-org .off{min-width:0;padding:28px;text-align:center}
+.site-modern #p-org .oav{width:176px;height:176px;margin:0 auto 18px;font-size:0}
+.site-modern #p-org .oav svg{width:82px;height:82px;color:#53719f}
+.site-modern #p-org .oav.photo-av img{width:100%;height:100%;object-fit:cover;object-position:center 28%}
+.site-modern #p-org .oname{font-size:22px;line-height:1.4}
+.site-modern #p-org .orole{font-size:16px}
+.site-modern #p-org .oaff{font-size:15px;color:#536176}
+.site-modern #p-org .off.chair-feature{grid-column:1/-1;display:grid;grid-template-columns:176px minmax(0,1fr);grid-template-rows:repeat(3,auto);column-gap:26px;justify-content:start;align-content:center;text-align:left}
+.site-modern #p-org .off.chair-feature .oav{grid-column:1;grid-row:1/4;margin:0}
+.site-modern #p-org .off.chair-feature :is(.oname,.orole,.oaff){grid-column:2}
+@media(max-width:650px){
+  .site-modern #p-org .offgrid{grid-template-columns:1fr;gap:16px}
+  .site-modern #p-org .off.chair-feature{grid-column:auto;display:block;text-align:center}
+  .site-modern #p-org .off.chair-feature .oav{margin:0 auto 18px}
+}

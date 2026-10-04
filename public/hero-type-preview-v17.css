@@ -1,0 +1,37 @@
+/* v17: restore the federation-approved heading and improve small hero labels. */
+.site-modern #p-home #bHeroTitle em {
+  white-space: normal;
+}
+.site-modern #p-home .nh-art-label text {
+  font-size: 22px;
+  letter-spacing: 1px;
+}
+.site-modern #p-home .nh-status,
+.site-modern #p-home .nh-art-bottom {
+  font-size: 14.4px;
+  line-height: 1.65;
+}
+.site-modern #p-home .nh-status { color: #e0eafa; }
+.site-modern #p-home .nh-art-bottom {
+  color: #d9e8fb;
+  gap: 8px;
+  white-space: nowrap;
+}
+.site-modern .util > .w {
+  color: #e8f1ff;
+  font-size: 13px;
+}
+.site-modern .util > .w > span:first-child {
+  color: #e8f1ff;
+  font-size: 12.5px;
+}
+.site-modern .util a {
+  color: #e8f1ff;
+  font-size: 13px;
+}
+@media (max-width: 500px) {
+  .site-modern #p-home .nh-status,
+  .site-modern #p-home .nh-art-bottom { font-size: 13.2px; }
+  .site-modern #p-home .nh-art-bottom { padding-left: 0; gap: 6px; }
+  .site-modern .util a { font-size: 12.5px; }
+}

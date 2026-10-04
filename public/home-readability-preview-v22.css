@@ -1,0 +1,101 @@
+/* v22: readable hierarchy and description contrast throughout the home page. */
+.site-modern #p-home .nh-section .nh-kicker {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: .9px;
+  color: #365b99;
+}
+.site-modern #p-home .nh-section .nh-heading p {
+  font-size: 17px;
+  line-height: 1.8;
+  color: #48566b;
+}
+.site-modern #p-home .nh-section .nh-textlink,
+.site-modern #p-home .nh-path-link {
+  font-size: 17px;
+  font-weight: 700;
+  color: #2754a7;
+}
+.site-modern #p-home .nh-learning-steps .nh-step-no {
+  font-size: 38px;
+  font-weight: 600;
+  color: #5876a8;
+}
+.site-modern #p-home .nh-learning-steps .nh-step-meta {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: .1px;
+  color: #385c96;
+}
+.site-modern #p-home .nh-learning-steps h3 {
+  font-size: 24px;
+  color: #202e45;
+}
+.site-modern #p-home .nh-learning-steps p {
+  font-size: 17px;
+  line-height: 1.8;
+  color: #4a586d;
+}
+.site-modern #p-home .nh-path .nh-index {
+  font-size: 15px;
+  font-weight: 700;
+  color: #365b98;
+}
+.site-modern #p-home .nh-path h3 { color: #202e45; }
+.site-modern #p-home .nh-path p {
+  font-size: 17px;
+  line-height: 1.8;
+  color: #4b586d;
+}
+.site-modern #p-home .nh-cert .tier p,
+.site-modern #p-home .nh-consult p {
+  font-size: 17px;
+  line-height: 1.8;
+  color: #4b586d;
+}
+.site-modern #p-home .nh-cert .nh-cert-focus { color: #304763; }
+.site-modern #p-home #bHeroDesc { color: #e4ebf6; }
+.site-modern #p-home .nh-forge p { color: #c9d4e6; }
+.site-modern #p-home .nh-forge-footer > a {
+  font-size: 16px;
+  color: #b1c8ff;
+}
+
+/* Restore the light-blue membership invitation above the dark footer. */
+.site-modern .ctaband {
+  background: #e6f0ff;
+  color: #172c4d;
+}
+.site-modern .ctaband h2 { color: #172c4d; }
+.site-modern .ctaband p {
+  font-size: 17px;
+  color: #405877;
+}
+.site-modern .ctaband .membership-benefits-link {
+  border-color: #8da9d1;
+  color: #244c86;
+  font-size: 16px;
+  font-weight: 700;
+}
+.site-modern .ctaband .membership-benefits-link span { color: #315fbd; }
+.site-modern .ctaband .membership-benefits-link:hover {
+  background: #d8e8ff;
+  border-color: #6085bd;
+  color: #1c417d;
+}
+@media (max-width: 700px) {
+  .site-modern #p-home .nh-section .nh-kicker,
+  .site-modern #p-home .nh-learning-steps .nh-step-meta,
+  .site-modern #p-home .nh-path .nh-index { font-size: 14px; }
+  .site-modern #p-home .nh-learning-steps .nh-step-no { font-size: 32px; }
+  .site-modern #p-home .nh-section .nh-heading p,
+  .site-modern #p-home .nh-learning-steps p,
+  .site-modern #p-home .nh-path p,
+  .site-modern #p-home .nh-cert .tier p,
+  .site-modern #p-home .nh-consult p { font-size: 16px; }
+  .site-modern #p-home .nh-section .nh-textlink,
+  .site-modern #p-home .nh-path-link { font-size: 16px; }
+  .site-modern .ctaband p { font-size: 16px; }
+}

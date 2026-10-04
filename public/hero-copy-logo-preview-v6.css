@@ -1,0 +1,42 @@
+/* Requested hero copy colours and the supplied header logo, cropped in CSS. */
+.site-modern #p-home #bHeroTitle {
+  color: #f5f7fa;
+}
+.site-modern #p-home #bHeroTitle em {
+  color: #7faeff;
+  font-size: clamp(22px, 3.5vw, 52px);
+  letter-spacing: -.045em;
+  white-space: nowrap;
+}
+.site-modern #p-home #bHeroBadge {
+  color: #dce6f4;
+}
+.site-modern header .logo .header-brand-mark {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 250px;
+  height: 44px;
+  overflow: hidden;
+}
+.site-modern header .logo .header-brand-mark img {
+  position: absolute;
+  top: -17px;
+  left: 0;
+  display: block;
+  width: 250px;
+  height: auto;
+  max-width: none;
+}
+@media (max-width: 1200px) {
+  .site-modern header .logo .header-brand-mark { width: 210px; height: 38px; }
+  .site-modern header .logo .header-brand-mark img { width: 210px; top: -14px; }
+}
+@media (max-width: 900px) {
+  .site-modern header .logo .header-brand-mark { width: 180px; height: 33px; }
+  .site-modern header .logo .header-brand-mark img { width: 180px; top: -12px; }
+}
+@media (max-width: 380px) {
+  .site-modern header .logo .header-brand-mark { width: 160px; height: 30px; }
+  .site-modern header .logo .header-brand-mark img { width: 160px; top: -11px; }
+}

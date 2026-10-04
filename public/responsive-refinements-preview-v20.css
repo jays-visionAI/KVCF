@@ -1,0 +1,67 @@
+/* The motion control belongs to the hero, not the site navigation. */
+.site-modern #p-home .nh-hero > .nh-motion-toggle {
+  position: absolute;
+  right: 3%;
+  bottom: 24px;
+  z-index: 5;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(176, 207, 246, .5);
+  border-radius: 50%;
+  background: rgba(10, 24, 45, .82);
+  color: #e5f0ff;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+}
+
+/* Banner typography is shared by all four rotating messages. */
+.site-modern #p-home .nh-announcement .nh-live {
+  font-size: 18px;
+  font-weight: 700;
+  color: #274d9c;
+}
+.site-modern #p-home .nh-announcement .nh-banner strong {
+  font-size: 18px;
+  font-weight: 700;
+  color: #202f49;
+}
+.site-modern #p-home .nh-announcement #featDate {
+  font-size: 16px;
+  font-weight: 500;
+  color: #394b66;
+}
+
+/* At tablet widths, place the diagram beside its copy in a full-width card. */
+@media (min-width: 801px) and (max-width: 1199px) {
+  .site-modern #p-home .nh-learning-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  .site-modern #p-home .nh-forge {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+    grid-template-rows: auto 1fr;
+    column-gap: 32px;
+    align-items: center;
+  }
+  .site-modern #p-home .nh-forge > .nh-kicker { grid-column: 1 / -1; }
+  .site-modern #p-home .bf-motion-slot {
+    grid-column: 1;
+    grid-row: 2;
+    min-width: 0;
+  }
+  .site-modern #p-home .bf-motion-slot .bf-scene {
+    margin: 0 auto 28px;
+  }
+  .site-modern #p-home .nh-forge-copy {
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 0;
+  }
+}
+@media (max-width: 900px) {
+  .site-modern #p-home .nh-announcement .nh-live { font-size: 16px; }
+  .site-modern #p-home .nh-announcement .nh-banner strong { font-size: 16px; }
+  .site-modern #p-home .nh-announcement #featDate { font-size: 15px; }
+}

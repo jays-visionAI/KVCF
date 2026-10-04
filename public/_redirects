@@ -1,0 +1,10 @@
+# KVCF — hash-based SPA 라우팅 폴백.
+# 정적 호스팅은 파일이 없으면 404 를 돌려주므로, 모든 미존재 경로는
+# 사이트 루트(index.html) 로 폴백시킨다. 이후 클라이언트의 hash 라우터가
+# 올바른 페이지를 그린다.
+
+# 404. page / fallback to home (hash routing)
+# ForgeDB Static Hosting / Netlify 호환 문법.
+
+/404  /  404
+# /*   /index.html  200  ← (배포 환경에 따라 필요 시 추가)

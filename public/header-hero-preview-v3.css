@@ -1,0 +1,30 @@
+/* Preview: remove header dividers and make the shared header more compact. */
+.site-modern .util,
+.site-modern header,
+.site-modern .page:not(#p-home):not(#p-admin) .pagehead {
+  border-bottom: 0;
+}
+.site-modern .util > .w { height: 32px; }
+.site-modern .nav { height: 58px; }
+
+/* Darken the bottom of the hero's existing animated background itself. */
+.site-modern #p-home .nh-hero {
+  background-image: linear-gradient(
+    180deg,
+    #0c1425 0%,
+    #0c1425 18%,
+    var(--kvcf-flow-dark) var(--kvcf-flow-mid),
+    var(--kvcf-flow-teal) 59%,
+    var(--kvcf-flow-blue) 79%,
+    var(--kvcf-flow-light) 89%,
+    #010308 100%
+  );
+}
+
+.site-modern .page:not(#p-home):not(#p-admin) .faqcat { font-size: 18px; }
+
+@media (max-width: 900px) {
+  .site-modern .util > .w { height: 30px; }
+  .site-modern .nav { height: 56px; }
+  .site-modern .nav nav { top: 56px; }
+}

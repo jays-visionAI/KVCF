@@ -1,0 +1,86 @@
+/* v19: keep the existing globe control within the header. */
+.site-modern header .nh-motion-toggle {
+  position: static;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  border: 1px solid #aebfda;
+  border-radius: 50%;
+  background: #f7faff;
+  color: #263a5e;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  cursor: pointer;
+}
+.site-modern header .nh-motion-toggle:hover { background: #eaf1ff; }
+.site-modern:not(.home-modern) header .nh-motion-toggle { display: none; }
+@media (max-width: 900px) {
+  .site-modern header .nh-motion-toggle { margin-left: auto; }
+}
+
+/* Strengthen the certification hierarchy without altering its card layout. */
+.site-modern #p-home .nh-cert .nh-cert-top .g {
+  padding: 3px 10px;
+  line-height: 1.35;
+  font-weight: 800;
+  color: #244c86;
+  background: #eef4ff;
+  border-color: #8fa9d1;
+}
+.site-modern #p-home .nh-cert .nh-cert-top .lv {
+  font-weight: 700;
+  color: #344a6a;
+}
+.site-modern #p-home .nh-cert-hours {
+  border-top: 1px solid #c9d7eb;
+  padding-top: 14px;
+  color: #315fbd;
+  font-weight: 700;
+}
+.site-modern #p-home .nh-cert-hours-note {
+  color: #33425b;
+  font-weight: 700;
+}
+.site-modern #p-home .nh-consult > span {
+  font-size: 16px;
+  font-weight: 700;
+  color: #315fbd;
+}
+.site-modern #p-home .nh-consult h3 { font-size: 20px; }
+
+/* Give the rotating announcement more presence, especially its lead label. */
+.site-modern #p-home .nh-announcement .nh-live {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: .6px;
+}
+.site-modern #p-home .nh-announcement .nh-banner strong {
+  font-size: 18px;
+  line-height: 1.55;
+}
+.site-modern #p-home .nh-announcement #featDate {
+  font-size: 15px;
+  line-height: 1.55;
+  color: #46566d;
+}
+@media (max-width: 900px) {
+  .site-modern #p-home .nh-announcement .nh-live { font-size: 15px; }
+  .site-modern #p-home .nh-announcement .nh-banner strong { font-size: 16px; }
+  .site-modern #p-home .nh-announcement .nh-banner {
+    position: relative;
+    display: block;
+    padding-right: 28px;
+  }
+  .site-modern #p-home .nh-announcement #featDate {
+    display: block;
+    margin-top: 3px;
+    font-size: 14px;
+  }
+  .site-modern #p-home .nh-announcement .nh-banner > b {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}

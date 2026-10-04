@@ -1,0 +1,35 @@
+/* White brand artwork on dark surfaces; blue artwork stays in the white header. */
+/* The existing association photo anchors the login panel. */
+.site-modern #p-login .login .brand {
+  background-image: linear-gradient(rgba(0,0,0,.64),rgba(0,0,0,.72)), url("assets/about/mou.png");
+  background-size: cover;
+  background-position: center;
+}
+.site-modern footer .footer-brand-logo {
+  display: block;
+  width: 280px;
+  max-width: 100%;
+  height: 58px;
+  object-fit: cover;
+  object-position: center;
+}
+.site-modern #p-login .login .brand .lg { justify-content: center; align-self: stretch; margin-bottom: 24px; }
+.site-modern #p-login .login-brand-logo {
+  display: block;
+  width: 360px;
+  max-width: 100%;
+  height: 64px;
+  object-fit: cover;
+  object-position: center;
+}
+@media (max-width: 700px) {
+  .site-modern footer .footer-brand-logo { width: 240px; height: 50px; }
+}
+/* Match account actions to the membership invitation blue. */
+.site-modern header .authbox > .linkbtn { color: #356FAF; }
+.site-modern header .authbox > .cta,
+.site-modern header .mobile-auth > .cta,
+.site-modern #p-login .login .card .b.fill { background: #356FAF; color: #fff; }
+.site-modern #p-login .login .card a[data-r="join"] { color: #356FAF !important; }
+/* A quiet divider belongs to the login view only. */
+body.site-modern:has(#p-login:not([hidden])) header { border-bottom: 1px solid #dbe5f2; }

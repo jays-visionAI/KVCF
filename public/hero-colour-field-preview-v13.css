@@ -1,0 +1,31 @@
+/* One continuous CSS background: broad colour fields blend without straight bands. */
+@property --kvcf-field-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 72%;
+}
+@property --kvcf-field-y {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 74%;
+}
+
+.site-modern #p-home .nh-hero {
+  background-color: #0c1425;
+  background-image:
+    radial-gradient(ellipse 140% 105% at 50% -14%, var(--kvcf-flow-dark) 3%, transparent 74%),
+    radial-gradient(ellipse 122% 110% at var(--kvcf-field-x) var(--kvcf-field-y), color-mix(in srgb, var(--kvcf-flow-blue) 78%, #315f8d) 0%, transparent 78%),
+    radial-gradient(ellipse 110% 105% at calc(100% - var(--kvcf-field-x)) calc(var(--kvcf-field-y) - 26%), color-mix(in srgb, var(--kvcf-flow-teal) 70%, #1c4e55) 0%, transparent 80%),
+    radial-gradient(ellipse 145% 86% at 52% 127%, #010308 3%, transparent 84%);
+  animation: kvcf-root-colour-flow 32s ease-in-out infinite, kvcf-field-drift-v13 32s ease-in-out infinite;
+}
+
+@keyframes kvcf-field-drift-v13 {
+  0%, 100% { --kvcf-field-x: 72%; --kvcf-field-y: 74%; }
+  33% { --kvcf-field-x: 59%; --kvcf-field-y: 83%; }
+  67% { --kvcf-field-x: 79%; --kvcf-field-y: 68%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-modern #p-home .nh-hero { animation: none; }
+}

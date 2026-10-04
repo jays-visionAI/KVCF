@@ -1,0 +1,81 @@
+#p-home .bf-scene{position:relative;aspect-ratio:8/5;margin:14px 0 56px}
+#p-home .bf-video,#p-home .bf-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;mix-blend-mode:normal;background:transparent;pointer-events:none}
+#p-home .bf-poster{display:none}
+#p-home .bf-scene.is-static .bf-video{visibility:hidden}
+#p-home .bf-scene.is-static .bf-poster{display:block}
+#p-home .bf-node{position:absolute;top:2%;left:5.73%;width:34.375%;height:23.34%;padding:0;border:1px solid transparent;border-radius:9px;background:transparent;opacity:0;pointer-events:none;cursor:default;transition:box-shadow .25s,border-color .25s}
+#p-home .bf-node:nth-of-type(2){left:59.90%}
+#p-home .bf-node:nth-of-type(3){top:74.66%}
+#p-home .bf-node:nth-of-type(4){top:74.66%;left:59.90%}
+#p-home .bf-scene.is-system .bf-node{opacity:1;pointer-events:auto}
+#p-home .bf-node:is(:hover,:focus-visible,.is-active){border-color:#9fdbff;box-shadow:0 0 20px #71bfff55;outline:none}
+#p-home .bf-caption{position:absolute;top:calc(100% + 8px);left:0;right:0;margin:0;color:#b7cae4;text-align:center;font-size:13px;line-height:1.6;min-height:42px}
+@media(prefers-reduced-motion:reduce){#p-home .bf-node{transition:none}}
+
+/* Restore the outer card layout; only the five AE module labels are centered. */
+#p-home .nh-forge>.nh-kicker{font-size:14px;line-height:1.5;letter-spacing:.4px}
+#p-home .nh-forge-copy>p{white-space:nowrap;font-size:clamp(12px,1.05vw,16px);line-height:1.7}
+#p-home .nh-forge .bf-caption{font-size:14px;line-height:1.5}
+@media(max-width:700px){#p-home .nh-forge-copy>p{white-space:normal;font-size:14px}#p-home .nh-forge>.nh-kicker{font-size:13px}}
+
+#p-home .nh-forge-copy h3{margin:10px 0 12px;line-height:1.4}
+#p-home .nh-forge-copy>p{margin:0}
+#p-home .nh-forge-copy a{margin-top:18px;padding-top:16px}
+/* Full-width media: no height containment or container-unit shrinkage. */
+#p-home .bf-motion-slot{width:100%;min-width:0;flex:none}
+#p-home .bf-motion-slot .bf-scene{width:100%;aspect-ratio:8/5;margin:-8px auto 14px}
+#p-home .nh-forge{justify-content:flex-start;align-items:stretch}
+#p-home .nh-forge-copy{width:100%;min-width:0;margin-top:auto}
+#p-home .nh-forge-copy h3{margin:12px 0 10px;line-height:1.4}
+#p-home .nh-forge-copy a{margin-top:12px;padding-top:12px}
+@media(min-width:900px){
+ #p-home .nh-forge{padding:22px 28px;align-self:stretch}
+ #p-home .nh-learning-steps{display:grid;grid-template-rows:repeat(3,1fr)}
+ #p-home .nh-learning-steps li{padding:14px 0;align-content:center}
+ #p-home .nh-learning-steps h3{margin:6px 0 8px}
+ #p-home .nh-learning-steps p{margin:0;line-height:1.6}
+ #p-home .nh-learning-steps .nh-step-time{margin-top:10px;line-height:1.5}
+}
+
+/* Shared footer: practice notice left, platform link right. */
+#p-home .nh-forge-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:12px;padding-top:12px;border-top:1px solid #ffffff26}
+#p-home .nh-forge-footer>p{margin:0;font-size:14px;line-height:1.7;word-break:keep-all}
+#p-home .nh-forge-footer>a{flex:none;display:inline-flex;justify-content:flex-end;gap:10px;margin:0;padding:0;border:0;white-space:nowrap;font-size:14px}
+#p-home .bf-motion-slot .bf-scene{margin-bottom:54px}
+@media(max-width:1200px){#p-home .nh-forge-footer>p{font-size:13px}#p-home .nh-forge-footer>a{font-size:13px}}
+@media(max-width:550px){#p-home .nh-forge-footer{flex-wrap:wrap;gap:10px}#p-home .nh-forge-footer>a{margin-left:auto}}
+
+/* Smaller title, with the previous line-box height retained. */
+#p-home .nh-forge-copy h3{font-size:24px;line-height:37.8px;min-height:75.6px;letter-spacing:-.7px}
+@media(max-width:1000px){#p-home .nh-forge-copy h3{font-size:22px;line-height:33.6px;min-height:67.2px}}
+
+/* v75: quiet navy surface and restrained active-state lighting. */
+#p-home.nh-scroll-scene .nh-forge{
+ background:radial-gradient(ellipse at 78% 8%,rgba(92,133,184,.13),transparent 58%),linear-gradient(155deg,rgba(25,40,63,.97),rgba(13,23,41,.97));
+ box-shadow:inset 0 1px 0 rgba(204,224,255,.12),inset 0 0 0 1px rgba(175,203,241,.07),0 8px 28px rgba(17,35,64,.06);
+}
+#p-home .bf-node{border-width:1px;transition:border-color .35s ease,box-shadow .35s ease}
+#p-home .bf-node:is(:hover,:focus-visible,.is-active){border-color:rgba(170,216,246,.8);box-shadow:0 0 14px rgba(113,191,255,.15),inset 0 0 12px rgba(113,191,255,.035)}
+#p-home .bf-node:focus-visible{outline:2px solid #c2e8ff;outline-offset:3px}
+#p-home .nh-forge>.nh-kicker{color:#a8bad2;letter-spacing:.7px}
+#p-home .nh-forge .bf-caption{color:#bdcce0}
+#p-home .nh-forge-footer{border-top-color:rgba(203,220,246,.14)}
+#p-home .nh-forge-footer>a{font-weight:500;color:#d5e2f3;transition:color .25s ease}
+#p-home .nh-forge-footer>a:hover{color:#fff}
+@media(prefers-reduced-motion:reduce){#p-home .bf-node,#p-home .nh-forge-footer>a{transition:none}}
+
+/* v78: BlueForge official palette — #050505 canvas, #4B7BF5 accent. */
+#p-home.nh-scroll-scene .nh-forge{
+ background:linear-gradient(155deg,#0b0b0b,#050505 72%);
+ box-shadow:inset 0 1px 0 #ffffff0c,inset 0 0 0 1px #ffffff08;
+ color:#e5e5e5;
+}
+#p-home .nh-forge>.nh-kicker{color:#8a8a8a}
+#p-home .nh-forge .nh-forge-name{color:#4b7bf5}
+#p-home .nh-forge-copy h3{color:#f0f0f0}
+#p-home .nh-forge .bf-caption,#p-home .nh-forge-footer>p{color:#a3a3a3}
+#p-home .nh-forge p strong{color:#e5e5e5}
+#p-home .nh-forge-footer{border-top-color:#242424}
+#p-home .nh-forge-footer>a{color:#7da1ff}
+#p-home .nh-forge-footer>a:hover{color:#a7bfff}
+#p-home .bf-node:is(:hover,:focus-visible,.is-active){border-color:#4b7bf5;box-shadow:0 0 14px #4b7bf526,inset 0 0 12px #4b7bf50a}

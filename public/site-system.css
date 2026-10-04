@@ -1,0 +1,462 @@
+/* Shared public-site chrome and spacing. Admin remains separate. */
+body.site-modern{--page-gutter:64px;--page-max:1360px;background:#fff;color:#161b27}
+.site-modern .util{display:block;position:static;background:#0c1425;border-bottom:1px solid #ffffff10}
+.site-modern .util>.w{max-width:var(--page-max);padding:0 var(--page-gutter);height:38px;font-size:12px;color:#a9bad2;gap:24px}
+.site-modern .util>.w>span:first-child{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;white-space:nowrap}
+.site-modern .util>.w>span:last-child{display:flex;align-items:center;gap:24px}
+.site-modern .util a{margin:0;color:#9aacc6;white-space:nowrap;transition:color .15s}
+.site-modern .util a:hover,.site-modern .util a:focus-visible{color:#e3edff}
+.site-modern header{background:#0c1425;color:#fff;border-bottom:1px solid #ffffff16;backdrop-filter:blur(16px)}
+.site-modern header>.w{max-width:var(--page-max);padding:0 var(--page-gutter)}
+.site-modern .nav{height:70px;gap:24px}
+.site-modern .logo{font-size:18px;letter-spacing:-.8px;white-space:nowrap}
+.site-modern .logo .d{border-radius:50%;background:#4678ff;width:32px;height:32px}
+.site-modern .nav nav{gap:22px;font-size:15px}
+.site-modern .nav nav>a,.site-modern .hasmenu>a,.site-modern .linkbtn,.site-modern .burger{color:#d7dfed}
+.site-modern .submenu a{color:#26334d}
+.site-modern .hasmenu:focus-within .submenu{display:flex}
+.site-modern .cta{display:inline-flex;align-items:center;justify-content:center;height:36px;line-height:1;padding:0 16px;font-size:13px;background:#fff;color:#152039;border-radius:6px}
+.site-modern .authbox{white-space:nowrap}
+.site-modern .linkbtn{font-size:14px;line-height:1.4;min-height:36px}
+.site-modern .ctaband{background:#0c1425;color:#fff;padding:48px 0}
+.site-modern .ctaband .in{background:transparent;border:0;padding:0}
+.site-modern .ctaband h2{font-size:32px;letter-spacing:-1px;font-weight:700;color:#fff}
+.site-modern .ctaband p{color:#94a4be;font-size:13px}
+.site-modern .ctaband .b{border-radius:5px;background:#4779ff}
+.site-modern footer{background:#102a47;color:#8b9bb5;border-top:1px solid #ffffff18}
+.site-modern footer .fgov{display:none}
+.site-modern footer .fl{color:#d8e2f5}
+.site-modern footer .fcols{padding-top:20px}
+.site-modern footer nav a{color:#8b9bb5}
+.site-modern footer .legal{border-top-color:#ffffff15;color:#7d8da7}
+.site-modern footer .footer-business>span+span::before{content:" · "}
+.site-modern .ctaband>.w,.site-modern footer>.w{max-width:var(--page-max);padding-left:var(--page-gutter);padding-right:var(--page-gutter)}
+@media(min-width:901px) and (max-width:1200px){
+.site-modern header>.w{padding:0 var(--page-gutter)}
+.site-modern .nav{gap:15px}
+.site-modern .nav nav{gap:12px;font-size:14px}
+.site-modern .logo{font-size:15px}
+.site-modern .logo .d{width:27px;height:27px}
+.site-modern .authbox{gap:8px}
+}
+@media(max-width:900px){
+.site-modern header>.w{padding:0 var(--page-gutter)}
+.site-modern .nav{height:64px;gap:14px}
+.site-modern .nav nav{top:64px;background:#0c1425}
+.site-modern .submenu{background:transparent}
+.site-modern .submenu a{color:#a7bad8}
+.site-modern .authbox{margin-left:auto}
+.site-modern .authbox>.cta{display:none}
+.site-modern .ctaband>.w,.site-modern footer>.w{padding-left:var(--page-gutter);padding-right:var(--page-gutter)}
+.site-modern .ctaband h2{font-size:26px}
+.site-modern .ctaband .in{gap:26px}
+}
+@media(max-width:380px){
+.site-modern .logo{font-size:14px}
+.site-modern header>.w{padding:0 var(--page-gutter)}
+.site-modern .logo .d{width:26px;height:26px}
+}
+@media(max-width:1200px){
+.site-modern .util>.w{padding-left:var(--page-gutter);padding-right:var(--page-gutter)}
+}
+@media(max-width:900px){
+.site-modern .util>.w{height:34px;justify-content:center}
+.site-modern .util>.w>span:first-child{display:none}
+.site-modern .util>.w>span:last-child{justify-content:center;gap:16px}
+.site-modern .util a{font-size:12px}
+}
+@media(max-width:380px){
+.site-modern .util>.w{padding-left:var(--page-gutter);padding-right:var(--page-gutter)}
+.site-modern .util>.w>span:last-child{width:100%;justify-content:center;gap:10px}
+}
+@media(max-width:1200px){
+body.site-modern{--page-gutter:40px}
+}
+@media(max-width:900px){
+body.site-modern{--page-gutter:28px}
+}
+@media(max-width:380px){
+body.site-modern{--page-gutter:22px}
+}
+
+/* Public design tokens. All routes receive these before the first paint. */
+body.site-modern{--blue:#3f6fe5;--navy:#101e36;--ink:#17243b;--sub:#536176;--faint:#68778b;--line:#dfe6f0;--soft:#f5f7fb;font-size:16px;line-height:1.75}
+.site-modern .w{max-width:var(--page-max);padding-left:var(--page-gutter);padding-right:var(--page-gutter)}
+.site-modern .nav{line-height:1.5}.site-modern .nav nav a.on{color:#9ebeff}.site-modern .submenu a.on{color:#315fbd}
+.site-modern .authbox .who,.site-modern .authbox .who b{color:#dce6f7}
+.site-modern header .submenu{border-radius:8px;padding:8px;box-shadow:0 12px 32px #08152b24}
+.site-modern .util{line-height:1.5}
+.site-modern .b{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:11px 20px;border-radius:6px;font-size:15px;line-height:1.4}
+.site-modern .b.sm{min-height:38px;font-size:14px;padding:9px 16px}
+.site-modern .b.line{background:#fff;border-color:#cbd7ea;color:#315691}
+.site-modern .b.fill:hover{background:#315dc8}
+.site-modern :is(a,button,input,textarea,select,summary):focus-visible{outline:2px solid #5387ef;outline-offset:4px}
+.site-modern footer :is(.fcontact,.legal){font-size:14px;line-height:1.9}
+.site-modern footer :is(.fcontact b,.fcols .fl span){font-size:12px}
+.site-modern footer nav a{font-size:14px}
+.site-modern .ctaband p{font-size:15px;line-height:1.85}
+/* Subpage headings, sections and reading hierarchy. */
+.site-modern .page:not(#p-home):not(#p-admin) .pagehead{background:linear-gradient(120deg,#f1f5fd,#fafbfd);border-bottom:1px solid var(--line)}
+.site-modern .pagehead .w{padding-top:56px;padding-bottom:48px}
+.site-modern .pagehead .crumb{font-size:12px;color:#607ba7;letter-spacing:1px;margin-bottom:20px}
+.site-modern .pagehead h1{font-size:clamp(32px,3.2vw,44px);font-weight:700;letter-spacing:-1.6px;line-height:1.35}
+.site-modern .pagehead p{font-size:16px;max-width:800px;line-height:1.85;margin-top:20px;color:#5b6b81}
+.site-modern .page:not(#p-home):not(#p-admin) .sec{padding:72px 0}
+.site-modern .page:not(#p-home):not(#p-admin) :is(.h2,.sech h2){font-size:30px;line-height:1.45;font-weight:700;letter-spacing:-1px}
+.site-modern :is(.lbl,.faqcat){font-size:12px;letter-spacing:1.2px;color:#5876a4}
+.site-modern :is(.lead,.card2 p,.efb p,.faq p,.tl .ev,.certblock .desc,.terms p,.terms li){font-size:16px;line-height:1.85;color:var(--sub)}
+.site-modern :is(.g2,.g3,.g4){gap:24px;align-items:start}
+.site-modern .card2{border-color:#e0e7f1;border-radius:10px;padding:28px;box-shadow:0 4px 20px #17315704}
+.site-modern .card2 h3{font-size:21px;line-height:1.5;font-weight:700;letter-spacing:-.5px}
+.site-modern .note{font-size:14px;line-height:1.8;color:#67758a}
+.site-modern :is(.terms,.article){max-width:900px}
+.site-modern .terms h3{font-size:22px;line-height:1.5;margin-top:32px}
+.site-modern .terms li{margin-left:20px;padding-left:4px}
+/* Education, qualifications and staff information. */
+.site-modern .tier{border:1px solid var(--line);border-radius:10px;padding:28px;box-shadow:0 4px 22px #17315704}
+.site-modern .tier h3{font-size:26px;font-weight:700}.site-modern .tier p{font-size:15px;line-height:1.85}
+.site-modern .tier :is(.lv,.hr){font-size:14px}.site-modern .tier .g{font-size:13px;border-radius:4px}
+.site-modern .consult{border:1px solid #cbd9ef;border-radius:10px;padding:28px;background:#f7f9fd}
+.site-modern .consult p{font-size:15px;line-height:1.85}.site-modern .consult h3{font-size:22px}
+.site-modern .efb{padding:28px;border-radius:10px;border-top:3px solid #7b9bd6}
+.site-modern .efb .n{font-size:12px;background:transparent;padding:0}.site-modern .efb h4{font-size:22px;font-weight:700;margin:18px 0 12px}
+.site-modern .efb .hr{font-size:13px;margin-top:24px}
+.site-modern .pf{background:linear-gradient(120deg,#10213d,#213c6a);border:0;border-radius:10px;padding:32px}
+.site-modern .pf .l{font-size:12px;color:#acbdd7}.site-modern .pf .t{font-size:18px;line-height:1.8}.site-modern .pf button{font-size:14px;min-height:44px;border-radius:6px}
+.site-modern .certblock{padding:32px;border-radius:10px;border-color:#dbe3ef}
+.site-modern .certblock h2{font-size:28px;font-weight:700}.site-modern .certblock .lv{font-size:14px}
+.site-modern .spec .it{padding:20px;border-radius:6px}.site-modern .spec .it .k{font-size:12px}.site-modern .spec .it .v{font-size:16px}
+.site-modern .legalbox{border-radius:8px;padding:24px;background:#f5f7fb}
+.site-modern .legalbox .r{font-size:15px;line-height:1.8}.site-modern .legalbox .warn{font-size:14px;line-height:1.8}
+.site-modern :is(.st,.tag2){font-size:12px}.site-modern .off{border-radius:10px;padding:26px}.site-modern .orole{font-size:14px}.site-modern .oaff{font-size:14px;line-height:1.7}
+.site-modern .tl{border-left:1px solid #cbd8ee}.site-modern .tl li{padding:0 0 36px 32px}.site-modern .tl .yr{font-size:15px}
+/* Tables retain their data and scroll inside the content boundary. */
+.site-modern .table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;border-top:1px solid #b6c6de;margin-top:20px}
+.site-modern .ptable{font-size:15px;line-height:1.8}.site-modern .ptable th,.site-modern .ptable td{padding:18px 16px}
+.site-modern .ptable thead th{font-size:14px;font-weight:600;color:#506783;border-bottom:1px solid #cbd8eb;background:#f4f7fc}
+/* News lists, resources and article reading. */
+.site-modern .ntabs{gap:8px;flex-wrap:wrap}.site-modern .ntabs a{font-size:14px;border-radius:6px;padding:10px 18px}
+.site-modern .listhead{margin-bottom:24px}.site-modern .cnt2{font-size:14px}
+.site-modern .page:not(#p-home) .brow{grid-template-columns:80px minmax(0,1fr) 100px;padding:24px 8px;border-radius:0;gap:20px}
+.site-modern .page:not(#p-home) .brow .tt{font-size:16px;white-space:normal;line-height:1.7}
+.site-modern .brow :is(.k,.d){font-size:13px}
+.site-modern .prow{padding:24px 8px;border-radius:0;grid-template-columns:minmax(0,1fr) 175px 65px}
+.site-modern .prow .t{font-size:16px;line-height:1.7}.site-modern .prow :is(.m,a.go){font-size:13px}
+.site-modern .doc{padding:26px;border-radius:8px}.site-modern .doc .t{font-size:17px}.site-modern .doc .t small{font-size:14px;line-height:1.7}.site-modern .doc .dl{font-size:14px}
+.site-modern .ahead h1{font-size:32px;line-height:1.5;font-weight:700}.site-modern :is(.ameta,.adate,.anav){font-size:14px}
+.site-modern .abody{font-size:16px;line-height:1.95}.site-modern .article .abody p{font-size:16px;line-height:1.95}
+.site-modern .pcard{border-radius:10px}.site-modern .pcard .bd{padding:22px}.site-modern .pcard h4{font-size:18px}.site-modern .pcard :is(.tag,.dt){font-size:13px}
+.site-modern .faq summary{font-size:17px;padding:6px 0;line-height:1.7}.site-modern .faq details{padding:22px 0}
+#p-faq .faq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:42px 48px;align-items:start}
+#p-faq .faq-group{min-width:0}
+#p-faq .faq-group .faqcat{margin-top:0}
+@media(max-width:1000px){#p-faq .faq-grid{grid-template-columns:minmax(0,1fr);gap:36px}}
+/* Forms and member screens. */
+.site-modern .form{max-width:640px;gap:22px}.site-modern .form label{font-size:15px}
+.site-modern .form :is(input,textarea,select){font-size:16px;line-height:1.6;border:1px solid #cbd6e6;border-radius:6px;padding:13px 15px;min-height:48px;background:#fff;color:var(--ink)}
+.site-modern .agree{padding:20px;border-radius:8px}.site-modern .agree label{font-size:14px;line-height:1.8}
+.site-modern .form input[type=checkbox],.site-modern .agree input[type=checkbox]{width:18px;height:18px;min-height:0;flex:0 0 18px;margin-top:4px;accent-color:#3f6fe5}
+.site-modern .vbox{max-width:640px;border-radius:10px}.site-modern .vbox .vh{padding:20px 24px;font-size:13px}.site-modern .vbox .vb{padding:28px 24px}
+.site-modern .vf input{min-width:0;font-size:16px;border-radius:6px}.site-modern .vf button{min-height:48px;border-radius:6px;font-size:15px}
+.site-modern .vrow{font-size:15px}.site-modern .vresult .sample{font-size:13px;line-height:1.8;overflow-wrap:anywhere}
+.site-modern .login{min-height:calc(100vh - 108px)}.site-modern .login .brand{background:linear-gradient(135deg,#101e36,#1d3865);padding:64px var(--page-gutter)}
+.site-modern .login .brand li,.site-modern .login .sub{font-size:16px;line-height:1.85}.site-modern .login .card{max-width:440px}.site-modern .login h1{font-size:32px;font-weight:700}
+.site-modern .login .hint{font-size:13px;line-height:1.8}
+.site-modern :is(.kpi,.panel2){border-radius:10px;padding:26px}.site-modern .kpi .l{font-size:15px}.site-modern .kpi .s{font-size:13px}
+.site-modern .certrow .info .t{font-size:16px}.site-modern .certrow .info .d{font-size:14px}
+@media(max-width:900px){
+ .site-modern .pagehead .w{padding-top:40px;padding-bottom:36px}.site-modern .pagehead h1{font-size:32px}.site-modern .pagehead p{font-size:15px}
+ .site-modern .page:not(#p-home):not(#p-admin) .sec{padding:48px 0}
+ .site-modern .g2,.site-modern .g3,.site-modern .g4{gap:24px}
+ .site-modern .ptable{min-width:560px}.site-modern .pagehead .acts{margin-top:22px}
+ .site-modern .spec{grid-template-columns:repeat(2,minmax(0,1fr))}.site-modern .certblock{padding:24px}
+ .site-modern .nav nav>a,.site-modern .hasmenu>a{padding-left:var(--page-gutter);padding-right:var(--page-gutter)}
+ .site-modern .submenu a.on{color:#a9c5ff}
+ .site-modern .fcontact{gap:24px}.site-modern .ctaband .in{align-items:flex-start}
+}
+@media(max-width:600px){
+.site-modern footer .footer-business{margin-top:12px;color:#c1cee2;line-height:1.8}
+.site-modern footer .footer-business>span{display:block}
+.site-modern footer .footer-business>span+span::before{content:none}
+ .site-modern .page:not(#p-home) .brow{grid-template-columns:62px minmax(0,1fr);gap:8px 14px;padding:22px 0}.site-modern .brow .d{grid-column:2;text-align:left}
+ .site-modern .prow{grid-template-columns:minmax(0,1fr) 54px;gap:10px}.site-modern .prow .m{grid-row:2;text-align:left;white-space:normal}.site-modern .prow a.go{grid-column:2;grid-row:1}
+ .site-modern .legalbox .r{flex-direction:column;gap:4px}.site-modern .legalbox .k{flex-basis:auto}
+ .site-modern .vf .rowf{flex-direction:column}.site-modern .spec{gap:10px}.site-modern .spec .it{padding:14px}
+ .site-modern .login .panel{padding:40px var(--page-gutter)}.site-modern .certrow{grid-template-columns:70px minmax(0,1fr);gap:12px}
+ .site-modern .ahead h1{font-size:26px}.site-modern .card2{padding:24px}.site-modern .ntabs a{padding:8px 12px}
+}
+
+/* v89: membership information CTA, distinct from header sign-up. */
+.site-modern .ctaband .membership-benefits-link{display:inline-flex;align-items:center;justify-content:center;gap:28px;padding:13px 22px;border:1px solid #788aa6;border-radius:7px;background:transparent;color:#f1f5fc;font-size:15px;line-height:1.5;font-weight:500;text-decoration:none;cursor:pointer;transition:background .2s,border-color .2s}
+.site-modern .ctaband .membership-benefits-link:hover{background:#ffffff0a;border-color:#b5c7e3;color:#fff}
+.site-modern .ctaband .membership-benefits-link:focus-visible{outline:2px solid #a7c7ff;outline-offset:4px}
+.site-modern .ctaband .membership-benefits-link span{font-size:19px;font-weight:400;color:#bed0eb}
+@media(prefers-reduced-motion:reduce){.site-modern .ctaband .membership-benefits-link{transition:none}}
+
+/* v94: equal business-card heights, with no clipped descriptions. */
+.site-modern #p-about .about-business-grid{align-items:stretch;grid-auto-rows:1fr}
+.site-modern #p-about .about-business-grid>.card2{height:100%;box-sizing:border-box}
+
+/* v95: the chair's letter and the association's commitments are separate. */
+.site-modern #p-greeting .greeting-task-grid{align-items:stretch;grid-auto-rows:1fr}
+.site-modern #p-greeting .greeting-task-grid>.card2{height:100%;box-sizing:border-box}
+
+/* v96: reference-led organization chart with complete branch connectors. */
+.site-modern #p-org .org-chart-viewport{overflow-x:auto;padding:12px 0 4px}
+.site-modern #p-org .org-chart-viewport:focus-visible{outline:2px solid #97b5e7;outline-offset:4px}
+.site-modern #p-org .chart{--org-line:#bcc9de;min-width:900px;padding:12px 4px;box-sizing:border-box}
+.site-modern #p-org .crow1{width:100%;flex-direction:row;gap:0}
+.site-modern #p-org .cnode{box-sizing:border-box;border:0;border-radius:12px;box-shadow:none;letter-spacing:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;padding:18px 16px;font-weight:600}
+.site-modern #p-org .cnode b{font-size:22px;line-height:1.4;font-weight:700}
+.site-modern #p-org .cnode .org-en{font-size:11px;line-height:1.5;letter-spacing:1.5px;font-weight:500;color:#b9c9e4;margin:0}
+.site-modern #p-org .cnode.chief,.site-modern #p-org .cnode.senior{width:280px;min-height:92px;background:#14254e;color:#fff}
+.site-modern #p-org .cnode.audit{position:absolute;right:0;top:16px;width:220px;min-height:86px;background:#e9edf3;color:#14254e}
+.site-modern #p-org .cnode.audit .org-en{color:#58657b}
+.site-modern #p-org .cline{width:1px;height:36px;flex:none;background:var(--org-line)}
+.site-modern #p-org .vps,.site-modern #p-org .bureaus{position:relative;width:100%;display:grid;gap:24px;margin:0;padding-top:40px;isolation:isolate}
+.site-modern #p-org .vps{grid-template-columns:repeat(4,1fr)}
+.site-modern #p-org .bureaus{grid-template-columns:repeat(5,1fr)}
+.site-modern #p-org .vps::before,.site-modern #p-org .bureaus::before{content:"";position:absolute;top:0;height:1px;background:var(--org-line)}
+.site-modern #p-org .vps::before{left:calc((100% - 72px)/8);right:calc((100% - 72px)/8)}
+.site-modern #p-org .bureaus::before{left:calc((100% - 96px)/10);right:calc((100% - 96px)/10)}
+.site-modern #p-org .vps::after{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:var(--org-line);z-index:-1}
+.site-modern #p-org .cnode.vp{position:relative;min-height:92px;background:#0d193b;color:#fff;box-shadow:none}
+.site-modern #p-org .cnode.vp::before,.site-modern #p-org .bur::before{content:"";position:absolute;left:50%;top:-40px;height:40px;width:1px;background:var(--org-line)}
+.site-modern #p-org .cnode.vp span{font-size:13px;color:#b9c9e4;margin:0;line-height:1.5}
+.site-modern #p-org .cnode.sg{width:280px;min-height:76px;background:#f0f3f8;color:#26364e}
+.site-modern #p-org .cnode.sg .org-en{color:#68778d}
+.site-modern #p-org .bur{position:relative;overflow:visible;box-shadow:none;border:1px solid #dce3ed;border-radius:11px;background:#fff}
+.site-modern #p-org .bur .bh3{background:transparent;color:#14254e;font-size:18px;font-weight:700;line-height:1.5;padding:14px 8px;border-bottom:2px solid #a9b7cf}
+.site-modern #p-org .bur ul{padding:12px 8px 16px;text-align:center}
+.site-modern #p-org .bur li{padding:4px 0;font-size:14px;line-height:1.6;color:#485568}
+.site-modern #p-org .bur li::before{display:none}
+
+/* v97: narrower VP tier, uniform column centres and distinct leadership colours. */
+.site-modern #p-org .vps{width:92%;grid-template-columns:repeat(4,minmax(0,1fr))}
+.site-modern #p-org .bureaus{grid-template-columns:repeat(5,minmax(0,1fr))}
+.site-modern #p-org .bur{min-width:0}
+.site-modern #p-org .cnode.vp::before,.site-modern #p-org .bur::before,.site-modern #p-org .vps::after{transform:translateX(-50%)}
+.site-modern #p-org .bureaus::after{content:"";position:absolute;left:50%;top:0;width:1px;height:40px;background:var(--org-line);transform:translateX(-50%)}
+.site-modern #p-org .bur:nth-child(3)::before{display:none}
+.site-modern #p-org .cnode.chief{background:#0d193b}
+.site-modern #p-org .cnode.senior{background:#203d69}
+.site-modern #p-org .cnode.vp{background:#34577c}
+.site-modern #p-org .cnode.vp span{color:#e0eaf5}
+
+/* v99: fluid tablet chart; mobile sibling groups stack on a shared side spine. */
+.site-modern #p-org .org-chart-viewport{width:100%;max-width:100%;min-width:0;box-sizing:border-box;overflow-x:visible}
+.site-modern #p-org .chart{width:100%;min-width:0}
+@media(min-width:701px) and (max-width:1100px){
+ .site-modern #p-org .vps,.site-modern #p-org .bureaus{gap:12px}
+ .site-modern #p-org .vps::before{left:calc((100% - 36px)/8);right:calc((100% - 36px)/8)}
+ .site-modern #p-org .bureaus::before{left:calc((100% - 48px)/10);right:calc((100% - 48px)/10)}
+ .site-modern #p-org .cnode.chief,.site-modern #p-org .cnode.senior,.site-modern #p-org .cnode.sg{width:34%}
+ .site-modern #p-org .cnode.audit{width:25%;padding:14px 8px}
+ .site-modern #p-org .cnode b{font-size:19px}
+ .site-modern #p-org .cnode .org-en{font-size:10px;letter-spacing:.6px}
+ .site-modern #p-org .cnode.vp{padding:16px 6px}
+ .site-modern #p-org .cnode.vp span{font-size:12px}
+ .site-modern #p-org .bur .bh3{font-size:15px;padding:12px 3px;letter-spacing:-.6px}
+ .site-modern #p-org .bur ul{padding:10px 4px}
+ .site-modern #p-org .bur li{font-size:12px;overflow-wrap:anywhere}
+}
+@media(max-width:700px){
+ .site-modern #p-org .chart{padding:8px 0}
+ .site-modern #p-org .crow1{flex-direction:column;gap:0}
+ .site-modern #p-org .cnode.chief,.site-modern #p-org .cnode.senior,.site-modern #p-org .cnode.sg{width:calc(100% - 56px);max-width:340px;min-height:80px}
+ .site-modern #p-org .cnode.audit{position:static;order:-1;align-self:flex-end;width:150px;min-height:68px;margin-bottom:24px;padding:12px}
+ .site-modern #p-org .cnode.audit b{font-size:18px}
+ .site-modern #p-org .cline{height:28px}
+ .site-modern #p-org .vps,.site-modern #p-org .bureaus{width:100%;grid-template-columns:minmax(0,1fr);gap:12px;padding:24px 0 24px 28px;box-sizing:border-box}
+ .site-modern #p-org .vps::before,.site-modern #p-org .bureaus::before{top:0;left:8px;right:50%;height:1px}
+ .site-modern #p-org .vps::after,.site-modern #p-org .bureaus::after{top:0;bottom:0;left:8px;width:1px;height:auto;transform:none;z-index:-1}
+ .site-modern #p-org .vps{background:linear-gradient(var(--org-line),var(--org-line)) 8px bottom / calc(50% - 8px) 1px no-repeat}
+ .site-modern #p-org .cnode.vp{min-height:76px;padding:14px 16px}
+ .site-modern #p-org .cnode.vp::before,.site-modern #p-org .bur::before,.site-modern #p-org .bur:nth-child(3)::before{display:block;left:-20px;top:50%;width:20px;height:1px;transform:none}
+ .site-modern #p-org .bur .bh3{font-size:18px;padding:12px}
+ .site-modern #p-org .bur ul{padding:8px 12px 12px}
+}
+
+/* v100: mobile bureau spine terminates at the last card's centre. */
+@media(max-width:700px){
+ .site-modern #p-org .bureaus::after{height:24px;bottom:auto}
+ .site-modern #p-org .bureaus>.bur::after{content:"";position:absolute;left:-21px;top:-13px;bottom:-13px;width:1px;background:var(--org-line)}
+ .site-modern #p-org .bureaus>.bur:first-child::after{top:-25px}
+ .site-modern #p-org .bureaus>.bur:last-child::after{bottom:50%}
+ .site-modern #p-org .bureaus>.bur::before{left:-21px;width:21px}
+}
+
+/* v101: application action belongs to the instructor section, not one card. */
+.site-modern #p-org .instructor-cards{align-items:stretch}
+.site-modern #p-org .instructor-actions{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:20px;flex-wrap:wrap}
+.site-modern #p-org .instructor-actions .note{margin:0}
+.site-modern #p-org .instructor-actions .b{margin-left:auto}
+
+/* v102: chronological story with compact, title-aligned milestone cards. */
+.site-modern #p-history .history-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:48px;align-items:start}
+.site-modern #p-history .history-media{width:100%;max-width:460px;justify-self:end;display:grid;gap:20px}
+.site-modern #p-history .history-media figure{margin:0;overflow:hidden;border-radius:14px}
+.site-modern #p-history .history-founding{position:relative;isolation:isolate;aspect-ratio:16/11;background:radial-gradient(ellipse at 7% 14%,#8091bb50,transparent 33%),radial-gradient(ellipse at 93% 93%,#96b6ff60,transparent 42%),linear-gradient(135deg,#14254e,#2855b1);display:flex;flex-direction:column;align-items:center;padding:22px 18px 18px;color:white}
+.site-modern #p-history .history-card-date{font:10px 'IBM Plex Mono',monospace;letter-spacing:3px;color:#dae5ff}
+.site-modern #p-history .founding-document{position:relative;width:82%;margin:auto;transform:rotate(-5deg);border:1px solid #ffffffaa;border-radius:10px;background:#f5f7fd;color:#162a53;box-shadow:-12px 10px 0 #dbe6ff45,0 12px 26px #050d2933}
+.site-modern #p-history .founding-document-bar{padding:9px 8px;border-radius:9px 9px 0 0;background:#14254e;color:#dfe8ff;text-align:center;font-size:10px;letter-spacing:2px}
+.site-modern #p-history .founding-document-body{padding:14px 20px}
+.site-modern #p-history .founding-brand{font-size:10px;font-weight:600;letter-spacing:2px;color:#5879b7}
+.site-modern #p-history .founding-document h3{font-size:clamp(18px,1.8vw,24px);line-height:1.45;margin:6px 0 8px;letter-spacing:-.5px}
+.site-modern #p-history .founding-document p{font-size:12px;line-height:1.6;color:#5c6e8b}
+.site-modern #p-history .founding-document-foot{border-top:1px solid #dbe2ee;margin-top:10px;padding-top:8px;font-size:10px;color:#536888}
+.site-modern #p-history .history-founding figcaption{font-size:11px;line-height:1.6;letter-spacing:.2px;margin-top:12px;text-align:center}
+.site-modern #p-history .history-mou{background:#fff;border:1px solid #e0e7f1}
+.site-modern #p-history .history-mou img{display:block;width:100%;aspect-ratio:16/9;height:auto;object-fit:cover;object-position:center top}
+.site-modern #p-history .history-mou figcaption{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 18px;font-size:13px;line-height:1.6;color:#263b58}
+.site-modern #p-history .history-mou figcaption span{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#667998}
+@media(prefers-reduced-motion:no-preference){
+ .site-modern #p-history .tl.history-ready li{opacity:0;transform:translateY(14px)}
+ .site-modern #p-history .tl.history-visible li{animation:history-step-in .7s cubic-bezier(.16,1,.3,1) var(--history-delay,0s) both}
+ @keyframes history-step-in{to{opacity:1;transform:translateY(0)}}
+}
+@media(max-width:900px){
+ .site-modern #p-history .history-grid{grid-template-columns:minmax(0,1fr);gap:32px}
+ .site-modern #p-history .history-media{max-width:none;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+ .site-modern #p-history .history-founding{aspect-ratio:auto;min-height:300px}
+}
+@media(max-width:600px){
+ .site-modern #p-history .history-media{grid-template-columns:minmax(0,1fr);max-width:460px;justify-self:center}
+ .site-modern #p-history .history-founding{min-height:320px}
+}
+
+/* v103: the tilted document is the founding card itself. */
+.site-modern #p-history .history-founding{display:block;aspect-ratio:auto;min-height:0;padding:0;background:#f5f7fd;color:#162a53;border:1px solid #dbe2ee;border-radius:12px;transform:rotate(-2deg);transform-origin:center center;box-shadow:-5px 6px 0 #e5ebf5,0 12px 26px #15295112;margin:8px 6px 10px}
+.site-modern #p-history .founding-document{width:100%;margin:0;transform:none;border:0;border-radius:0;background:transparent;box-shadow:none}
+.site-modern #p-history .founding-document-bar{padding:15px 18px;border-radius:0;font-size:11px}
+.site-modern #p-history .founding-document-body{padding:24px 28px 0}
+.site-modern #p-history .history-card-date{color:#6b7d99;font-size:11px;letter-spacing:2px;margin-bottom:20px}
+.site-modern #p-history .founding-brand{font-size:12px}
+.site-modern #p-history .founding-document h3{font-size:clamp(23px,2.1vw,29px);margin:8px 0 14px}
+.site-modern #p-history .founding-document p{font-size:14px;line-height:1.75}
+.site-modern #p-history .founding-document-foot{font-size:12px;margin-top:20px;padding-top:14px}
+.site-modern #p-history .history-founding figcaption{color:#667998;font-size:12px;text-align:left;margin:0;padding:10px 28px 24px}
+@media(max-width:600px){.site-modern #p-history .founding-document-body{padding:22px 22px 0}.site-modern #p-history .history-founding figcaption{padding:10px 22px 22px}}
+
+/* v104: straight, compact founding document. */
+.site-modern #p-history .history-founding{transform:none;box-shadow:none;margin:0;min-height:0}
+.site-modern #p-history .founding-document-bar{padding:12px 18px}
+.site-modern #p-history .founding-document-body{padding:18px 22px 0}
+.site-modern #p-history .history-card-date{margin-bottom:12px}
+.site-modern #p-history .founding-document h3{font-size:clamp(20px,1.7vw,24px);line-height:1.4;margin:6px 0 10px;word-break:keep-all}
+.site-modern #p-history .founding-document p{font-size:13px;line-height:1.6;word-break:keep-all}
+.site-modern #p-history .founding-document-foot{margin-top:14px;padding-top:12px}
+.site-modern #p-history .history-founding figcaption{padding:8px 22px 18px}
+
+/* v105: restore a little breathing room without reintroducing tilt. */
+.site-modern #p-history .founding-document-bar{padding:15px 18px}
+.site-modern #p-history .founding-document-body{padding:26px 22px 0}
+.site-modern #p-history .history-card-date{margin-bottom:18px}
+.site-modern #p-history .founding-document h3{margin:8px 0 14px}
+.site-modern #p-history .founding-document-foot{margin-top:20px;padding-top:16px}
+.site-modern #p-history .history-founding figcaption{padding:12px 22px 26px}
+
+/* v106: taller founding card with more vertical breathing room. */
+.site-modern #p-history .founding-document-bar{padding:19px 18px}
+.site-modern #p-history .founding-document-body{padding:40px 22px 0}
+.site-modern #p-history .history-card-date{margin-bottom:26px}
+.site-modern #p-history .founding-document h3{margin:12px 0 20px}
+.site-modern #p-history .founding-document-foot{margin-top:30px;padding-top:22px}
+.site-modern #p-history .history-founding figcaption{padding:18px 22px 40px}
+
+/* v107: readable founding-card typography. */
+.site-modern #p-history .founding-document-bar{font-size:14px;letter-spacing:1.5px}
+.site-modern #p-history .history-card-date{font-size:14px;color:#506481}
+.site-modern #p-history .founding-brand{font-size:15px;color:#3e609c}
+.site-modern #p-history .founding-document h3{font-size:clamp(24px,2vw,28px);line-height:1.45;letter-spacing:-.7px}
+.site-modern #p-history .founding-document p{font-size:16px;line-height:1.75;color:#435774}
+.site-modern #p-history .founding-document-foot{font-size:14px;line-height:1.7;color:#435774}
+.site-modern #p-history .history-founding figcaption{font-size:14px;line-height:1.7;color:#506481}
+
+/* v108: widen both history cards as a shared column. */
+@media(min-width:901px){
+ .site-modern #p-history .history-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:40px}
+ .site-modern #p-history .history-media{max-width:580px}
+}
+@media(max-width:600px){
+ .site-modern #p-history .history-media{max-width:none}
+}
+
+/* v109: align the MOU caption typography and inset with the founding card. */
+.site-modern #p-history .history-mou figcaption{padding:20px 22px;gap:8px 16px;text-align:left;font-size:16px;line-height:1.7;color:#263b58}
+.site-modern #p-history .history-mou figcaption span{font-size:14px;color:#506481}
+.site-modern #p-history .history-mou figcaption strong{font-size:16px;font-weight:600}
+
+/* v110: responsive Google map supplied by the site owner. */
+.site-modern #p-contact .contact-map{width:100%;aspect-ratio:4/3;border:1px solid #dce3ed;border-radius:16px;overflow:hidden;background:#eef2f7}
+.site-modern #p-contact .contact-map iframe{display:block;width:100%;height:100%;border:0}
+/* Prevent wide tables from widening the mobile page grid. */
+.site-modern #p-contact .g2 > div{min-width:0}
+.site-modern #p-join .g2 > *{min-width:0}
+.site-modern #p-inquiry .g2 > *{min-width:0}
+.site-modern #p-apply .g2 > *{min-width:0}
+@media(max-width:600px){
+ .site-modern #p-contact .ptable{min-width:0;width:100%;table-layout:fixed}
+ .site-modern #p-contact .ptable th{width:36%}
+ .site-modern #p-contact .ptable :is(th,td){padding:16px 8px;overflow-wrap:anywhere}
+ .site-modern #p-inquiry .ptable{min-width:0;width:100%;table-layout:fixed}
+ .site-modern #p-inquiry .ptable th{width:36%!important}
+ .site-modern #p-inquiry .ptable :is(th,td){padding:16px 8px;overflow-wrap:anywhere}
+ .site-modern #p-apply .ptable{min-width:0;width:100%;table-layout:fixed}
+ .site-modern #p-apply .ptable th{width:36%!important}
+ .site-modern #p-apply .ptable :is(th,td){padding:16px 8px;overflow-wrap:anywhere}
+}
+
+/* v111: align map top with the office heading below the CONTACT label. */
+@media(min-width:901px){
+ .site-modern #p-contact .contact-map{margin-top:33px}
+}
+
+/* v112: distinguish status information from application actions. */
+.site-modern .certblock .cst{gap:7px;max-width:270px;white-space:normal;text-align:right}
+.site-modern .certblock .cst .st{border:0;background:transparent;padding:0;border-radius:0;font-family:inherit;font-size:14px;color:#57657b}
+.site-modern .cert-status-note{font-size:13px;line-height:1.7;color:#68778b}
+.site-modern .dashboard-demo-note{padding:14px 18px;margin:0 0 22px;border:1px solid #dfe6f0;border-radius:8px;font-size:14px;color:#536176;background:#f5f7fb}
+@media(max-width:600px){.site-modern .certblock .cst{text-align:left;align-items:flex-start;max-width:none}}
+
+/* v113: cumulative qualification hours; course steps show incremental hours. */
+.site-modern #p-home .nh-cert-hours{margin-top:18px;font-size:14px;line-height:1.7;color:#435774}
+
+/* v114: hour guidance belongs to certification, not curriculum steps. */
+.site-modern #p-home .nh-cert-hours-note{margin:20px 0 0;font-size:14px;line-height:1.8;color:#536176}
+
+/* v115: readable partner names and subtitles, scoped to company directory. */
+.site-modern #p-companies .lk{gap:14px;padding:22px;min-width:0}
+.site-modern #p-companies .lk .t{min-width:0;font-size:18px;line-height:1.5;word-break:keep-all;overflow-wrap:anywhere}
+.site-modern #p-companies .lk .t small{font-size:14px;line-height:1.6;color:#536176;margin-top:7px;letter-spacing:.3px}
+.site-modern #p-companies .lk .a{flex-shrink:0;font-size:20px}
+@media(max-width:480px){.site-modern #p-companies .links4{grid-template-columns:1fr}}
+
+/* v116: reserve two title lines and anchor the partner-card arrow. */
+.site-modern #p-companies .links4{align-items:stretch}
+.site-modern #p-companies .lk{position:relative;display:block;padding:22px 22px 54px}
+.site-modern #p-companies .lk .t{display:grid;grid-template-rows:54px auto;align-content:start}
+.site-modern #p-companies .lk .t small{align-self:start;margin-top:7px}
+.site-modern #p-companies .lk .a{position:absolute;right:22px;bottom:18px;line-height:1}
+@media(min-width:901px) and (max-width:1150px){.site-modern #p-companies .links4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* v117: arrow shares the subtitle row, rather than a separate bottom row. */
+.site-modern #p-companies .lk{display:grid;grid-template-columns:minmax(0,1fr) 20px;grid-template-rows:54px auto;column-gap:14px;row-gap:7px;padding:22px}
+.site-modern #p-companies .lk .t{display:contents}
+.site-modern #p-companies .partner-name{grid-column:1 / -1;grid-row:1;font-size:18px;font-weight:700;line-height:1.5;word-break:keep-all}
+.site-modern #p-companies .lk .t small{grid-column:1;grid-row:2;margin:0;align-self:center}
+.site-modern #p-companies .lk .a{position:static;grid-column:2;grid-row:2;align-self:center;justify-self:end;line-height:1}
+
+/* v118: square-ended news tab underline and centered article layout. */
+.site-modern :is(#p-notice,#p-recruit,#p-press,#p-library) .ntabs a{border-radius:0}
+.site-modern #p-noticeview .article{width:100%;max-width:900px;margin-inline:auto;min-width:0}
+
+/* v119: article uses the same full content container as the news list. */
+.site-modern #p-noticeview .article{width:100%;max-width:none;margin:0;min-width:0}
+
+/* Align article list navigation with the right content edge. */
+.site-modern #p-noticeview .article .afoot{justify-content:flex-end}
+
+/* v121: readable previous/next article navigation. */
+.site-modern #p-noticeview .article .anav a{font-size:16px;line-height:1.7;grid-template-columns:80px minmax(0,1fr);padding:18px 16px}
+.site-modern #p-noticeview .article .anav .lb{font-family:inherit;font-size:15px;font-weight:600;color:#536176}

@@ -1,0 +1,16 @@
+/* Anchor the control to the hero content, directly above QUICK ACCESS. */
+.site-modern #p-home .nh-hero-grid > .nh-motion-toggle {
+  position: absolute;
+  right: var(--page-gutter);
+  bottom: 14px;
+  z-index: 5;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(176, 207, 246, .32);
+  border-radius: 50%;
+  background: transparent;
+  color: #e5f0ff;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+}

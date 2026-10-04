@@ -1,0 +1,15 @@
+/* Start the dark transition sooner so the first frame flows into black. */
+.site-modern #p-home .nh-hero {
+  background-image: linear-gradient(
+    180deg,
+    #0c1425 0%,
+    #0c1425 18%,
+    var(--kvcf-flow-dark) var(--kvcf-flow-mid),
+    var(--kvcf-flow-teal) 52%,
+    var(--kvcf-flow-blue) 65%,
+    var(--kvcf-flow-light) 70%,
+    #101e2c 82%,
+    #07101b 92%,
+    #010308 100%
+  );
+}

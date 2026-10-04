@@ -1,0 +1,45 @@
+/* Improve quick-access text contrast without adding a background layer. */
+.site-modern #p-home .nh-service-label {
+  color: #e7eefb;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+.site-modern #p-home .nh-service-links a > span {
+  color: #e1eaf8;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.site-modern #p-home .nh-service-links strong {
+  color: #ffffff;
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+.site-modern #p-home .nh-service-links b {
+  color: #bfd7ff;
+  font-size: 20px;
+  font-weight: 700;
+}
+.site-modern #p-home .nh-service-links a:hover strong,
+.site-modern #p-home .nh-service-links a:focus-visible strong {
+  color: #ffffff;
+}
+.site-modern #p-home .nh-service-links a:hover b,
+.site-modern #p-home .nh-service-links a:focus-visible b {
+  color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .site-modern #p-home .nh-service-links {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+  .site-modern #p-home .nh-service-links a + a {
+    padding-left: 0;
+    padding-top: 18px;
+    border-left: 0;
+    border-top: 1px solid #ffffff40;
+  }
+}

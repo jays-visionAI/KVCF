@@ -1,0 +1,316 @@
+/* Homepage-specific layout and interactive hero. */
+#p-home .nh-wrap{max-width:var(--page-max);padding:0 var(--page-gutter);margin:auto}
+#p-home .nh-hero{background:#0c1425;color:white;overflow:hidden}
+#p-home .nh-hero-grid{display:grid;grid-template-columns:1.2fr 1fr;align-items:center;gap:28px;min-height:596px;padding-top:64px;padding-bottom:14px}
+#p-home .nh-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.7px;color:#a9b9d1;display:flex;align-items:center;gap:10px;margin-bottom:30px}
+#p-home .nh-eyebrow>span{width:6px;height:6px;background:#8ad9cd;border-radius:50%}
+#p-home h1{font-size:clamp(34px,3.7vw,54px);line-height:1.3;letter-spacing:-2.8px;font-weight:700;word-break:keep-all}
+#p-home h1 em{font-style:normal;color:#90b2ff}
+#p-home #bHeroDesc{font-size:14px;line-height:1.95;color:#9faec6;max-width:530px;margin-top:26px;word-break:keep-all}
+#p-home .nh-actions{display:flex;gap:28px;align-items:center;flex-wrap:wrap;margin-top:36px}
+#p-home .nh-btn{display:inline-flex;gap:30px;align-items:center;padding:17px 22px;font-size:13px;font-weight:700;border-radius:5px}
+#p-home .primary{background:#4779ff;color:#fff}
+#p-home .primary:hover{background:#6190ff}
+#p-home .nh-textlink{font-size:13px;font-weight:700;display:inline-block;cursor:pointer}
+#p-home .nh-textlink:hover{color:#4678ff}
+#p-home .nh-status{font-size:10px;color:#8a9ab3;margin-top:27px;letter-spacing:.15px}
+#p-home .nh-art{position:relative;min-width:0}
+#p-home .nh-art svg{width:100%;display:block}
+#p-home .nh-art-label{position:absolute;top:5%;left:8%;font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.8;letter-spacing:1px;color:#c4d6f7}
+#p-home .nh-art-label span{color:#617391}
+#p-home .nh-art-bottom{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1px;color:#71839e;padding:0 8%;gap:16px}
+#p-home .nh-hero-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid #ffffff15;padding-top:24px;padding-bottom:25px;font-size:11px;color:#899ab6}
+#p-home .nh-hero-foot a{color:#c3cde0}
+#p-home .nh-announcement{background:#edf2fa;border-bottom:1px solid #e6ebf2}
+#p-home .nh-announcement>.nh-wrap{display:flex;gap:30px;align-items:center;padding-top:23px;padding-bottom:23px}
+#p-home .nh-live{font-family:'IBM Plex Mono',monospace;color:#315bbb;font-size:10px;letter-spacing:1px;white-space:nowrap}
+#p-home .nh-banner{background:transparent;border:0;display:flex;gap:22px;align-items:center;text-align:left;flex:1;min-width:0;color:#25334d}
+#p-home .nh-banner strong{font-size:13px;word-break:keep-all}
+#p-home #featDate{color:#748199;font-size:11px}
+#p-home .nh-banner>b{margin-left:auto;font-size:20px;font-weight:400}
+#p-home .nh-section{padding:100px 0}
+#p-home .nh-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:42px}
+#p-home .nh-kicker{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.7px;color:#58709c;margin-bottom:19px;display:block}
+#p-home h2{font-size:clamp(28px,3vw,39px);line-height:1.4;font-weight:700;letter-spacing:-1.7px;word-break:keep-all}
+#p-home .nh-heading p{font-size:13px;color:#737d8e;line-height:1.95;word-break:keep-all}
+#p-home .nh-paths{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid #dce1e9;border-bottom:1px solid #dce1e9}
+#p-home .nh-path{padding:35px 30px 25px;cursor:pointer;transition:background .2s}
+#p-home .nh-path:first-child{padding-left:0}
+#p-home .nh-path+.nh-path{border-left:1px solid #e3e7ef}
+#p-home .nh-path:hover{background:#f5f7fb}
+#p-home .nh-index{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5273b4;letter-spacing:1px}
+#p-home .nh-path h3{font-size:25px;line-height:1.45;letter-spacing:-1px;margin:30px 0 20px;font-weight:700}
+#p-home .nh-path p{font-size:13px;line-height:1.9;color:#798293}
+#p-home .nh-path-link{display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-top:36px}
+#p-home .nh-path-link b{font-size:21px;font-weight:400}
+#p-home .nh-cert{background:#f5f7fb}
+#p-home .tiers{gap:18px}
+#p-home .tier{border:0;border-radius:8px;padding:30px;background:white;box-shadow:0 3px 20px #17315704;cursor:pointer}
+#p-home .tier .g{background:#edf2ff;border-radius:4px;color:#3f6acc;font-size:11px;padding:6px 10px}
+#p-home .tier h3{font-size:25px;font-weight:700;margin-top:23px}
+#p-home .tier .lv{font-size:11px;color:#8592a8;margin-top:8px}
+#p-home .tier p{line-height:1.9;min-height:76px;margin-top:20px}
+#p-home .tier .hr{font-size:11px;margin-top:26px;padding-top:17px}
+#p-home .nh-consult{display:flex;gap:25px;align-items:center;margin-top:22px;padding:25px 28px;border:1px solid #dce3ef;border-radius:8px}
+#p-home .nh-consult>span{font-size:10px;color:#5974a5}
+#p-home .nh-consult h3{font-size:17px;letter-spacing:-.5px}
+#p-home .nh-consult p{font-size:12px;color:#7a869b}
+#p-home .nh-consult b{margin-left:auto}
+#p-home .nh-legal{font-size:11px;color:#7e899c;margin-top:18px}
+#p-home .nh-about .nh-textlink{margin-top:22px}
+#p-home .nh-stats{display:grid;grid-template-columns:repeat(4,1fr);padding-top:0;border-top:0;margin-top:0}
+#p-home .nh-about-message{max-width:1100px;margin:68px auto 0;text-align:center;word-break:keep-all}
+#p-home .nh-about-message h2{margin:0;font-size:clamp(36px,3.7vw,56px);line-height:1.28;letter-spacing:.05em}
+#p-home .nh-about-message p{margin-top:36px;color:#40506a;font-size:17px;line-height:1.85}
+#p-home .nh-about-message .nh-about-english{display:block;margin:0 0 28px;color:#315bbb;font-size:clamp(14px,1.3vw,18px);font-weight:700;letter-spacing:.1em;white-space:nowrap}
+#p-home .stat{text-align:left;border-right:0;padding-left:30px;border-left:1px solid #e1e6ed}
+#p-home .stat:first-child{padding-left:0;border-left:0}
+#p-home .stat .n{font-size:58px;font-weight:500;letter-spacing:-3px;color:#172944;line-height:1.1}
+#p-home .stat .l{font-size:12px;margin-top:17px;color:#8190a4}
+#p-home .nh-news{padding-top:0}
+#p-home #bHomeNotice{border-top:1px solid #24334c}
+#p-home .brow{padding:25px 4px;grid-template-columns:85px 1fr 70px;border-bottom:1px solid #e6eaf0;gap:20px}
+#p-home .brow .tt{font-size:15px;font-weight:500}
+#p-home .brow .k{background:transparent!important;color:#5777b0!important;font-size:11px}
+#p-home .brow .d{font-size:11px;color:#8b98ab}
+#p-home .nh-partners{padding:45px 0;background:#f7f8fa;border-top:1px solid #eef0f4}
+#p-home .nh-partners>.nh-wrap>div{display:flex;justify-content:space-between;gap:25px;align-items:center;flex-wrap:wrap}
+#p-home .nh-partners a{font-size:17px;font-weight:700;color:#6b7688;letter-spacing:-.3px}
+#p-home .nh-partners small{display:block;font-size:10px;font-weight:400;margin-top:4px}
+@media(min-width:901px) and (max-width:1200px){
+#p-home .nh-wrap{padding-left:var(--page-gutter);padding-right:var(--page-gutter)}
+#p-home h1{font-size:39px;letter-spacing:-2px}
+#p-home .nh-hero-grid{gap:5px}
+}
+@media(max-width:900px){
+#p-home .nh-wrap{padding-left:var(--page-gutter);padding-right:var(--page-gutter)}
+#p-home .nh-hero-grid{grid-template-columns:1fr;padding-top:60px;padding-bottom:36px;gap:10px;min-height:0}
+#p-home h1{font-size:clamp(33px,6.2vw,52px);letter-spacing:-1.8px}
+#p-home .nh-art{max-width:420px;width:100%;margin:20px auto 0}
+#p-home .nh-art-label{top:0}
+#p-home .nh-hero-foot{font-size:10px;gap:18px}
+#p-home .nh-section{padding:64px 0}
+#p-home .nh-heading{align-items:flex-start;flex-direction:column;gap:20px;margin-bottom:30px}
+#p-home .nh-paths{grid-template-columns:1fr}
+#p-home .nh-path,#p-home .nh-path:first-child{padding:28px 0}
+#p-home .nh-path+.nh-path{border-left:0;border-top:1px solid #e3e7ef}
+#p-home .nh-path h3{margin:18px 0;font-size:25px}
+#p-home .nh-path h3 br{display:none}
+#p-home .nh-path-link{margin-top:20px}
+#p-home .tiers{grid-template-columns:1fr}
+#p-home .tier p{min-height:0}
+#p-home .nh-consult{flex-wrap:wrap;gap:12px 20px;padding:24px}
+#p-home .nh-consult p{width:100%;order:3}
+#p-home .nh-consult h3{font-size:16px}
+#p-home .nh-stats{grid-template-columns:1fr 1fr;row-gap:32px}
+#p-home .stat .n{font-size:44px}
+#p-home .stat:nth-child(3){border:0;padding-left:0}
+#p-home .nh-news{padding-top:0}
+#p-home .nh-announcement>.nh-wrap{gap:16px}
+#p-home #featDate{display:none}
+#p-home .nh-banner strong{font-size:12px}
+#p-home .brow{grid-template-columns:52px 1fr;gap:10px;padding:20px 0}
+#p-home .brow .tt{font-size:13px}
+#p-home .brow .d{grid-column:2;text-align:left}
+#p-home .nh-partners a{font-size:14px}
+}
+@media(max-width:380px){
+#p-home .nh-wrap{padding-left:var(--page-gutter);padding-right:var(--page-gutter)}
+#p-home h1{font-size:30px}
+#p-home .nh-actions{gap:20px}
+#p-home .nh-hero-foot{align-items:flex-start;flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){
+#p-home *,#p-home *::before,#p-home *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+#p-home #nh-particle-globe{display:block;width:100%;height:auto;aspect-ratio:1/1;touch-action:pan-y}
+#p-home .nh-motion-toggle{position:absolute;right:8%;bottom:34px;width:30px;height:30px;border:1px solid #53658380;background:#111d32;color:#bdcee8;border-radius:50%;font-size:12px;display:grid;place-items:center;z-index:2}
+#p-home .nh-motion-toggle:hover{background:#22385d;color:#fff}
+#p-home .nh-art-label,#p-home .nh-art-bottom{pointer-events:none}
+#p-home .nh-hero{position:relative;isolation:isolate}
+#p-home #nh-pointer-field{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
+#p-home .nh-hero-grid,#p-home .nh-hero-foot{position:relative;z-index:1}
+#p-home .nh-motion-toggle{z-index:4}
+#p-home #nh-particle-globe{visibility:hidden}
+#p-home .nh-services{gap:36px;padding-top:26px;padding-bottom:26px}
+#p-home .nh-service-label{font:10px 'IBM Plex Mono',monospace;letter-spacing:1.5px;color:#96a9c6}
+#p-home .nh-service-links{display:flex;gap:44px;flex-wrap:wrap}
+#p-home .nh-service-links a{display:grid;gap:7px;min-width:205px;cursor:pointer}
+#p-home .nh-service-links a+a{border-left:1px solid #ffffff20;padding-left:44px}
+#p-home .nh-service-links a>span{font-size:10px;color:#93a5c1}
+#p-home .nh-service-links strong{font-size:13px;color:#e6edfc;font-weight:500}
+#p-home .nh-service-links b{margin-left:20px;font-weight:400;color:#90b2ff}
+#p-home .nh-service-links a:hover strong{color:#9dc0ff}
+#p-home .nh-learning{background:#f8faff;border-top:1px solid #edf0f6}
+#p-home .nh-learning .nh-textlink{margin-top:20px}
+#p-home .nh-learning-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:64px;align-items:stretch}
+#p-home .nh-learning-steps{list-style:none;padding:0;margin:0;border-top:1px solid #cfd9e9}
+#p-home .nh-learning-steps li{display:grid;grid-template-columns:58px 1fr;gap:22px;padding:28px 0;border-bottom:1px solid #dce4ef}
+#p-home .nh-step-no{font-size:34px;font-weight:400;letter-spacing:-2px;line-height:1.1;color:#9aacc8}
+#p-home .nh-step-meta{font:9px 'IBM Plex Mono',monospace;letter-spacing:1px;color:#5677b2}
+#p-home .nh-learning-steps h3{font-size:22px;letter-spacing:-.7px;margin:9px 0 12px}
+#p-home .nh-learning-steps p{font-size:12px;line-height:1.85;color:#717e92;word-break:keep-all}
+#p-home .nh-step-time{display:block;font-size:11px;font-weight:600;color:#3d547b;margin-top:15px}
+#p-home .nh-step-time i{font-style:normal;color:#8c9bb4;margin:0 14px}
+#p-home .nh-forge{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;background:radial-gradient(ellipse at 90% 15%,#243f76,transparent 65%),#101c33;border-radius:12px;padding:36px;color:#fff;min-width:0}
+#p-home .nh-forge>.nh-kicker{font-size:8px;color:#a5bada;line-height:1.7;letter-spacing:1.2px}
+#p-home .nh-forge-symbol{height:150px;position:relative;margin:20px 0 30px}
+#p-home .nh-forge-symbol span{position:absolute;width:100px;height:100px;left:calc(50% - 50px);top:20px;border:1px solid #9dbdff70;background:linear-gradient(140deg,#b3ccff22,#3c68b208);border-radius:16px;transform:rotate(-30deg) skew(10deg,10deg)}
+#p-home .nh-forge-symbol span:nth-child(1){transform:translate(-28px,24px) rotate(-30deg) skew(10deg,10deg);opacity:.4}
+#p-home .nh-forge-symbol span:nth-child(2){transform:translate(-14px,12px) rotate(-30deg) skew(10deg,10deg);opacity:.7}
+#p-home .nh-forge-name{font-size:15px;letter-spacing:-.3px;color:#aac8ff}
+#p-home .nh-forge h3{font-size:27px;line-height:1.5;letter-spacing:-1px;margin:16px 0}
+#p-home .nh-forge p{font-size:13px;line-height:1.9;color:#9eafca}
+#p-home .nh-forge p strong{font-weight:500;color:#d5e3ff}
+#p-home .nh-forge a{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-top:30px;padding-top:23px;border-top:1px solid #ffffff26;color:#e5edfb;font-size:12px}
+#p-home .nh-forge a:hover{color:#a5c5ff}
+#p-home .nh-service-links a:focus-visible,#p-home .nh-learning a:focus-visible{outline:2px solid #719fff;outline-offset:6px}
+@media(max-width:1000px){
+#p-home .nh-learning-grid{gap:32px}
+#p-home .nh-forge{padding:28px}
+#p-home .nh-forge h3{font-size:24px}
+}
+@media(max-width:700px){
+#p-home .nh-services{align-items:flex-start;flex-direction:column;gap:20px}
+#p-home .nh-service-links{width:100%;gap:22px}
+#p-home .nh-service-links a{min-width:0;flex:1}
+#p-home .nh-service-links a+a{padding-left:22px}
+#p-home .nh-service-links a>span{line-height:1.7}
+#p-home .nh-service-links strong{font-size:12px}
+#p-home .nh-service-links b{margin-left:5px}
+#p-home .nh-learning-grid{grid-template-columns:1fr;gap:32px}
+#p-home .nh-learning-steps li{grid-template-columns:38px 1fr;gap:16px}
+#p-home .nh-step-no{font-size:28px}
+#p-home .nh-learning-steps p br{display:none}
+#p-home .nh-forge{padding:30px}
+#p-home .nh-forge-symbol{height:110px;margin:10px 0 28px}
+#p-home .nh-forge-symbol span{width:80px;height:80px;left:calc(50% - 40px)}
+}
+
+/* Main-page readability baseline, shared with the public subpages. */
+#p-home #bHeroDesc{font-size:16px;line-height:1.9;max-width:560px}
+#p-home :is(.nh-heading p,.nh-path p,.nh-learning-steps p,.nh-forge p){font-size:16px;line-height:1.85}
+#p-home :is(.nh-btn,.nh-textlink,.nh-path-link,.nh-forge a){font-size:15px}
+#p-home :is(.nh-kicker,.nh-index,.nh-step-meta,.nh-service-label,.nh-live){font-size:12px;line-height:1.6}
+#p-home :is(.nh-eyebrow,.nh-status,.nh-art-label,.nh-art-bottom){font-size:12px;line-height:1.75}
+#p-home .nh-eyebrow{letter-spacing:1px}
+#p-home .nh-art-bottom{letter-spacing:.5px}
+#p-home :is(.nh-service-links a>span,.nh-step-time,.nh-legal,.nh-consult>span){font-size:14px;line-height:1.75}
+#p-home .nh-service-links strong{font-size:15px}
+#p-home .nh-service-links a{min-width:230px}
+#p-home .nh-banner strong{font-size:15px;line-height:1.7}
+#p-home #featDate{font-size:14px;line-height:1.7}
+#p-home .nh-banner{flex-wrap:wrap;gap:8px 22px}
+#p-home .tier p{font-size:16px;line-height:1.85;min-height:0}
+#p-home .tier :is(.lv,.hr){font-size:14px;line-height:1.7}
+#p-home .tier .g{font-size:13px}
+#p-home .nh-consult{flex-wrap:wrap;gap:16px 24px}
+#p-home .nh-consult p{font-size:15px;line-height:1.8}
+#p-home .stat .l{font-size:15px;line-height:1.7}
+#p-home .brow{grid-template-columns:80px minmax(0,1fr) 100px}
+#p-home .brow .tt{font-size:16px;line-height:1.7;white-space:normal}
+#p-home .brow :is(.k,.d){font-size:13px}
+#p-home .nh-partners small{font-size:13px;line-height:1.7}
+#p-home .nh-forge>.nh-kicker{font-size:12px;letter-spacing:.8px}
+#p-home .nh-learning-steps li{padding:30px 0}
+#p-home .nh-forge-symbol{flex-shrink:0}
+@media(max-width:900px){
+ #p-home .brow{grid-template-columns:62px minmax(0,1fr)}
+ #p-home .nh-services{align-items:flex-start;flex-direction:column;gap:18px}
+ #p-home .nh-service-links{width:100%;gap:24px}
+ #p-home .nh-service-links a{min-width:0;flex:1}
+ #p-home .nh-service-links a+a{padding-left:24px}
+ #p-home .nh-hero-grid{padding-top:48px}
+ #p-home .nh-consult p{font-size:15px}
+}
+@media(max-width:500px){
+ #p-home .nh-art-label,#p-home .nh-art-bottom{font-size:11px}
+ #p-home .nh-service-links{gap:16px}#p-home .nh-service-links a+a{padding-left:16px}
+ #p-home .nh-service-links strong{font-size:14px}
+ #p-home .nh-service-links a>span{font-size:13px}
+ #p-home .nh-eyebrow{font-size:11px;letter-spacing:.5px}
+ #p-home .nh-announcement>.nh-wrap{gap:16px}
+ #p-home .nh-banner strong{font-size:14px}
+}
+
+/* Hero entrance animates paint only; font metrics and document flow stay stable. */
+#p-home .nh-hero .nh-btn.primary{background:rgba(0,0,0,.42);border:1px solid #9ac6ffb3;box-shadow:inset 0 0 14px #75aaff0d,0 0 18px #629fff26;color:#f5f9ff;transition:background .25s,box-shadow .25s,border-color .25s}
+#p-home .nh-hero .nh-btn.primary:hover{background:rgba(0,0,0,.58);border-color:#c3e4ff;box-shadow:inset 0 0 16px #75aaff15,0 0 24px #75baff55}
+@keyframes nh-hero-rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:no-preference){
+ .home-modern #p-home .nh-intro h1{animation:nh-hero-rise 1s cubic-bezier(.16,1,.3,1) .08s both}
+ .home-modern #p-home #bHeroDesc{animation:nh-hero-rise 1s cubic-bezier(.16,1,.3,1) .25s both}
+ .home-modern #p-home .nh-actions>:nth-child(1){animation:nh-hero-rise .9s cubic-bezier(.16,1,.3,1) .45s both}
+ .home-modern #p-home .nh-actions>:nth-child(2){animation:nh-hero-rise .9s cubic-bezier(.16,1,.3,1) .60s both}
+ .home-modern #p-home .nh-status{animation:nh-hero-rise .9s cubic-bezier(.16,1,.3,1) .72s both}
+}
+
+#p-home .nh-hero .nh-btn.primary{justify-content:center;text-align:center;gap:0}
+
+#p-home .nh-hero .nh-btn.primary{padding:11px 22px;line-height:1.5}
+
+/* Two-line globe label follows a subtle spherical arc. */
+#p-home .nh-art-label{top:0;left:0;width:100%;aspect-ratio:1;pointer-events:none;padding:0}
+#p-home .nh-art-label svg{width:100%;height:100%;overflow:visible}
+#p-home .nh-art-label text{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:1.25px;fill:#e4edff;text-anchor:middle;paint-order:stroke;stroke:#08112199;stroke-width:2px;stroke-linejoin:round}
+#p-home .nh-art-label .nh-globe-label-secondary{font-size:11px;letter-spacing:1px;fill:#aabddd}
+
+/* Label breathes on the same clock as the globe; vertical offset stays in CSS pixels. */
+#p-home .nh-art-label{transform:translateY(3px) scale(1);transform-origin:50% 50%;will-change:transform}
+
+/* Soft local contrast behind globe lettering, without a panel. */
+#p-home .nh-art-label text{filter:drop-shadow(0 1px 2px rgba(2,6,15,.95)) drop-shadow(0 0 5px rgba(2,6,15,.8));stroke:#061020b3;stroke-width:2px}
+
+/* v75: lighter action typography and quieter illuminated edges. */
+#p-home :is(.nh-btn,.nh-textlink){font-weight:500}
+#p-home .nh-hero .nh-btn.primary{border-color:rgba(162,197,232,.48);background:rgba(3,9,18,.46);box-shadow:inset 0 1px 0 rgba(204,228,255,.045),0 0 14px rgba(98,159,255,.065);color:#e7eef8;border-radius:7px}
+#p-home .nh-hero .nh-btn.primary:hover{border-color:rgba(184,221,250,.8);background:rgba(8,19,34,.64);box-shadow:0 0 18px rgba(117,186,255,.16)}
+#p-home .nh-hero .nh-textlink{color:#d3ddec;transition:color .25s ease}
+#p-home .nh-hero .nh-textlink:hover{color:#fff}
+#p-home :is(.nh-btn,.nh-textlink):focus-visible{outline:2px solid #a3caff;outline-offset:4px}
+
+/* v79: sections 01–05 share white; spacing supplies the section rhythm. */
+#p-home>.nh-section{background:#fff;border-top:0;padding:72px 0}
+#p-home>.nh-section.nh-about{padding-top:48px;padding-bottom:64px}
+#p-home>.nh-section.nh-news{padding-bottom:72px}
+@media(max-width:700px){#p-home>.nh-section{padding:44px 0}#p-home>.nh-section.nh-about{padding-top:36px;padding-bottom:40px}#p-home>.nh-section.nh-news{padding-bottom:44px}}
+
+/* Unboxed certification columns align with the section content. */
+#p-home .nh-cert .tier{padding-left:0;padding-right:0}
+#p-home .nh-cert .tier .g{background:transparent;border:1px solid #9bafd2;color:#34558b}
+
+/* v80: balanced rules around the foundation metrics. */
+#p-home .nh-stats{padding-bottom:40px;border-bottom:1px solid #e0e5ec}
+
+/* v81: credential outcomes and learning content have distinct roles. */
+#p-home .nh-cert-focus{font-size:17px;line-height:1.6;font-weight:500;color:#263b58;margin-top:20px;min-height:54px;word-break:keep-all}
+#p-home .nh-cert .tier p{margin-top:10px}
+#p-home .nh-learning-steps .nh-step-meta{font-family:inherit;letter-spacing:.1px;font-size:13px;line-height:1.6}
+@media(max-width:700px){#p-home .nh-cert-focus{min-height:0}}
+
+/* v83: right-side section summaries and compact credential hierarchy. */
+#p-home .nh-section .nh-heading>:not(:first-child){text-align:right;margin-left:auto}
+#p-home .nh-section .nh-heading>div:not(:first-child) .nh-textlink{text-align:right}
+#p-home .nh-cert-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#p-home .nh-cert .nh-cert-top .lv{margin:0;font-size:15px;line-height:1.5}
+#p-home .nh-cert .tier h3{margin:16px 0 0}
+#p-home .nh-cert .nh-cert-focus{margin-top:8px;min-height:0;font-size:16px;line-height:1.65}
+#p-home .nh-cert .tier p{margin-top:12px;min-height:0;line-height:1.75}
+#p-home .nh-cert .tier .hr{margin-top:20px;padding-top:14px}
+
+/* v86: centred dark halos preserve readability over pointer particles. */
+#p-home .nh-hero :is(.nh-eyebrow,h1,#bHeroDesc,.nh-actions,.nh-status,.nh-art-bottom,.nh-service-label,.nh-service-links){text-shadow:0 0 2px rgba(2,6,15,.98),0 0 6px rgba(2,6,15,.9),0 0 14px rgba(2,6,15,.72)}
+#p-home .nh-art-label text{filter:drop-shadow(0 0 2px rgba(2,6,15,.98)) drop-shadow(0 0 5px rgba(2,6,15,.85));text-shadow:none}
+
+/* v87: restrained light for the globe footer captions. */
+#p-home .nh-hero .nh-art-bottom{color:#b8cbe8;text-shadow:0 0 2px rgba(2,6,15,.95),0 0 5px rgba(2,6,15,.75),0 0 7px rgba(145,185,240,.22)}
+
+/* v88: shared hero footer baseline and readable announcement detail. */
+@media(min-width:901px){
+ #p-home .nh-hero-grid{align-items:stretch}
+ #p-home .nh-intro{display:flex;flex-direction:column}
+ #p-home .nh-intro .nh-status{margin-top:auto;padding-top:27px}
+ #p-home .nh-art{display:flex;flex-direction:column}
+ #p-home .nh-art-bottom{margin-top:auto}
+}
+#p-home .nh-announcement #featDate{color:#46566d}

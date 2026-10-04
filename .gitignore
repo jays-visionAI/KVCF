@@ -1,0 +1,25 @@
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# Node / Next
+node_modules/
+.next/
+out/
+dist/
+*.tsbuildinfo
+.npm-cache/
+
+# BlueForge
+project.json
+.blueforge/
+.env
+.env.local
+.env.*.local
+
+# Public assets — only auto-generated preview snapshots
+public/preview-*.html
+public/preview-*.txt
+public/__tmp__/

@@ -1,0 +1,19 @@
+/* Outline login button matches the adjacent filled join button in the mobile menu. */
+@media(max-width:900px){
+  .site-modern header .mobile-auth>.linkbtn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:36px;
+    padding:0 16px;
+    border:1px solid rgba(245,247,250,.72);
+    border-radius:6px;
+    color:#f5f7fa;
+    line-height:1;
+  }
+  .site-modern header .mobile-auth>.linkbtn:hover,
+  .site-modern header .mobile-auth>.linkbtn:focus-visible{
+    background:rgba(255,255,255,.08);
+    border-color:#f5f7fa;
+  }
+}

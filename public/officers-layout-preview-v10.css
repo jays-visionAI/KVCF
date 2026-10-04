@@ -1,0 +1,17 @@
+/* First card is the honorary chair; lower cards remain in two columns. */
+.site-modern #p-org .off.honorary-feature{
+  grid-column:1/-1;
+  display:grid;
+  grid-template-columns:calc((100% - 24px)/2) minmax(0,1fr);
+  column-gap:24px;
+  align-items:center;
+  padding:24px 0;
+  text-align:left;
+}
+.site-modern #p-org .off.honorary-feature .oav{margin:0 auto}
+.site-modern #p-org .off.honorary-feature .off-details{padding-right:28px}
+@media(max-width:650px){
+  .site-modern #p-org .off.honorary-feature{grid-column:auto;display:block;padding:28px;text-align:center}
+  .site-modern #p-org .off.honorary-feature .oav{margin:0 auto 18px}
+  .site-modern #p-org .off.honorary-feature .off-details{padding-right:0}
+}

@@ -1,0 +1,15 @@
+/* Blue membership invitation above the footer. */
+.site-modern .ctaband {
+  background: #356FAF;
+  color: #fff;
+}
+.site-modern .ctaband h2,
+.site-modern .ctaband p { color: #fff; }
+.site-modern .ctaband .membership-benefits-link,
+.site-modern .ctaband .membership-benefits-link:hover,
+.site-modern .ctaband .membership-benefits-link:focus-visible {
+  background: transparent;
+  border-color: #fff;
+  color: #fff;
+}
+.site-modern .ctaband .membership-benefits-link span { color: #fff; }

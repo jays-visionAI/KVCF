@@ -1,0 +1,23 @@
+/* Shared subpage text with enough size and contrast to read at a glance. */
+.site-modern .page:not(#p-home):not(#p-admin) .pagehead .crumb{
+ font-size:16px;
+ line-height:1.6;
+ letter-spacing:0;
+ font-weight:600;
+ color:#314b6e;
+}
+.site-modern .page:not(#p-home):not(#p-admin) .pagehead p{
+ font-size:18px;
+ line-height:1.75;
+ font-weight:500;
+ color:#334155;
+}
+.site-modern .page:not(#p-home):not(#p-admin) :is(.lbl,.faqcat){
+ font-family:'Noto Sans KR',sans-serif;
+ font-size:17px;
+ line-height:1.6;
+ letter-spacing:0;
+ font-weight:700;
+ color:#29486e;
+}
+.site-modern #p-faq .faqcat{font-size:18px}

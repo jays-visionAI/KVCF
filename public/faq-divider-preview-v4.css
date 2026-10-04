@@ -1,0 +1,6 @@
+/* Tie each FAQ category heading to the questions below it. */
+.site-modern #p-faq .faq-group .faqcat {
+  margin-bottom: 2px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #9aabc4;
+}

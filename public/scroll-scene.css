@@ -1,0 +1,28 @@
+/* Only the main page owns this fixed graphic layer. No content heights animate. */
+#p-home.nh-scroll-scene{position:relative;isolation:isolate}
+#p-home.nh-scroll-scene #nh-pointer-field{position:fixed;inset:0;width:100%;height:100vh;height:100dvh;z-index:1;pointer-events:none}
+#p-home.nh-scroll-scene .nh-hero{isolation:auto}
+#p-home.nh-scroll-scene .nh-wrap{position:relative;z-index:2}
+#p-home.nh-scroll-scene .nh-motion-toggle{position:fixed;right:22px;bottom:22px;z-index:50;width:36px;height:36px;box-shadow:0 3px 16px #10213d26}
+/* Card padding and the gaps between cards remain open to the particle field. */
+#p-home.nh-scroll-scene :is(.nh-paths,.nh-path,.tier,.nh-consult,.nh-learning-steps,.nh-stats,#bHomeNotice,.brow){background:transparent;box-shadow:none}
+#p-home.nh-scroll-scene :is(.nh-path,.tier,.nh-consult,.brow):hover{background:transparent}
+/* BlueForge is the single translucent card surface; no backdrop blur. */
+#p-home.nh-scroll-scene .nh-forge{background:rgba(16,28,51,.95);box-shadow:none}
+#p-home.nh-scroll-scene .nh-heading p{color:#536176}
+#p-home.nh-scroll-scene .nh-hero .nh-heading p{color:inherit}
+@media(max-width:700px){#p-home.nh-scroll-scene .nh-motion-toggle{right:12px;bottom:12px}}
+
+/* Opaque sticky header: no background sampling from the animated canvas. */
+.home-modern header{background:#0c1425;backdrop-filter:none;-webkit-backdrop-filter:none;isolation:isolate;transform:translateZ(0)}
+@media(min-width:900px){
+ #p-home.nh-scroll-scene .nh-learning-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:40px}
+}
+
+/* Darker copy on light sections; hero and BlueForge retain their own palette. */
+#p-home.nh-scroll-scene :is(.nh-heading p,.nh-path p,.tier p,.nh-learning-steps p,.nh-consult p){color:#475569}
+#p-home.nh-scroll-scene :is(.tier .lv,.nh-legal,.stat .l,.brow .d,.nh-partners small){color:#59697f}
+#p-home.nh-scroll-scene :is(.tier .hr,.tier .g,.nh-step-meta,.nh-step-time,.nh-consult>span){color:#34558b;font-weight:500}
+#p-home.nh-scroll-scene .nh-hero .nh-heading p{color:inherit}
+
+#p-home.nh-scroll-scene .nh-legal{text-align:center}

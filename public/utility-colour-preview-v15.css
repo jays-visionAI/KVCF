@@ -1,0 +1,4 @@
+/* Distinguish the utility bar from the main header without changing its layout. */
+.site-modern .util {
+  background-color: #08111f;
+}

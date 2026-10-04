@@ -1,0 +1,52 @@
+/* Return the utility bar and header to the original light-header direction. */
+.site-modern .util { background-color: #0d2350; }
+.site-modern header {
+  background: #fff;
+  color: #17243b;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.site-modern header .burger { color: #263a5e; }
+.site-modern header .authbox .linkbtn,
+.site-modern header .authbox .who,
+.site-modern header .authbox .who b { color: #26334d; }
+.site-modern header .authbox > .cta { background: #0d2350; color: #fff; }
+
+@media (min-width: 901px) {
+  .site-modern header .nav nav > a,
+  .site-modern header .nav .hasmenu > a { color: #33415c; }
+  .site-modern header .nav nav a.on { color: #315fbd; }
+}
+
+/* The new blue artwork has wider alpha bounds; keep the visible logo in place. */
+.site-modern header .logo .header-brand-mark { height: 42px; }
+.site-modern header .logo .header-brand-mark img { width: 204px; left: -9px; top: -14px; }
+@media (max-width: 1200px) {
+  .site-modern header .logo .header-brand-mark { height: 36px; }
+  .site-modern header .logo .header-brand-mark img { width: 172px; left: -8px; top: -10px; }
+}
+@media (max-width: 900px) {
+  .site-modern header .logo .header-brand-mark { height: 32px; }
+  .site-modern header .logo .header-brand-mark img { width: 148px; left: -6.5px; top: -9px; }
+}
+@media (max-width: 380px) {
+  .site-modern header .logo .header-brand-mark { height: 29px; }
+  .site-modern header .logo .header-brand-mark img { width: 134px; left: -6px; top: -8px; }
+}
+
+/* Make the hero description clear without the previous heavy dark halo. */
+.site-modern #p-home #bHeroDesc {
+  color: #dce7f5;
+  text-shadow: 0 1px 2px rgba(3, 8, 20, .42);
+}
+
+/* Light emitted by the SVG lettering replaces its dark outline and shadow. */
+.site-modern #p-home .nh-art-label text {
+  fill: #edf7ff;
+  stroke: none;
+  text-shadow: none;
+  filter: drop-shadow(0 0 2px rgba(216, 238, 255, .94)) drop-shadow(0 0 7px rgba(112, 187, 255, .74));
+}
+.site-modern #p-home .nh-art-label .nh-globe-label-secondary {
+  fill: #cbe6ff;
+}

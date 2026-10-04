@@ -1,0 +1,46 @@
+name: Build KVCF Portal
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build static export
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Build (static export → out/)
+        env:
+          # GitHub Actions 의 Secrets 에서 주입. 실제 키는 로컬 .env / ForgeDB 콘솔 에 있다.
+          FORGEDB_URL: ${{ secrets.FORGEDB_URL }}
+          NEXT_PUBLIC_FORGEDB_URL: ${{ secrets.FORGEDB_URL }}
+          FORGEDB_PROJECT_ID: ${{ secrets.FORGEDB_PROJECT_ID }}
+          NEXT_PUBLIC_FORGEDB_PROJECT_ID: ${{ secrets.FORGEDB_PROJECT_ID }}
+          FORGEDB_ANON_KEY: ${{ secrets.FORGEDB_ANON_KEY }}
+          NEXT_PUBLIC_FORGEDB_ANON_KEY: ${{ secrets.FORGEDB_ANON_KEY }}
+          FORGEDB_SITE_ROLE_KEY: ${{ secrets.FORGEDB_SITE_ROLE_KEY }}
+        run: npm run build
+
+      - name: Upload static bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: kvcf-static-${{ github.sha }}
+          path: out/
+          retention-days: 14

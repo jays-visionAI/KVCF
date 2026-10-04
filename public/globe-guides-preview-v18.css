@@ -1,0 +1,26 @@
+/* Four quiet corner guides track the globe's existing square anchor. */
+.site-modern #p-home .nh-globe-guides {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  aspect-ratio: 1;
+  pointer-events: none;
+  z-index: 1;
+}
+.site-modern #p-home .nh-globe-guides span {
+  position: absolute;
+  width: clamp(13px, 3.5%, 19px);
+  height: clamp(13px, 3.5%, 19px);
+  border-color: rgba(190, 216, 247, .36);
+  border-style: solid;
+  border-width: 0;
+}
+.site-modern #p-home .nh-guide-tl { top: 8%; left: 8%; border-top-width: 1px !important; border-left-width: 1px !important; }
+.site-modern #p-home .nh-guide-tr { top: 8%; right: 8%; border-top-width: 1px !important; border-right-width: 1px !important; }
+.site-modern #p-home .nh-guide-bl { bottom: 8%; left: 8%; border-bottom-width: 1px !important; border-left-width: 1px !important; }
+.site-modern #p-home .nh-guide-br { bottom: 8%; right: 8%; border-bottom-width: 1px !important; border-right-width: 1px !important; }
+/* hero-motion.js owns transform; the top offset moves only the lettering. */
+.site-modern #p-home .nh-art-label { top: 20px; }
+@media (max-width: 900px) {
+  .site-modern #p-home #bHeroTitle em { font-size: inherit; }
+}

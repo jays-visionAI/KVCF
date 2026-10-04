@@ -1,0 +1,6 @@
+/* Use the authentic RGBA logo from Drive, with no JPEG threshold filter. */
+.site-modern header .logo .header-brand-mark img{
+  -webkit-filter:none;
+  filter:none;
+  mix-blend-mode:normal;
+}
