@@ -48,19 +48,27 @@ function applyShellVisibility() {
   const adminShell = document.getElementById("adminShell");
   const pAdmin = document.getElementById("p-admin");
 
+  // 1) body 클래스 즉시 토글 — CSS가 셸 가시성을 결정한다.
+  //    admin 라우트일 때 body.admin-mode 가 없으면 어드민 셸이 절대 보이지 않으므로,
+  //    legacy app.js 가 호출되기 전이라도 여기서 먼저 동기화한다.
+  document.body.classList.toggle("admin-mode", isAdmin);
+
   if (siteShell) {
     // admin 라우트일 때는 회원 사이트 셸을 완전히 숨깁니다.
     siteShell.hidden = isAdmin;
     siteShell.style.display = isAdmin ? "none" : "";
   }
   if (adminShell) {
-    adminShell.hidden = !isAdmin;
+    // 어드민 셸의 hidden 속성을 직접 토글하지 않는다.
+    // CSS(body.admin-mode .admin-shell{display:block!important} / body:not(.admin-mode) .admin-shell{display:none!important})
+    // 가 단일 진실 공급원이며, hidden 속성과 충돌하지 않도록 admin 라우트에서는 강제로 hidden 을 해제한다.
+    adminShell.hidden = false;
   }
   if (pAdmin && isAdmin) {
     pAdmin.hidden = false;
   }
 
-  // React 가 다음 렌더 패스에서 hidden 을 다시 덮어쓰는 경우를 대비해
+  // React 가 다음 렌더 패스에서 siteShell 의 hidden 을 다시 덮어쓰는 경우를 대비해
   // 다음 프레임에 한 번 더 동기화합니다.
   window.requestAnimationFrame(() => {
     const ss = document.getElementById("siteShell");
@@ -70,7 +78,11 @@ function applyShellVisibility() {
       ss.hidden = isAdmin;
       ss.style.display = isAdmin ? "none" : "";
     }
-    if (as) as.hidden = !isAdmin;
+    if (as) {
+      // 어드민 셸은 항상 hidden=false 로 강제해 CSS만으로 보이게 한다.
+      as.hidden = false;
+    }
     if (pa && isAdmin) pa.hidden = false;
+    document.body.classList.toggle("admin-mode", isAdmin);
   });
 }

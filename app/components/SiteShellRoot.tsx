@@ -20,9 +20,14 @@ import { useEffect, useState } from "react";
 // 클라이언트 hydration 직후 useLayoutEffect 에서 hash 를 읽어 즉시 첫 렌더 결과를 덮어씁니다.
 function getInitialIsAdmin(): boolean {
   if (typeof window === "undefined") return false;
+  // 1) hash 로 판정
   const raw = (window.location.hash || "#home").slice(1);
   const [page = "home"] = raw.split("?");
-  return page === "admin";
+  if (page === "admin") return true;
+  // 2) 이미 legacy app.js 가 body.admin-mode 를 켜둔 경우에도 admin 으로 인정한다.
+  //    (legacy 의 show('admin') 이 React 첫 렌더보다 먼저 실행된 경우를 흡수).
+  if (typeof document !== "undefined" && document.body && document.body.classList.contains("admin-mode")) return true;
+  return false;
 }
 
 export default function SiteShellRoot({ children }: { children: React.ReactNode }) {

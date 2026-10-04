@@ -59,6 +59,10 @@ export default function RootLayout({children}:{children:React.ReactNode}) {
         <link rel="stylesheet" href="/org-motion-preview-v40.css?v=46" />
         <link rel="stylesheet" href="/legacy-post.css" />
         <link rel="stylesheet" href="/member-ui-v129.css" />
+        <link rel="stylesheet" href="/admin-gate-card-preview-v1.css?v=1" />
+        <link rel="stylesheet" href="/admin-shell.css?v=1" />
   <Script src="/legacy-head.js" strategy="beforeInteractive" />
- </head><body className="site-modern home-modern" suppressHydrationWarning>{children}</body></html>;
+ </head><body className="site-modern home-modern" suppressHydrationWarning>{children}
+  <script dangerouslySetInnerHTML={{__html: `(function(){var p=['home','about','greeting','org','history','contact','cert','vca','vcp','vce','consultant','schedule','rules','edu','partners','apply','verify','member','join','signup','companies','notice','recruit','noticeview','press','library','faq','inquiry','terms','privacy','noemail','login','dashboard','profile','admin'];var r=(location.hash||'#home').slice(1).split('?')[0];if(r==='mypage')r='dashboard';if(p.indexOf(r)<0)r='home';if(r==='dashboard'||r==='profile')r='login';if(r==='admin'){document.body.classList.add('admin-mode');}var st=document.createElement('style');st.id='initial-route-style-v2';st.textContent='.page{display:none!important}#p-'+r+'{display:block!important}'+(r==='admin'?'.site-shell{display:none!important}#adminShell{display:block!important}#p-admin{display:block!important}':'');document.head.appendChild(st);})();`}} />
+</body></html>;
 }

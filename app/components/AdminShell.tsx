@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
-
 /**
  * 어드민 사이트 셸 — 회원 사이트와 완전히 분리된 독립 셸.
  *
@@ -12,22 +10,10 @@ import { useEffect } from "react";
  *  - 회원 사이트 페이지(login, dashboard, profile 등)는 어드민 셸 안에 마운트되지 않습니다.
  *  - 어드민 사이트에 진입한 사용자가 회원 사이트로 갈 수 있는 직접 링크도 없습니다.
  *
- * 어드민 셸이 표시되는 동안에만 admin-shell.css 가 페이지에 로드되며,
- * 회원 사이트 라우트일 때는 어드민 셸이 hidden 이고 CSS 도 unload 되어 회원 사이트 페이지에 영향을 주지 않습니다.
+ * admin-shell.css 는 app/layout.tsx 에서 SSR 시점에 항상 로드되어,
+ * hydration 또는 컴포넌트 마운트 타이밍에 의존하지 않고 admin 라우트 진입 즉시 어드민 셸이 정확히 표시됩니다.
+ * 어드민 셸의 가시성은 body.admin-mode 클래스 + 어드민 셸/사이트 셸의 display CSS 가 단일 진실 공급원으로 관리합니다.
  */
 export default function AdminShell({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    const id = "admin-shell-css";
-    if (document.getElementById(id)) return;
-    const link = document.createElement("link");
-    link.id = id;
-    link.rel = "stylesheet";
-    link.href = "/admin-shell.css";
-    document.head.appendChild(link);
-    return () => {
-      const el = document.getElementById(id);
-      if (el) el.remove();
-    };
-  }, []);
   return <>{children}</>;
 }

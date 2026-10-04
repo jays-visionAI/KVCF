@@ -25,14 +25,26 @@ body.admin-mode{
   --adm-radius:8px;
 }
 
-/* 어드민 라우트일 때 회원 사이트 셸을 DOM 상에서 숨김 — 어떤 자식도 화면에 남지 않습니다. */
+/* =============================================================
+   회원 사이트 셸 / 어드민 셸 — body.admin-mode 클래스 단일 진실 공급원.
+   - admin 라우트일 때: .site-shell 숨김 + .admin-shell 보임
+   - 그 외 라우트일 때: .admin-shell 숨김 + .site-shell 보임
+   - hidden 속성보다 이 CSS 우선순위가 항상 높다 ( !important + 더 구체적 선택자 )
+   ============================================================= */
+
+/* 어드민 라우트일 때: 회원 사이트 셸을 DOM 상에서 완전히 숨김 */
 body.admin-mode .site-shell{display:none !important;}
-/* 그 외 회원 라우트일 때는 어드민 셸을 숨김 */
-.admin-shell[hidden]{display:none !important;}
+
+/* 어드민 라우트가 아닐 때: 어드민 셸을 숨김 */
 body:not(.admin-mode) .admin-shell{display:none !important;}
 
-/* 어드민 셸의 기본 박스 */
-.admin-shell{display:block;min-height:100vh;background:var(--adm-bg);color:var(--adm-text)}
+/* 어드민 라우트일 때: 어드민 셸은 반드시 보이도록 강제 (hidden 속성보다 우선) */
+body.admin-mode .admin-shell{
+  display:block !important;
+  min-height:100vh;
+  background:var(--adm-bg);
+  color:var(--adm-text);
+}
 
 /* =============================================================
    어드민 셸 자체 헤더 (회원 사이트 헤더와 다른 디자인)
@@ -248,6 +260,73 @@ body:not(.admin-mode) .admin-shell{display:none !important;}
 
 /* 어드민 콘솔이 어드민 셸 안에서 보이도록 어드민 페이지의 .adm 가로폭/패딩 조정 */
 .admin-shell .adm{min-height:auto}
+/* =============================================================
+   어드민 로그인 안내 체크리스트 (details/summary)
+   ============================================================= */
+.admin-shell .adm-login-checklist{
+  margin-top:14px;
+  border:1px solid var(--adm-line);
+  border-radius:8px;
+  background:var(--adm-bg-3);
+  padding:0;
+  overflow:hidden;
+}
+.admin-shell .adm-login-checklist>summary{
+  cursor:pointer;
+  padding:12px 14px;
+  font-size:13px;
+  font-weight:700;
+  color:var(--adm-text);
+  list-style:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  user-select:none;
+}
+.admin-shell .adm-login-checklist>summary::-webkit-details-marker{display:none}
+.admin-shell .adm-login-checklist>summary::after{
+  content:"";
+  display:none;
+}
+.admin-shell .adm-login-checklist-caret{
+  font-size:11px;
+  color:var(--adm-faint);
+  transition:transform .2s;
+}
+.admin-shell .adm-login-checklist[open] .adm-login-checklist-caret{
+  transform:rotate(180deg);
+}
+.admin-shell .adm-login-checklist>summary:hover{
+  background:rgba(71,121,255,.06);
+}
+.admin-shell .adm-login-checklist ol{
+  margin:0;
+  padding:6px 14px 14px 32px;
+  color:var(--adm-sub);
+  font-size:12.5px;
+  line-height:1.75;
+}
+.admin-shell .adm-login-checklist ol li{
+  margin-bottom:6px;
+}
+.admin-shell .adm-login-checklist ol li b{
+  color:var(--adm-text);
+  font-weight:700;
+  display:block;
+  margin-bottom:2px;
+  font-size:12.5px;
+}
+.admin-shell .adm-login-checklist-foot{
+  font-size:11.5px;
+  color:var(--adm-faint);
+  padding:0 14px 14px;
+  font-family:'IBM Plex Mono',monospace;
+  letter-spacing:.3px;
+}
+.admin-shell .adm-login-checklist-foot[hidden]{display:none}
+.admin-shell .adm-login-checklist[open] .adm-login-checklist-foot{display:block}
+
 @media (max-width:720px){
   .adm-shell-header-inner{padding:0 16px;height:58px}
   .adm-shell-mode-badge{display:none}
