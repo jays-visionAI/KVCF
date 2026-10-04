@@ -462,8 +462,12 @@ function flash(id){const el=document.getElementById(id);if(!el)return;el.classLi
 
  // #admin 단일 라우트에서 미인증/비-admin 은 로그인 카드를, 인증된 admin 은 콘솔을 보여줍니다 (별도 adminlogin 라우트 제거).
  const PAGES=['home','about','greeting','books','org','history','contact','cert','vca','vcp','vce','consultant','schedule','rules','edu','partners','apply','verify','member','join','signup','companies','notice','recruit','noticeview','press','library','faq','inquiry','terms','privacy','noemail','login','dashboard','profile','admin'];
-// 'join' 도 인증된 회원만 신청 가능 — 미인증 사용자는 /#login 으로 보냄.
-const GUARD={join:['member','admin'],dashboard:['member','admin'],profile:['member','admin'],admin:['admin']};
+// 'join' / 'dashboard' / 'profile' 은 인증된 회원만 접근 가능 — 미인증 사용자는 /#login 으로 보냄.
+// '#admin' 은 단일 라우트이므로 GUARD에 두지 않습니다. 콘솔(<div className="adm">) 노출은 React 측
+// useAdminAuth 의 isAdmin 으로 hidden={!isAdmin} 제어되며, 미인증/비-admin 사용자는 같은 #admin
+// 페이지 안에서 React가 마운트한 <AdminLoginCard /> (로그인 카드)를 보게 됩니다. 비-admin 계정으로
+// 로그인한 사용자가 /#admin 에 들어가도 콘솔은 잠긴 채 로그인 카드가 다시 뜨도록 의도되었습니다.
+const GUARD={join:['member','admin'],dashboard:['member','admin'],profile:['member','admin']};
 let auth={role:null,name:null};
 let notifs=[];
 const CERTINFO={
@@ -799,3 +803,25 @@ window.doLogin = doLogin;
 document.querySelectorAll('#p-home a[data-r]').forEach(a => a.href = '#' + a.dataset.r);
 document.querySelectorAll('#p-home a[data-r]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); const r=a.dataset.r; setRoute(r); show(r); }));
 document.querySelectorAll('#p-home .tier[data-r]').forEach(row=>{row.tabIndex=0;row.setAttribute('role','link');row.addEventListener('keydown',e=>{if(e.key==='Enter'){setRoute(row.dataset.r);show(row.dataset.r);}});});
+
+
+// ─── 라우팅 보강: 모든 페이지의 data-r 링크 / 버튼 ─────────────────────────────
+// 기존 코드는 #p-home a[data-r] 만 잡고 있어, 로그인 카드·admin 카드·헤더의
+// data-r 링크가 클릭되어도 라우팅되지 않는 문제가 있었음. 모든 페이지에
+// 같은 핸들러를 일괄 적용하고 React 컴포넌트가 의존하는 전역(window)을
+// 명시적으로 노출하여 폼 submit → doLogin 호출이 정상 동작하도록 보장.
+window.doLogin = window.doLogin || doLogin;
+window.doSignup = window.doSignup || doSignup;
+window.doLogout = window.doLogout || doLogout;
+window.setRoute = window.setRoute || setRoute;
+window.show = window.show || show;
+['p-login','p-admin','p-signup','p-join','p-home'].forEach(function(pid){
+  var root = document.getElementById(pid);
+  if (!root) return;
+  root.querySelectorAll('a[data-r], button[data-r]').forEach(function(el){
+    var r = el.dataset.r;
+    if (!r) return;
+    if (el.tagName === 'A') el.setAttribute('href', '#' + r);
+    el.addEventListener('click', function(e){ e.preventDefault(); setRoute(r); show(r); });
+  });
+});
