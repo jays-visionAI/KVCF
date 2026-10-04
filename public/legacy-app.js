@@ -790,6 +790,10 @@ document.addEventListener('change',e=>{if(['fType','fStatus'].includes(e.target.
 renderAuth();renderPublic();featRender();ftimer=setInterval(featNext,5000);
 restoreRoute();
 
+// React 마운트 페이지(/#admin AdminLoginCard, /#login LoginPage) 가 호출하는
+// 전역 핸들러를 window 에 노출합니다. doLogin 만 React 측에서 참조합니다.
+window.doLogin = doLogin;
+
 
 // Links remain compatible with the original prototype router and keyboard navigation.
 document.querySelectorAll('#p-home a[data-r]').forEach(a => a.href = '#' + a.dataset.r);
