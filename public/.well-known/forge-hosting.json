@@ -1,6 +1,6 @@
 {
-  "host": "kvcf",
-  "domain": "kvcf.example.com",
+  "host": "kvcf-jt1bd3-live",
+  "domain": "kvcf-jt1bd3-live.forgedb.app",
   "branch": "main",
   "build_command": "npm run build",
   "output_dir": "out",
@@ -36,7 +36,7 @@
   ],
   "environment": {
     "NEXT_PUBLIC_FORGEDB_URL": "https://forgedb.cloud",
-    "NEXT_PUBLIC_FORGEDB_PROJECT_ID": "kvcf",
-    "NEXT_PUBLIC_SITE_DOMAIN": "kvcf.example.com"
+    "NEXT_PUBLIC_FORGEDB_PROJECT_ID": "kvcf-jt1bd3",
+    "NEXT_PUBLIC_SITE_DOMAIN": "kvcf-jt1bd3-live.forgedb.app"
   }
 }
