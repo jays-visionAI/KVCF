@@ -6,7 +6,7 @@ window.kvcfInitialRoute=(function(){
  let route=(location.hash||'#home').slice(1).split('?')[0];
  if(route==='mypage')route='dashboard';
  if(!pages.includes(route))route='home';
- if(route==='admin'||route==='dashboard'||route==='profile')route='login';
+ if(route==='dashboard'||route==='profile')route='login';
  document.documentElement.style.backgroundColor=route==='home'?'':'#ffffff';
  document.documentElement.classList.toggle('home-background',route==='home');
  const style=document.createElement('style');style.id='initial-route-style';
