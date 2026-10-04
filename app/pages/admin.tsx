@@ -3,12 +3,35 @@
 import AdminLoginCard from "../components/AdminLoginCard";
 import { useAdminAuth } from "../components/useAdminAuth";
 
+/**
+ * 어드민 사이트 셸 안에서만 마운트되는 어드민 페이지.
+ * 회원 사이트와 완전히 분리되어 있습니다:
+ *  - 회원 사이트의 UtilityBar / SiteHeader / SiteFooter / MembershipCTA / AdminEditor / ApplicationModal 은 어드민 셸 안에 마운트되지 않습니다.
+ *  - 회원 사이트의 login / dashboard / profile / 다른 어떤 페이지도 어드민 셸에 마운트되지 않습니다.
+ *  - 어드민 셸은 자체 헤더/푸터를 갖고, 어드민 전용 CSS(.admin-shell *) 만 적용됩니다.
+ *  - 인증된 admin 만 콘솔 진입, 그 외에는 어드민 전용 로그인 카드(AdminLoginCard)만 표시 — 회원 로그인 페이지는 절대 표시되지 않습니다.
+ */
 export default function AdminPage() {
-  const { isAdmin } = useAdminAuth();
+  const { isAdmin, authReady } = useAdminAuth();
   return (
-    <div className="page" id="p-admin" hidden={true}>
-      {!isAdmin ? <AdminLoginCard /> : null}
-      <div className={"adm"} hidden={!isAdmin}>
+    <div className="page admin-page" id="p-admin">
+      <header className="adm-shell-header">
+        <div className="adm-shell-header-inner">
+          <a className="adm-shell-brand" href="#!/">
+            <img src="/assets/kvcf-logo-white.png" alt="한국바이브코딩협회 어드민" />
+            <span className="adm-shell-brand-text">
+              <b>{"한국바이브코딩협회"}</b>
+              <span>{"ADMIN CONSOLE"}</span>
+            </span>
+          </a>
+          <div className="adm-shell-header-meta">
+            <span className="adm-shell-mode-badge">{"RESTRICTED · ADMIN ONLY"}</span>
+          </div>
+        </div>
+      </header>
+      <div className="adm-shell-body">
+        {!isAdmin ? <AdminLoginCard /> : null}
+        <div className={"adm"} hidden={!isAdmin || !authReady}>
         <aside className={"adm-side"}>
           <div className={"lg"}>
             <img src="/assets/kvcf-logo-white.png" alt="한국바이브코딩협회" />
@@ -893,6 +916,13 @@ export default function AdminPage() {
           </div>
         </div>
       </div>
+      </div>
+      <footer className="adm-shell-footer">
+        <div className="adm-shell-footer-inner">
+          <span>{"© 2026 Korea Vibe Coding Federation. ADMIN CONSOLE."}</span>
+          <span>{"운영자 전용 — 권한이 없는 사용자는 즉시 세션을 종료해 주세요."}</span>
+        </div>
+      </footer>
     </div>
   );
 }

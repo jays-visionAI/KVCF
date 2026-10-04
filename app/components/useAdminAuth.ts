@@ -19,9 +19,13 @@ export function useAdminAuth(): { authReady: boolean; isAdmin: boolean } {
       setAuthReady(true);
     };
     sync();
+    // 첫 1초 동안은 자주 폴링 (legacy app.js 가 window.auth 를 설정할 시간을 확보),
+    // 이후에는 600ms 간격으로 완화.
+    let fast = 0;
+    const fastId = window.setInterval(() => { sync(); if (++fast >= 10) window.clearInterval(fastId); }, 100);
     const id = window.setInterval(sync, 600);
     window.addEventListener("hashchange", sync);
-    return () => { window.clearInterval(id); window.removeEventListener("hashchange", sync); };
+    return () => { window.clearInterval(id); window.clearInterval(fastId); window.removeEventListener("hashchange", sync); };
   }, []);
   return { authReady, isAdmin: authReady && !!auth && auth.role === "admin" };
 }
