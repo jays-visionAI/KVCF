@@ -2,7 +2,12 @@
 
 도메인: `kvcf.kr` (가비아 / `ns.gabia.co.kr`)
 ForgeDB 호스팅 대상: `kvcf-jt1bd3.forgedb.app`
-결정: **`www.kvcf.kr` 를 먼저 연결** — apex(`kvcf.kr`)는 CNAME 이 불가능
+결정: **apex(`kvcf.kr`)를 메인으로 사용** — www 는 보조 경로
+
+> 현재 실측(2026-10-05): 두 도메인 모두 ForgeDB 에 등록돼 있으나
+> `Pending DNS` / `SSL: pending`. 가비아에 아직 레코드가 없어
+> `forgedb hosting domains verify` 는 `DNS lookup failed` 를 반환합니다.
+> **아래 레코드를 가비아에 넣는 것이 남은 유일한 작업입니다.**
 
 > 아래 값은 `forgedb hosting domains add` CLI 가 **방금(2026-10-05) 출력한 실값**입니다.
 > 이전 세션의 토큰이 아니라 지금 필요한 값입니다. 추가/삭제 후 값이 바뀌면

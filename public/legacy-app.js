@@ -34,13 +34,13 @@ const SITE={
   {code:'CON',grade:'별도 트랙',name:'바이브코딩컨설턴트',en:'Vibe Coding Consultant',hours:'별도 과정',method:'사례 서술 + 면접',target:'조직 도입 자문 인력',
    desc:'조직의 AI 도입 전략·조직 적용·리스크·거버넌스를 자문한다.',route:'consultant'}],
  officers:[
-   {name:'정현교',role:'명예회장',aff:'서울대 명예교수 · 한국AI교육협회 명예회장',photo:'assets/officer-jung-hyungyo-v8.jpeg'},
+   {name:'정현교',role:'명예회장',aff:'서울대 명예교수 · 한국AI교육협회 명예회장',photo:'/assets/officer-jung-hyungyo-v8.jpeg'},
   {name:'문형남',role:'회장',aff:'숙명여대 한류국제대학 학장/교수 · 지속가능과학회 회장',photo:1},
-  {name:'양성길',role:'수석부회장',aff:'인싸이트컨설팅 대표',photo:'assets/officer-yang-seonggil-v8.jpeg'},
+  {name:'양성길',role:'수석부회장',aff:'인싸이트컨설팅 대표',photo:'/assets/officer-yang-seonggil-v8.jpeg'},
   {name:'[성명]',role:'감사',aff:'[소속]'},
   {name:'[성명]',role:'사무총장',aff:'사무국'},
-  {name:'류성국',role:'부회장 · 정책기획',aff:'Roze AI 나스닥 컨설팅',photo:'assets/officer-ryu-seongguk.jpeg'},
-  {name:'오승종',role:'부회장 · 교육자격',aff:'(주)에듀오 대표이사',photo:'assets/officer-oh-seungjong.jpeg'},
+  {name:'류성국',role:'부회장 · 정책기획',aff:'Roze AI 나스닥 컨설팅',photo:'/assets/officer-ryu-seongguk.jpeg'},
+  {name:'오승종',role:'부회장 · 교육자격',aff:'(주)에듀오 대표이사',photo:'/assets/officer-oh-seungjong.jpeg'},
   {name:'[성명]',role:'부회장 · 산업기술',aff:'[소속]'},
   {name:'[성명]',role:'부회장 · 대외회원',aff:'[소속]'}],
  notices:[

@@ -101,7 +101,7 @@ export default function HistoryPage() {
                 </figcaption>
               </figure>
               <figure className={"history-mou"}>
-                <img src={"assets/about/mou.png"} width={1790} height={1252} alt={"한국바이브코딩협회와 블루포지 업무협약 체결식"} loading={"lazy"} decoding={"async"} />
+                <img src={"/assets/about/mou.png"} width={1790} height={1252} alt={"한국바이브코딩협회와 블루포지 업무협약 체결식"} loading={"lazy"} decoding={"async"} />
                 <figcaption>
                   <span>
                     {"2026.06.29"}

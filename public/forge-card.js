@@ -6,7 +6,7 @@
  const video=scene.querySelector('video'),nodes=[...scene.querySelectorAll('.bf-node')],caption=scene.querySelector('.bf-caption'),toggle=document.querySelector('.nh-motion-toggle');
  // WebKit uses HEVC with alpha; Chromium/Firefox use VP9 with alpha.
  const ua=typeof navigator==='undefined'?'':navigator.userAgent;
- if(/AppleWebKit/.test(ua)&&!/Chrome|Chromium|Edg|OPR|Firefox/.test(ua))video.src='assets/blueforge/system-alpha-v7.mov';
+ if(/AppleWebKit/.test(ua)&&!/Chrome|Chromium|Edg|OPR|Firefox/.test(ua))video.src='/assets/blueforge/system-alpha-v7.mov';
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  const codeLines=[...scene.querySelectorAll('.bf-code-lines span')];
  const codeText=codeLines.map(line=>line.textContent);

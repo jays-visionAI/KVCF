@@ -285,8 +285,8 @@ export default function HomePage() {
               </span>
               <div className={"bf-motion-slot"}>
                 <div className={"bf-scene"} aria-label={"BlueForge 시스템 구성 개념도"}>
-                  <video className={"bf-video"} muted={true} playsInline={true} preload={"metadata"} aria-hidden={"true"} src={"assets/blueforge/system-alpha-v7.webm"}></video>
-                  <img className={"bf-poster"} src={"assets/blueforge/system-alpha-poster-v7.png"} alt={""} aria-hidden={"true"} />
+                  <video className={"bf-video"} muted={true} playsInline={true} preload={"metadata"} aria-hidden={"true"} src={"/assets/blueforge/system-alpha-v7.webm"}></video>
+                  <img className={"bf-poster"} src={"/assets/blueforge/system-alpha-poster-v7.png"} alt={""} aria-hidden={"true"} />
                   <div className={"bf-code-intro"} aria-hidden={"true"}>
                     <div className={"bf-code-bar"}>
                       <i></i>

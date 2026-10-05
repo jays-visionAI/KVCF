@@ -51,7 +51,7 @@ export default function AboutPage() {
               </div>
             </div>
             <div className={"photo"} style={{"aspectRatio": "16/11", "borderRadius": "16px", "background": "transparent", "overflow": "hidden"}}>
-              <img src={"assets/about/mou.png"} width={1790} height={1252} alt={"한국바이브코딩협회와 블루포지의 업무협약(MOU) 체결식"} decoding={"async"} style={{"display": "block", "width": "100%", "height": "100%", "objectFit": "cover", "objectPosition": "center top"}} />
+              <img src={"/assets/about/mou.png"} width={1790} height={1252} alt={"한국바이브코딩협회와 블루포지의 업무협약(MOU) 체결식"} decoding={"async"} style={{"display": "block", "width": "100%", "height": "100%", "objectFit": "cover", "objectPosition": "center top"}} />
             </div>
           </div>
         </div>

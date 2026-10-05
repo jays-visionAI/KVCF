@@ -34,7 +34,7 @@ export function SiteHeader() {
           <div className={"nav"}>
             <a className={"logo"} data-r={"home"}>
               <span className={"header-brand-mark"}>
-                <img src={"assets/kvcf-logo-basic.png"} alt={"한국바이브코딩협회"} />
+                <img src={"/assets/kvcf-logo-basic.png"} alt={"한국바이브코딩협회"} />
               </span>
             </a>
             <nav id={"publicNav"}>
@@ -276,7 +276,7 @@ export function SiteFooter() {
           </div>
           <div className={"fcols"}>
             <div className={"fl"}>
-              <img className={"footer-brand-logo"} src={"assets/kvcf-logo-white.png"} alt={"한국바이브코딩협회"} />
+              <img className={"footer-brand-logo"} src={"/assets/kvcf-logo-white.png"} alt={"한국바이브코딩협회"} />
             </div>
             <nav>
               <a data-r={"about"}>
