@@ -23,6 +23,11 @@ const nextConfig: NextConfig = {
   turbopack: { root: process.cwd() },
   outputFileTracingRoot: process.cwd(),
 
+  // dev 서버 HMR / RSC 요청 호스트 화이트리스트 — Next.js 16 기본 차단 해제.
+  // 정적 export 자체에는 무관하지만, dev 환경에서 127.0.0.1 / 사내 IP 로 접속할 때
+  // "Blocked cross-origin request" 경고가 뜨며 HMR 이 끊기는 현상을 막습니다.
+  allowedDevOrigins: ["127.0.0.1", "localhost", "0.0.0.0"],
+
   // 클라이언트가 이미지를 가져올 수 있는 외부 호스트 (Open Graph 등 외부 사진 사용 시).
   // Org 멤버 사진은 public/assets/ 에서 직접 서빙하므로 보통 비워 둡니다.
 };

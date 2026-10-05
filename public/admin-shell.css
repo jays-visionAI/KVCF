@@ -6,6 +6,14 @@
    ============================================================= */
 
 html, body{height:auto;min-height:100%}
+/* 배경 단일 진실 공급원 — 어드민 모드에서는 html 배경까지 함께 강제한다.
+   legacy-base.css 의 `html:has(body.admin-mode){background:#101e36}` 보다
+   늦게 로드되므로 같은 값을 여기서 다시 선언해 어드민 화면의 배경 색을
+   파싱 순서와 무관하게 하나로 고정한다. */
+html:has(body.admin-mode){
+  background:#0a1024 !important;
+  color:#e7edfa;
+}
 body.admin-mode{
   background:#0a1024;
   color:#e7edfa;
@@ -126,6 +134,13 @@ body.admin-mode .admin-shell{
 .admin-shell .page,
 .admin-shell #p-admin{display:block;background:var(--adm-bg);color:var(--adm-text);padding:0}
 
+/* legacy-base.css 의 `.adm{display:grid}` 는 UA 기본 `[hidden]{display:none}` 보다
+   우선순위가 높아 hidden 속성을 통째로 무력화합니다. 그 결과 로그인 화면 아래에
+   밝은 흰 배경의 어드민 콘솔(.adm, background:#f2f5fa)이 그대로 삽출되며
+   어드민 로그인 화면에 파란 배경과 흰 배경이 두 개로 보였습니다.
+   hidden 을 걸어둔 .adm 은 어떤 경우에도 렌더되지 않게 여기서 차단합니다. */
+.admin-shell .adm[hidden]{display:none !important}
+
 /* =============================================================
    어드민 전용 로그인 — 회원 사이트의 .login/.login-brand-panel 과
    시각·구조 완전 분리. 회원 사이트 로그인 페이지가 절대 보이지 않습니다.
@@ -232,6 +247,74 @@ body.admin-mode .admin-shell{
   line-height:1.6;
   margin-top:14px;
 }
+.admin-shell .adm-login-magic{
+  background:rgba(60,140,255,.06);
+  border:1px solid rgba(60,140,255,.35);
+  border-radius:8px;
+  padding:14px;
+  margin-top:14px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.admin-shell .adm-login-magic-head{display:flex;flex-direction:column;gap:4px}
+.admin-shell .adm-login-magic-head b{color:var(--adm-accent-2);font-size:13.5px;letter-spacing:-.2px}
+.admin-shell .adm-login-magic-head span{font-size:12px;color:var(--adm-faint);line-height:1.6}
+.admin-shell .adm-login-card .submit.magic{
+  background:transparent;
+  border:1px solid var(--adm-accent);
+  color:var(--adm-accent-2);
+}
+.admin-shell .adm-login-card .submit.magic:hover:not(:disabled){
+  background:rgba(60,140,255,.15);
+}
+.admin-shell .adm-login-card .submit:disabled{opacity:.55;cursor:not-allowed}
+.admin-shell .adm-login-magic-msg{
+  font-size:12.5px;
+  color:#b9d6ff;
+  background:rgba(60,140,255,.08);
+  border:1px solid rgba(60,140,255,.25);
+  padding:8px 10px;
+  border-radius:6px;
+  line-height:1.55;
+  word-break:break-all;
+}
+.admin-shell .adm-login-pw-msg{
+  font-size:12.5px;
+  padding:8px 10px;
+  border-radius:6px;
+  line-height:1.55;
+  white-space:pre-line;
+  word-break:break-word;
+}
+.admin-shell .adm-login-pw-msg--info{
+  color:#b9d6ff;
+  background:rgba(60,140,255,.08);
+  border:1px solid rgba(60,140,255,.25);
+}
+.admin-shell .adm-login-pw-msg--error{
+  color:#ffb4b4;
+  background:rgba(255,80,80,.10);
+  border:1px solid rgba(255,80,80,.35);
+}
+.admin-shell .adm-login-pw-msg--success{
+  color:#b8f0c6;
+  background:rgba(60,200,120,.10);
+  border:1px solid rgba(60,200,120,.35);
+}
+.admin-shell .adm-login-magic-link{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  font-size:12px;
+  color:var(--adm-faint);
+}
+.admin-shell .adm-login-magic-link a{
+  color:var(--adm-accent-2);
+  font-size:12px;
+  word-break:break-all;
+  text-decoration:underline;
+}
 .admin-shell .adm-login-hint{
   font-size:12px;
   color:var(--adm-faint);
@@ -316,6 +399,19 @@ body.admin-mode .admin-shell{
   display:block;
   margin-bottom:2px;
   font-size:12.5px;
+}
+.admin-shell .adm-login-code{
+  margin:4px 0 4px;
+  padding:8px 10px;
+  border:1px solid var(--adm-line);
+  border-radius:6px;
+  background:var(--adm-bg-2);
+  color:var(--adm-text);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11.5px;
+  line-height:1.6;
+  white-space:pre-wrap;
+  overflow-x:auto;
 }
 .admin-shell .adm-login-checklist-foot{
   font-size:11.5px;

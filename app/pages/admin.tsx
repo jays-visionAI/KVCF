@@ -1,6 +1,7 @@
 "use client";
 
 import AdminLoginCard from "../components/AdminLoginCard";
+import AdminBootCard from "../components/AdminBootCard";
 import { useAdminAuth } from "../components/useAdminAuth";
 
 /**
@@ -30,8 +31,19 @@ export default function AdminPage() {
         </div>
       </header>
       <div className="adm-shell-body">
-        {!isAdmin ? <AdminLoginCard /> : null}
-        <div className={"adm"} hidden={!isAdmin || !authReady}>
+        {/*
+            비로그인 상태에서는 AdminLoginCard 만 표시한다.
+            admin 콘솔(<div className="adm">) 은 authReady && isAdmin 일 때만
+            마운트되며, 비로그인 상태에서는 아예 렌더되지 않는다 — useEffect
+            기반 데이터 fetch / 폴링 / 콘솔 부수효과가 한 번도 실행되지 않는다.
+            authReady 가 false 인 동안에도 admin 콘솔은 절대 표시되지 않는다.
+          */}
+        {!authReady ? (
+          <AdminBootCard />
+        ) : !isAdmin ? (
+          <AdminLoginCard />
+        ) : (
+        <div className={"adm"}>
         <aside className={"adm-side"}>
           <div className={"lg"}>
             <img src="/assets/kvcf-logo-white.png" alt="한국바이브코딩협회" />
@@ -915,7 +927,8 @@ export default function AdminPage() {
             </section>
           </div>
         </div>
-      </div>
+        </div>
+        )}
       </div>
       <footer className="adm-shell-footer">
         <div className="adm-shell-footer-inner">

@@ -3,29 +3,28 @@
 import { useEffect, useLayoutEffect } from "react";
 
 // useLayoutEffect 는 SSR 에서는 useEffect 로 폴백 (React 공식 권장 패턴)
-const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 /**
  * 회원 사이트 셸(#siteShell) 과 어드민 셸(#adminShell) 의 가시성을
- * 현재 해시 라우트에 맞춰 동기화하는 가벼운 브리지.
+ * 현재 해시 라우트에 맞춰 단일 진실 공급원(body.admin-mode + admin-shell.css)
+ * 에 동기화하는 가벼운 브리지.
  *
- * 문제 배경:
- *  - `legacy-app.js` 의 show(r) 는 adminShell.hidden 토글만 담당합니다.
- *    siteShell 은 body.admin-mode 클래스의 CSS(display:none) 에 의존합니다.
- *  - 그런데 legacy 스크립트가 늦게 로드되거나 React hydration 이 먼저 일어나면
- *    body 클래스 토글이 race condition 으로 씹히는 경우가 있습니다.
- *  - 또한 React 가 admin 셸/페이지를 다시 렌더할 때 `hidden` 속성을 덮어쓰면서
- *    legacy 가 풀어준 상태가 다시 가려질 수 있습니다.
- *
- * 이 브리지는:
- *   1) React 첫 마운트 직후 한 번, 현재 라우트(#admin 등) 에 맞춰 siteShell / adminShell 의
- *      hidden 속성을 즉시 강제합니다.
- *   2) 이후 hashchange 이벤트가 발생할 때마다 같은 로직을 다시 적용합니다.
- *   3) 어드민 셸은 React 가 자식 JSON 단의 hidden 을 매번 다시 적용하므로, 가시성 토글을
- *      미니 setTimeout 으로 React 렌더 패스 다음 프레임에 다시 적용합니다.
+ * 셸 가시성 정책:
+ *   - `body.admin-mode` 가 켜져 있을 때: admin-shell.css 가 `.site-shell{display:none!important}`
+ *     과 `.admin-shell{display:block!important}` 를 적용한다. 이게 단일 진실 공급원.
+ *   - 이 브리지는 body.admin-mode 와 admin 셸 / p-admin 의 hidden 만 즉시 보정한다.
+ *   - React 가 admin 셸 자식의 hidden 을 매 렌더마다 덮어쓸 수 있으므로, hashchange
+ *     시점에 한 번 더 보정한다 (단, requestAnimationFrame 으로 두 번 토글하던 이전
+ *     패턴은 race condition 을 만들 수 있어 제거).
+ *   - `<html>` 배경색도 이 브리지가 단일로 소유한다. legacy-app.js 의 show() 도
+ *     같은 값을 쓰고 있었는데, 두 경로가 어긋나면 어드민 라우트에서 html 은 흰색으로
+ *     남아 어두운 어드민 셸 밖 여백이 흰 배경으로 노출된다 (배경이 두 개로 보임).
  */
 export default function ShellVisibilityBridge() {
-  // hydration 직후 즉시 한 번 동기화 — React 가 첫 hidden 적용을 끝내기 전에 셸 가시성을 먼저 잡습니다.
+  // hydration 직후 즉시 한 번 동기화 — React 가 첫 hidden 적용을 끝내기 전에
+  // body 클래스 / admin 셸 hidden 을 먼저 보정한다.
   useIsomorphicLayoutEffect(() => {
     applyShellVisibility();
   }, []);
@@ -49,40 +48,35 @@ function applyShellVisibility() {
   const pAdmin = document.getElementById("p-admin");
 
   // 1) body 클래스 즉시 토글 — CSS가 셸 가시성을 결정한다.
-  //    admin 라우트일 때 body.admin-mode 가 없으면 어드민 셸이 절대 보이지 않으므로,
-  //    legacy app.js 가 호출되기 전이라도 여기서 먼저 동기화한다.
   document.body.classList.toggle("admin-mode", isAdmin);
 
-  if (siteShell) {
-    // admin 라우트일 때는 회원 사이트 셸을 완전히 숨깁니다.
-    siteShell.hidden = isAdmin;
-    siteShell.style.display = isAdmin ? "none" : "";
+  // 1-1) <html> 배경도 여기서 단일로 맞춘다.
+  //   어드민 셸이 떠 있는 동안 html 이 흰색으로 남아 있으면, 어두운 어드민 셸이
+  //   콘텐츠 영역만 덮고 스크롤 여백/짧은 페이지 하단이 흰 배경으로 노출된다
+  //   (파란 배경과 흰 배경이 두 개로 보이는 증상). legacy-app.js 의 show() 도
+  //   같은 값을 쓰고 있었기에 이중 통제였다 — 여기서 한 곳으로 모은다.
+  const rootStyle = document.documentElement.style;
+  rootStyle.backgroundColor = isAdmin
+    ? "#0a1024"
+    : page === "home"
+      ? ""
+      : "#ffffff";
+  document.documentElement.classList.toggle("home-background", page === "home");
+
+  // 2) siteShell: 가시성은 admin-shell.css 가 결정한다. inline display 는
+  //    admin 모드가 아닐 때만 보장해주면 되고, admin 모드에서는 CSS 의
+  //    !important 가 inline 을 덮어쓴다.
+  if (siteShell && !isAdmin) {
+    siteShell.style.display = "";
   }
+
+  // 3) adminShell: admin 라우트일 때만 보이도록 CSS 가 처리한다.
+  //    React 가 admin 셸 자식 hidden 을 매 렌더마다 덮어쓰는 경우를 막기 위해
+  //    hidden 속성을 강제로 false 로 맞춘다 (CSS 가 우선이므로 안전).
   if (adminShell) {
-    // 어드민 셸의 hidden 속성을 직접 토글하지 않는다.
-    // CSS(body.admin-mode .admin-shell{display:block!important} / body:not(.admin-mode) .admin-shell{display:none!important})
-    // 가 단일 진실 공급원이며, hidden 속성과 충돌하지 않도록 admin 라우트에서는 강제로 hidden 을 해제한다.
     adminShell.hidden = false;
   }
   if (pAdmin && isAdmin) {
     pAdmin.hidden = false;
   }
-
-  // React 가 다음 렌더 패스에서 siteShell 의 hidden 을 다시 덮어쓰는 경우를 대비해
-  // 다음 프레임에 한 번 더 동기화합니다.
-  window.requestAnimationFrame(() => {
-    const ss = document.getElementById("siteShell");
-    const as = document.getElementById("adminShell");
-    const pa = document.getElementById("p-admin");
-    if (ss) {
-      ss.hidden = isAdmin;
-      ss.style.display = isAdmin ? "none" : "";
-    }
-    if (as) {
-      // 어드민 셸은 항상 hidden=false 로 강제해 CSS만으로 보이게 한다.
-      as.hidden = false;
-    }
-    if (pa && isAdmin) pa.hidden = false;
-    document.body.classList.toggle("admin-mode", isAdmin);
-  });
 }

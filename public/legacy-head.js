@@ -7,7 +7,10 @@ window.kvcfInitialRoute=(function(){
  if(route==='mypage')route='dashboard';
  if(!pages.includes(route))route='home';
  if(route==='dashboard'||route==='profile')route='login';
- document.documentElement.style.backgroundColor=route==='home'?'':'#ffffff';
+ // 어드민 라우트는 어드민 셸의 캔버스 배경(진한 남색)을 그대로 사용한다.
+ // 회원 라우트만 흰색(홈은 hero 이미지 아래로 비워둠) — 어드민 화면 가장자리/오버스크롤에
+ // 흰 배경이 남으면 어드민 셸과 색이 달라 이중 배경으로 보인다.
+ document.documentElement.style.backgroundColor=route==='home'?'':(route==='admin'?'#0a1024':'#ffffff');
  document.documentElement.classList.toggle('home-background',route==='home');
  // 어드민 라우트로 직접 진입한 경우 legacy app.js 가 로드되기 전이라도
  // 어드민 셸 CSS 가 SSR 헤더에서 항상 로드되도록 body 클래스를 즉시 토글한다.

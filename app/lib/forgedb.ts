@@ -799,6 +799,46 @@ export async function deleteApplication(id: string): Promise<{ ok: boolean; erro
 
 
 // ────────────────────────────────────────────────────────────────────────────
+//  Magic link (auth-magic-link edge function) — 비밀번호 대신 매직링크로 admin 진입
+//  이 인스턴스는 이메일+비밀번호 provider가 비활성이라 encrypted_password 컬럼이
+//  없습니다. 따라서 운영자는 매직링크로만 로그인해야 합니다.
+//  anon 클라이언트가 함수를 호출하면 service_role 컨텍스트로 매직링크를 생성합니다.
+// ────────────────────────────────────────────────────────────────────────────
+export type MagicLinkResult = {
+  ok: boolean;
+  email?: string;
+  action_link?: string | null;
+  email_otp?: string | null;
+  sent_at?: string;
+  error?: string;
+};
+
+export async function requestAdminMagicLink(
+  email: string,
+  redirectTo?: string
+): Promise<MagicLinkResult> {
+  const c = client();
+  if (!c) return { ok: false, error: "ForgeDB 미설정 (.env anon key 없음)" };
+  try {
+    const { data, error } = await c.functions.invoke("auth-magic-link", {
+      body: { email, redirect_to: redirectTo ?? null },
+    });
+    if (error) return { ok: false, error: error.message };
+    const payload = (data || {}) as Partial<MagicLinkResult>;
+    return {
+      ok: payload.ok !== false,
+      email: payload.email ?? email,
+      action_link: payload.action_link ?? null,
+      email_otp: payload.email_otp ?? null,
+      sent_at: payload.sent_at,
+    };
+  } catch (e) {
+    return { ok: false, error: String((e as { message?: string })?.message || e) };
+  }
+}
+
+
+// ────────────────────────────────────────────────────────────────────────────
 //  utils
 // ────────────────────────────────────────────────────────────────────────────
 function escHtml(s: string): string {
