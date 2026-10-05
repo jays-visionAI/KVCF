@@ -4,9 +4,19 @@
 ForgeDB 호스팅 대상: `kvcf-jt1bd3.forgedb.app`
 결정: **apex(`kvcf.kr`)를 메인으로 사용** — www 는 보조 경로
 
-> 현재 실측(2026-10-05): 두 도메인 모두 ForgeDB 에 등록돼 있으나
-> `Pending DNS` / `SSL: pending`. 가비아에 아직 레코드가 없어
-> `forgedb hosting domains verify` 는 `DNS lookup failed` 를 반환합니다.
+> 현재 실측 (2026-10-05 23:29 KST):
+> - `www.kvcf.kr` → **DNS verified / SSL active** ✅ `https://www.kvcf.kr` 는
+>   200 응답, Let's Encrypt 인증서 `CN=www.kvcf.kr` (만료 2027-01-03) 정상 발급.
+> - `kvcf.kr` (apex) → `Pending DNS / SSL: pending` ⚠️
+>   apex 의 A 레코드와 `_forgedb-verify` TXT 가 **가비아에 하나도 없습니다.**
+>   (가비아 NS 3곳 `ns.gabia.co.kr` / `ns1.gabia.co.kr` / `ns.gabia.net` 과
+>   퍼블릭 리졸버 `1.1.1.1` / `8.8.8.8` / `9.9.9.9` 모두 빈 응답)
+>   → `https://kvcf.kr` 은 `Could not resolve host` 로 아예 열리지 않습니다.
+>
+> ⚠️ **apex 의 기존 A 레코드(`121.254.178.253`)가 삭제된 상태입니다.**
+> 이전에는 그 IP 에 기존 서비스가 떠 있었으나, 지금은 apex 가 DNS 에서
+> 사라진 상태입니다. apex 를 메인으로 쓰려면 아래 A 레코드를 새로 추가해야 합니다.
+>
 > **아래 레코드를 가비아에 넣는 것이 남은 유일한 작업입니다.**
 
 > 아래 값은 `forgedb hosting domains add` CLI 가 **방금(2026-10-05) 출력한 실값**입니다.
@@ -49,38 +59,56 @@ A 레코드를 바꿀 필요는 없습니다.
 
 메뉴: **도메인 관리 → DNS 설정**
 
-apex 가 메인이므로 아래 2줄이 전부입니다. **기존 레코드는 하나도 지우지 마세요.**
+apex 가 메인이므로 아래 3줄이 전부입니다.
 
-| 유형 | 이름 | 값 | TTL |
+| 유형 | 이름 | 값 | TTL | 상태 |
+|---|---|---|---|---|
+| **A** | (비움 = apex) | `157.180.84.28` | 기본값 | ❗ **필수** — apex 가 엣지 IP 로 바로 붙습니다 |
+| **TXT** | `_forgedb-verify` | `7447205a95528de6ef22b272d4c9ecec` | 기본값 | ❗ **필수** — 소유권 검증 |
+
+가비아 이름 칸은 **빈칸(또는 `@`)** 이고, `_forgedb-verify` 는 `.kr` 을 빼고 입력합니다.
+
+⚠️ **A 레코드가 꼭 있어야 합니다.** 이전 문서의 "TXT 한 줄이면 된다"는 설명은
+틀렸습니다. 실측 결과(2026-10-05):
+
+```
+A  레코드 없이 TXT 만 추가한 경우
+  → dig A kvcf.kr          = (빈 응답)
+  → https://kvcf.kr        = Could not resolve host   ← 사이트가 아예 안 열림
+  → verify kvcf.kr         = DNS lookup failed
+```
+
+apex 는 CNAME 이 불가능하므로 ForgeDB 엣지 IP(`157.180.84.28`)로 A 레코드를
+직접 걸어야 합니다. 이 IP 는 `www.kvcf.kr` 가 이미 가리키는 대상과 동일합니다.
+
+### www 는 이미 연결 완료 ✅ (추가 작업 불필요)
+
+| 유형 | 이름 | 값 | 상태 |
 |---|---|---|---|
-| **TXT** | `_forgedb-verify` | `7447205a95528de6ef22b272d4c9ecec` | 기본값 |
+| **CNAME** | `www` | `kvcf-jt1bd3.forgedb.app` | ✅ 검증·SSL 발급 완료 |
+| **TXT** | `_forgedb-verify.www` | `61c7fe8ef95147b1bfe3b2556cc43cac` | ✅ 통과 |
 
-가비아 이름 칸에는 **`.kr` 을 빼고** `_forgedb-verify` 만 넣습니다.
-TXT 는 apex A 레코드와 공존하므로 `121.254.178.253` 의 기존 서비스가 끊기지 않습니다.
-이 레코드가 들어가면 `forgedb hosting domains verify kvcf.kr` 가 통과하고
-**apex 용 SSL 이 자동 발급**됩니다. CNAME 이 필요 없습니다.
-
-### 선택: www 도 같이 붙이려면
-
-| 유형 | 이름 | 값 | TTL |
-|---|---|---|---|
-| **CNAME** | `www` | `kvcf-jt1bd3.forgedb.app` | 기본값 |
-| **TXT** | `_forgedb-verify.www` | `61c7fe8ef95147b1bfe3b2556cc43cac` | 기본값 |
-
-- 기존 `www` → A 레코드(`121.254.178.253`)는 **삭제**해야 합니다
-  (같은 이름에 A 와 CNAME 이 공존할 수 없습니다).
-- apex 메인이므로 www 는 보조 주소로만 씁니다 (리다이렉트 없음).
+`https://www.kvcf.kr` 는 지금 접속되며, HTTP(80) 은 HTTPS 로 301 됩니다.
+apex 메인이므로 www 는 보조 주소이며 리다이렉트는 걸지 않습니다.
 
 ---
 
 ## 2. 전파 확인
 
+두 레코드가 **둘 다** 조회되어야 합니다 (A 레코드를 빠뜨리면 검증 단계에서 걸립니다):
+
 ```bash
-dig +short TXT _forgedb-verify.kvcf.kr @1.1.1.1
+dig +short A   kvcf.kr                   @1.1.1.1   # → 157.180.84.28
+dig +short TXT _forgedb-verify.kvcf.kr   @1.1.1.1   # → 7447205a95528de6ef22b272d4c9ecec
 ```
 
-위 값이 조회되면 전파 완료입니다. 가비아 NS 기준 전파는 보통
-10분~수 시간이며, ForgeDB 검증은 최대 48시간 걸릴 수 있습니다.
+A 레코드가 조회되면 이 단계에서 사이트가 열립니다:
+
+```bash
+curl -I https://kvcf.kr    # → 200
+```
+
+가비아 NS 기준 전파는 보통 10분~수 시간이며, ForgeDB 검증은 최대 48시간 걸릴 수 있습니다.
 
 ---
 

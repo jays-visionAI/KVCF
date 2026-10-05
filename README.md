@@ -85,24 +85,32 @@ git push -u origin main
 ### 2-4. 커스텀 도메인 연결 — `kvcf.kr` (apex)
 
 `kvcf.kr` 은 apex(루트) 도메인이라 DNS 표준상 CNAME 을 걸 수 없습니다.
-그래서 **TXT 검증 레코드 한 줄**로 소유권을 확인하면 apex 용 SSL 이 자동 발급됩니다.
+그래서 **엣지 IP 로 A 레코드를 직접 걸고**, TXT 검증으로 소유권을 확인합니다.
+apex 용 SSL 은 검증 통과 후 자동 발급됩니다.
 
 1. ForgeDB 호스팅에 도메인 등록:
    ```bash
    forgedb hosting domains add kvcf.kr
    ```
-2. 가비아 **도메인 관리 → DNS 설정** 에 아래 한 줄만 추가합니다 (이것이 유일한 필수 작업):
+2. 가비아 **도메인 관리 → DNS 설정** 에 아래 2줄을 추가합니다 (이것이 유일한 필수 작업):
    ```
-   TXT    _forgedb-verify   →   7447205a95528de6ef22b272d4c9ecec
+   A     (이름 칸 비움)    →   157.180.84.28
+   TXT   _forgedb-verify  →   7447205a95528de6ef22b272d4c9ecec
    ```
-   - 이름 칸에는 `.kr` 을 빼고 `_forgedb-verify` 만 입력합니다.
-   - **기존 A 레코드는 삭제하지 마세요.** TXT 는 apex A 레코드와 공존합니다.
+   - A 레코드의 이름 칸은 **빈칸(또는 `@`)** 입니다.
+   - TXT 는 `.kr` 을 빼고 `_forgedb-verify` 만 입력합니다.
+   - ⚠️ A 레코드를 빠뜨리면 apex 가 DNS 에서 사라져 `https://kvcf.kr` 이
+     `Could not resolve host` 로 열리지 않습니다. **둘 다 반드시 넣으세요.**
 3. 전파 후 소유권 검증 + 자동 SSL 발급:
    ```bash
+   dig +short A   kvcf.kr                 @1.1.1.1   # → 157.180.84.28
    dig +short TXT _forgedb-verify.kvcf.kr @1.1.1.1
    forgedb hosting domains verify kvcf.kr
    ```
 4. `https://kvcf.kr` 로 바로 접속됩니다.
+
+보조 경로인 `www.kvcf.kr` 는 CNAME(`kvcf-jt1bd3.forgedb.app`) + TXT 로
+**이미 연결·검증·SSL 발급이 완료**되어 `https://www.kvcf.kr` 로 접속됩니다.
 
 메인 주소가 apex 이므로 apex → www 리다이렉트는 걸지 않습니다
 (`public/.well-known/forge-hosting.json`). 도메인 관련 값들은 이미 실제 값으로 반영돼 있습니다:
