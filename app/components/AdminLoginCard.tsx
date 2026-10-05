@@ -76,7 +76,9 @@ export default function AdminLoginCard() {
       let dbIsAdmin = false;
       try {
         const rpc = await fb.rpc("is_admin");
-        dbIsAdmin = Boolean(rpc?.data && rpc.data.length > 0 && rpc.data[0]?.is_admin === true);
+        // is_admin() 은 스칼라 boolean 을 반환한다 (배열 아님).
+        const d = rpc?.data as unknown;
+        dbIsAdmin = d === true || (Array.isArray(d) && (d[0] as { is_admin?: boolean })?.is_admin === true);
       } catch (_) { dbIsAdmin = false; }
       const md = (u.user_metadata as Record<string, unknown> | null) ?? {};
       const metaIsAdmin = md["role"] === "admin";
@@ -95,15 +97,17 @@ export default function AdminLoginCard() {
       setPwTone("success");
       setPwMsg("인증되었습니다. 어드민 콘솔로 이동합니다…");
       try {
+        // legacy 가 읽는 전역 인증 객체를 반드시 새로 만든다.
+        // (레거시는 모듈 스코프 `auth` 를 쓰므로 window.auth 가 없으면 폴링이 영원히 실패한다)
         const w = window as Window & {
           auth?: { role?: string | null; name?: string | null; email?: string | null; userId?: string | null };
         };
-        if (w.auth) {
-          w.auth.role = "admin";
-          w.auth.email = u.email || email;
-          w.auth.name = (typeof md["name"] === "string" && (md["name"] as string)) || (u.email || email).split("@")[0] || "관리자";
-          w.auth.userId = u.id;
-        }
+        w.auth = {
+          role: "admin",
+          email: u.email || email,
+          name: (typeof md["name"] === "string" && (md["name"] as string)) || (u.email || email).split("@")[0] || "관리자",
+          userId: u.id,
+        };
         if (typeof window.location !== "undefined") {
           window.location.hash = "#admin";
           window.dispatchEvent(new HashChangeEvent("hashchange"));
