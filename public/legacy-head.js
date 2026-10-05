@@ -2,7 +2,7 @@
 // Select the initial route before the browser paints any page content.
 if('scrollRestoration' in history)history.scrollRestoration='manual';
 window.kvcfInitialRoute=(function(){
- const pages=['home','about','greeting','org','history','contact','cert','vca','vcp','vce','consultant','schedule','rules','edu','partners','apply','verify','member','join','signup','companies','notice','recruit','noticeview','press','library','faq','inquiry','terms','privacy','noemail','login','dashboard','profile','admin'];
+ const pages=['home','about','greeting','org','history','contact','books','cert','vca','vcp','vce','consultant','schedule','rules','edu','partners','apply','verify','member','join','signup','companies','notice','recruit','noticeview','press','library','faq','inquiry','terms','privacy','noemail','login','dashboard','profile','admin'];
  // 정적 호스팅은 없는 경로를 index.html 로 폴백시킵니다(spa_fallback).
  // 그래서 https://kvcf.kr/about 처럼 해시가 없는 clean path 로 진입하면
  // location.hash 가 빈 문자열이라 그대로 'home' 으로 떨어집니다. sitemap.xml 과
