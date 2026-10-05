@@ -3,7 +3,7 @@ import Script from "next/script";
 export const metadata: Metadata = {
   title: "한국바이브코딩협회 (KVCF)",
   description: "한국바이브코딩협회 공식 사이트. 바이브코딩 교육, 자격, 연구와 교류를 통해 누구나 만들고 함께 성장하는 미래를 만들어갑니다.",
-  metadataBase: new URL("https://kvcf-public-preview.vercel.app"),
+  metadataBase: new URL("https://kvcf.kr"),
   openGraph: {
     type: "website",
     locale: "ko_KR",

@@ -670,7 +670,7 @@ export default function AdminPage() {
                       {"회원 관리"}
                     </h3>
                     <div className={"hint"}>
-                      {"회원 정보 조회·수정 및 가입 승인을 처리합니다."}
+                      {"사이트 계정과 협회 회원가입 신청을 함께 조회·수정하고 가입 승인을 처리합니다."}
                     </div>
                   </div>
                   <button className={"abtn pri"} id={"addMember"}>
@@ -691,6 +691,17 @@ export default function AdminPage() {
                     </option>
                     <option>
                       {"교육기관"}
+                    </option>
+                  </select>
+                  <select id={"fSrc"}>
+                    <option value={""}>
+                      {"전체 가입구분"}
+                    </option>
+                    <option value={"site"}>
+                      {"사이트 계정만"}
+                    </option>
+                    <option value={"assoc"}>
+                      {"협회 회원만"}
                     </option>
                   </select>
                   <select id={"fStatus"}>
@@ -720,6 +731,9 @@ export default function AdminPage() {
                       </th>
                       <th>
                         {"유형"}
+                      </th>
+                      <th>
+                        {"가입구분"}
                       </th>
                       <th>
                         {"연락처"}

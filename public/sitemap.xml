@@ -1,64 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://kvcf.example.com/</loc>
+    <loc>https://kvcf.kr/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://kvcf.example.com/about</loc>
+    <loc>https://kvcf.kr/about</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://kvcf.example.com/greeting</loc>
+    <loc>https://kvcf.kr/greeting</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://kvcf.example.com/books</loc>
+    <loc>https://kvcf.kr/books</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://kvcf.example.com/org</loc>
+    <loc>https://kvcf.kr/org</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://kvcf.example.com/contact</loc>
+    <loc>https://kvcf.kr/contact</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://kvcf.example.com/cert</loc>
+    <loc>https://kvcf.kr/cert</loc>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://kvcf.example.com/edu</loc>
+    <loc>https://kvcf.kr/edu</loc>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://kvcf.example.com/verify</loc>
+    <loc>https://kvcf.kr/verify</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://kvcf.example.com/notice</loc>
+    <loc>https://kvcf.kr/notice</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://kvcf.example.com/recruit</loc>
+    <loc>https://kvcf.kr/recruit</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://kvcf.example.com/press</loc>
+    <loc>https://kvcf.kr/press</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://kvcf.example.com/library</loc>
+    <loc>https://kvcf.kr/library</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://kvcf.example.com/faq</loc>
+    <loc>https://kvcf.kr/faq</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://kvcf.example.com/inquiry</loc>
+    <loc>https://kvcf.kr/inquiry</loc>
     <priority>0.7</priority>
   </url>
 </urlset>

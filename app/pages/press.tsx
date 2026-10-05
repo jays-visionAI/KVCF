@@ -34,8 +34,8 @@ export default function PressPage() {
             <h2>
               {"언론 보도 (블루포지 MOU 관련)"}
             </h2>
-            <span className={"mono"} style={{"fontSize": "14px", "color": "var(--faint)"}}>
-              {"총 12건"}
+            <span className={"mono"} id={"cntPress"} style={{"fontSize": "14px", "color": "var(--faint)"}}>
+              {"총 0건"}
             </span>
           </div>
           <div className={"presslist"} id={"bPressList"}></div>

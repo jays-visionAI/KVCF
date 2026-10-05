@@ -279,6 +279,7 @@ footer{background:var(--navy);color:#a9bee0;padding:40px 0}
 .brow[data-r]:hover .tt{color:var(--blue)}
 .prow[data-ext]:hover{background:var(--soft)}
 .doc[data-doc]:hover{border-color:var(--blue)}
+a.doc:hover{border-color:var(--blue);background:var(--soft)}
 .stat[data-r]:hover .n{opacity:.75}
 .consult[data-r]:hover{box-shadow:0 12px 30px rgba(25,87,214,.16)}
 

@@ -109,6 +109,46 @@ async function dbDelete(table,eq){
  try{var fb=window.kvcfClient&&window.kvcfClient();if(!fb)return {ok:false,error:'ForgeDB 미설정'};var r=await fb.from(table).delete().eq(eq.column,eq.value);if(r.error)return {ok:false,error:r.error.message};return {ok:true};}catch(err){return {ok:false,error:(err&&err.message)||'DB 오류'};}
 }
 
+/* ───────────────────────────────────────────────────────────────────────────
+   공개 콘텐츠(공지사항·보도자료·자료실) — 어드민 변경이 프런트에 즉시 반영되도록
+   ───────────────────────────────────────────────────────────────────────────
+   홈 / 공지사항 / 보도자료 / 자료실 화면은 모두 SITE.notices·press·library 메모리
+   배열에서 그려집니다. 이 배열을 DB 로 채우던 진입점이 fetchAllAdminData() 뿐인데
+   그 함수는 #admin 에 들어갔을 때만 실행됩니다. 그래서 관리자가 콘솔에서 공지를
+   저장해도 그 밖의 모든 화면은 언제나 코드에 하드코딩된 예시 데이터였습니다.
+
+   RLS 는 notices / press / library_docs 에 anon SELECT 을 허용하므로 로그인 여부와
+   무관하게 조회할 수 있습니다. 아래 세 매퍼는 fetchAllAdminData(어드민 콘솔)와
+   fetchPublicContent(전체 방문자)가 함께 씁니다 — 매핑 로직은 한 곳에 두고 호출
+   주체만 나눕니다.
+
+   DB 에 행이 있으면 DB 가 곧 기준입니다. 예제 시드는 해당 테이블이 아직 비어 있을
+   때만 fallback 으로 남습니다(빈 화면 대신 데모 콘텐츠가 보이도록). */
+function applyPublicNotices(rows){
+ if(!rows||!rows.length)return;
+ SITE.notices=rows.map(function(x){return{cat:x.category||'공지',id:x.id,title:x.title,date:(x.published_at||'').slice(0,10).replace(/-/g,'.'),dept:x.author||'사무국',body:x.body||'',sort:1,_db:1};});
+}
+function applyPublicPress(rows){
+ if(!rows||!rows.length)return;
+ SITE.press=rows.map(function(x){return{title:x.title,media:x.outlet,date:(x.published_at||'').slice(0,10).replace(/-/g,'.'),url:x.url||'',id:x.id};});
+}
+function applyPublicLibrary(rows){
+ if(!rows||!rows.length)return;
+ SITE.library=rows.map(function(x){return{name:x.title,type:x.category||'PDF',description:x.description||'',file_url:x.file_url||'',date:(x.published_at||'').slice(0,10).replace(/-/g,'.'),ready:x.file_url?1:0,id:x.id};});
+}
+// 방문자(익명 포함) 최초 진입 시, 그리고 어드민이 공지/보도/자료를 저장·삭제한 직후 호출합니다.
+// DB 미설정이나 조회 실패는 dbFetch 가 null 을 돌려주고 → SITE 는 예시 시드를 그대로 유지합니다.
+async function fetchPublicContent(){
+ applyPublicNotices(await dbFetch('notices','*',{column:'published_at',ascending:false}));
+ applyPublicPress(await dbFetch('press','*',{column:'published_at',ascending:false}));
+ applyPublicLibrary(await dbFetch('library_docs','*',{column:'published_at',ascending:false}));
+ renderPublic();
+ // #noticeview 로 직접 진입한 경우 restoreRoute() 가 DB 로드 전 예시 시드로 해석했으므로
+ // 목록이 준비된 뒤 한 번 더 해석해 줍니다(id 로 찾으므로 순서가 바뀌어도 안전).
+ var r=(location.hash||'').replace(/^#/,'').replace(/^\/+/,'').split('?')[0];
+ if(r==='noticeview')restoreRoute();
+}
+
 // admin 진입 시 콘텐츠·회원·신청·문의를 DB 에서 한 번에 가져와 SITE / MEMBERS / APPLS / INQS / INSTS 메모리 캐시를 갱신.
 async function fetchAllAdminData(){
  var hero=await dbFetchSingle('site_hero',{column:'id',value:1});
@@ -121,20 +161,10 @@ async function fetchAllAdminData(){
  if(ofs&&ofs.length){SITE.officers=ofs.map(function(x){return{name:x.name,role:x.role,aff:x.affiliation||'',photo:x.photo_url||1,id:x.id,sort:x.sort_order||0};});}
  var bks=await dbFetch('books','*',{column:'sort_order',ascending:true});
  if(bks&&bks.length){SITE.books=bks.map(function(x){return{title:x.title,cover:x.cover_url||'',url:x.url,id:x.id,sort:x.sort_order||0};});}
- // notices (DB 시드 행 + 메모리 시드 행 머지 — DB 우선)
- var nts=await dbFetch('notices','*',{column:'published_at',ascending:false});
- if(nts&&nts.length){
-  var mapped=nts.map(function(x){return{cat:x.category||'공지',id:x.id,title:x.title,date:(x.published_at||'').slice(0,10).replace(/-/g,'.'),dept:x.author||'사무국',body:x.body||'',sort:1,_db:1};});
-  // 메모리 기본값 중 DB 와 겹치지 않는 것은 유지 (legacy 시연용)
-  var keep=SITE.notices.filter(function(m){return !mapped.some(function(d){return d.title===m.title;});});
-  SITE.notices=mapped.concat(keep);
- }
- // press
- var prs=await dbFetch('press','*',{column:'published_at',ascending:false});
- if(prs&&prs.length){SITE.press=prs.map(function(x){return{title:x.title,media:x.outlet,date:(x.published_at||'').slice(0,10).replace(/-/g,'.'),url:x.url||'',id:x.id};});}
- // library
- var libs=await dbFetch('library_docs','*',{column:'published_at',ascending:false});
- if(libs&&libs.length){SITE.library=libs.map(function(x){return{name:x.title,type:x.category||'PDF',description:x.description||'',file_url:x.file_url||'',date:(x.published_at||'').slice(0,10).replace(/-/g,'.'),ready:x.file_url?1:0,id:x.id};});}
+ // notices / press / library — 공개 콘텐츠 매퍼를 공유합니다(fetchPublicContent 와 동일).
+ applyPublicNotices(await dbFetch('notices','*',{column:'published_at',ascending:false}));
+ applyPublicPress(await dbFetch('press','*',{column:'published_at',ascending:false}));
+ applyPublicLibrary(await dbFetch('library_docs','*',{column:'published_at',ascending:false}));
  // cert
  var crts=await dbFetch('certificates','*',{column:'sort_order',ascending:true});
  if(crts&&crts.length){SITE.certs=crts.map(function(x){return{code:x.code,grade:x.grade,name:x.name,en:x.code,hours:(x.hours||0)+'h',method:x.exam_method||'',target:'',route:codeForRoute(x.code),desc:'',id:x.id};});}
@@ -147,7 +177,7 @@ async function fetchAllAdminData(){
  // members
  var mbs=await dbFetch('members','*',{column:'joined_at',ascending:false});
  if(mbs&&mbs.length){
-  MEMBERS=mbs.map(function(x){return{id:x.id,no:x.member_no||'-',name:x.full_name,type:x.member_type||'individual',phone:x.phone||'',org:x.org_name||'',title:x.title||'',status:x.state||'pending',joined:(x.joined_at||'').slice(0,10).replace(/-/g,'.'),certs:'-'};});
+  MEMBERS=mbs.map(function(x){return{id:x.id,no:x.member_no||'-',name:x.full_name,type:x.member_type||'individual',phone:x.phone||'',org:x.org_name||'',title:x.title||'',status:x.state||'pending',joined:(x.joined_at||'').slice(0,10).replace(/-/g,'.'),certs:'-',src:'site',email:'',joinAppId:'',isAssoc:false};});
  }else{MEMBERS=[];}
  // applications
  var aps=await dbFetch('applications','*',{column:'created_at',ascending:false});
@@ -156,6 +186,28 @@ async function fetchAllAdminData(){
   INQS=aps.filter(function(x){return x.kind==='inquiry';}).map(function(x){return{id:x.id,date:(x.created_at||'').slice(0,10).replace(/-/g,'.'),type:'문의',name:x.applicant_name||'-',email:x.applicant_email||'-',msg:((x.payload&&x.payload.message)||''),status:x.state||'미답변'};});
   INSTS=aps.filter(function(x){return x.kind==='institute';}).map(function(x){return{id:x.id,date:(x.created_at||'').slice(0,10).replace(/-/g,'.'),name:(x.payload&&x.payload.org_name)||x.applicant_name||'-',mgr:x.applicant_name||'-',course:((x.payload&&x.payload.course)||'-'),status:x.state||'접수'};});
  }else{APPLS=[];INQS=[];INSTS=[];}
+  // 협회 회원가입(join.tsx → applications.kind='join')은 members 로 오지 않습니다. 회원 관리에서
+  // '사이트 계정'과 '협회 회원가입'을 함께 보여야 하므로 여기서 members 배열로 합칩니다.
+  // 같은 auth.users 로 온 계정은 양쪽에 있으므로 members.id 로 1:1 을 찾아 한 행으로 합칩니다.
+  var byUid={};MEMBERS.forEach(function(m){if(m.id)byUid[m.id]=m;});
+  (aps||[]).filter(function(x){return x.kind==='join';}).forEach(function(a){
+   var p=a.payload||{};
+   var nm=(p.member_type&&p.member_type!=='individual'?(p.affiliation||''):'')||a.applicant_name||'';
+   var m=byUid[a.applicant_id];
+   if(m){
+    m.isAssoc=true;m.joinAppId=a.id;
+    if(p.member_type)m.type=p.member_type;
+    if(p.affiliation&&!m.org)m.org=p.affiliation;
+    if(p.title&&!m.title)m.title=p.title;
+    if(p.cert_interest&&(!m.certs||m.certs==='-'))m.certs=p.cert_interest;
+    if(a.applicant_phone&&!m.phone)m.phone=a.applicant_phone;
+    if(a.applicant_email&&!m.email)m.email=a.applicant_email;
+   }else{
+    // 계정 없이 신청만 남은 경우도 관리자가 볼 수 있도록 목록에 올립니다.
+    MEMBERS.push({id:'',no:'-',name:nm||'-',type:p.member_type||'individual',phone:a.applicant_phone||'',org:p.affiliation||'',title:p.title||'',status:'승인대기',joined:(a.created_at||'').slice(0,10).replace(/-/g,'.'),certs:p.cert_interest||'-',src:'join',email:a.applicant_email||'',joinAppId:a.id,isAssoc:true});
+   }
+  });
+  MEMBERS.sort(function(x,y){return (y.joined||'').localeCompare(x.joined||'');});
 }
 function codeForRoute(code){return ({'VCA':'vca','VCP':'vcp','VCE':'vce','CONSULT':'consultant'})[code]||'cert';}
 
@@ -272,10 +324,23 @@ function renderPublic(){
    '<div><b>사무국</b>'+esc(c.addr1)+'<br>'+esc(c.addr2)+'</div>'+
    '<div><b>연락처</b>'+esc(c.tel)+'<br>'+esc(c.email)+'</div>'+
    '<div><b>운영시간</b>'+esc(c.hours)+'<br>주말·공휴일 휴무</div>';
- if(q('bPressList')) q('bPressList').innerHTML=SITE.press.map(x=>
-   '<a class="prow" href="'+esc(x.url)+'" target="_blank" rel="noopener"><span class="t">'+esc(x.title)+'</span><span class="m">'+esc(x.media)+(x.date?' · '+esc(x.date):'')+'</span></a>').join('');
- if(q('bLibrary')) q('bLibrary').innerHTML=SITE.library.map(d=>
-   '<div class="doc" data-doc="1" style="cursor:pointer"><span class="t">'+esc(d.name)+'<small>'+esc(d.type)+(d.ready?' · 등록완료':' · 최종본 등록 예정')+'</small></span><span class="dl">다운로드 ↓</span></div>').join('');
+ if(q('bPressList')){
+   // url 이 없는 보도자료는 <a href=""> 로 두면 현재 페이지로 되돌아오는 깨진 링크가 됩니다.
+   // 링크가 있을 때만 앵커, 없으면 클릭 불가한 div 로 렌더합니다.
+   const prows=SITE.press.map(x=>x.url
+     ?'<a class="prow" href="'+esc(x.url)+'" target="_blank" rel="noopener"><span class="t">'+esc(x.title)+'</span><span class="m">'+esc(x.media)+(x.date?' · '+esc(x.date):'')+'</span></a>'
+     :'<div class="prow"><span class="t">'+esc(x.title)+'</span><span class="m">'+esc(x.media)+(x.date?' · '+esc(x.date):'')+'</span></div>');
+   q('bPressList').innerHTML=prows.join('')||'<div class="emptyrow">등록된 보도자료가 없습니다.</div>';
+   if(q('cntPress'))q('cntPress').textContent='총 '+SITE.press.length+'건';
+  }
+ if(q('bLibrary')){
+   // 관리자가 파일 URL 을 등록한 문서만 실제 다운로드로 연결합니다.
+   // URL 이 없으면 기존과 동일한 "최종본 등록 예정" 안내(클릭 시 알림)로 둡니다.
+   const docs=SITE.library.map(d=>d.ready&&d.file_url
+     ?'<a class="doc" href="'+esc(d.file_url)+'" target="_blank" rel="noopener"><span class="t">'+esc(d.name)+'<small>'+esc(d.type)+(d.description?' · '+esc(d.description):'')+'</small></span><span class="dl">다운로드 ↓</span></a>'
+     :'<div class="doc" data-doc="1" style="cursor:pointer"><span class="t">'+esc(d.name)+'<small>'+esc(d.type)+(d.description?' · '+esc(d.description):'')+(d.ready?' · 등록완료':' · 최종본 등록 예정')+'</small></span><span class="dl">다운로드 ↓</span></div>');
+   q('bLibrary').innerHTML=docs.join('')||'<div class="emptyrow">등록된 자료가 없습니다.</div>';
+  }
  FEATS.length=0; SITE.banners.forEach(b=>FEATS.push({tag:b.tag,t:b.t,d:b.d,r:b.r}));
  if(fi>=FEATS.length) fi=0; featRender();
 }
@@ -311,12 +376,12 @@ function renderAdmin(){
  set('cMember',MEMBERS.length); set('cAppl',APPLS.length); set('cInq',INQS.length); set('cInst',INSTS.length);
  // 대시보드
  set('kMember',MEMBERS.length);
- set('kMemberSub','회원사 '+MEMBERS.filter(m=>m.type!=='개인').length+' 포함');
- set('kWait',MEMBERS.filter(m=>m.status==='승인대기').length);
+ set('kMemberSub','협회 회원 '+MEMBERS.filter(m=>m.isAssoc).length+' · 사이트 계정 '+MEMBERS.filter(m=>!m.isAssoc).length);
+ set('kWait',MEMBERS.filter(m=>memberStateLabel(m.status)==='승인대기').length);
  set('kAppl',APPLS.length);
  set('kInq',INQS.filter(i=>i.status==='미답변').length);
  if(q('dashAppl')) q('dashAppl').innerHTML=APPLS.slice(0,5).map(a=>'<tr><td>'+esc(a.date)+'</td><td>'+esc(a.name)+'</td><td>'+esc(a.cert)+'</td><td>'+chip(a.status)+'</td></tr>').join('')||'<tr><td colspan="4" class="emptyrow">접수 내역이 없습니다.</td></tr>';
- if(q('dashMember')) q('dashMember').innerHTML=MEMBERS.slice(0,5).map(m=>'<tr><td>'+esc(m.join)+'</td><td>'+esc(m.name)+'</td><td>'+esc(m.type)+'</td><td>'+chip(m.status)+'</td></tr>').join('');
+ if(q('dashMember')) q('dashMember').innerHTML=MEMBERS.slice(0,5).map(m=>'<tr><td>'+esc(m.joined)+'</td><td><b>'+esc(m.name)+'</b><div style="font-size:11.5px;color:var(--sub)">'+(m.isAssoc?'<b style="color:var(--ink)">협회 회원</b>':'사이트 계정')+'</div></td><td>'+esc(memberTypeLabel(m.type))+'</td><td>'+chip(memberStateLabel(m.status))+'</td></tr>').join('')||'<tr><td colspan="4" class="emptyrow">가입한 회원이 없습니다.</td></tr>';
  // 폼 초기값
  if(q('fHeroBadge')){q('fHeroBadge').value=SITE.hero.badge;q('fHeroTitle').value=SITE.hero.title.replace(/<em>|<\/em>/g,'');q('fHeroDesc').value=SITE.hero.desc;}
  if(q('fAddr1')){const c=SITE.contact;q('fAddr1').value=c.addr1;q('fAddr2').value=c.addr2;q('fTel').value=c.tel;q('fEmail').value=c.email;q('fHours').value=c.hours;q('fMapUrl').value=c.mapUrl;}
@@ -336,17 +401,41 @@ function renderAdmin(){
  renderMembers();
  renderPublic();
 }
+// members 테이블은 'individual' / 'active' 같은 영문 값을 쓰고, 필터·칩은 '개인' / '활성' 을 씁니다.
+// 원래 코드는 이 차이를 정규화하지 않아 유형·상태 필터가 아무것도 못 잡았습니다.
+const MEMBER_TYPE_LABEL={individual:'개인',company:'기업(회원사)',institute:'교육기관'};
+const MEMBER_STATE_LABEL={active:'활성',pending:'승인대기',suspended:'정지'};
+function memberTypeLabel(t){return MEMBER_TYPE_LABEL[t]||t||'개인';}
+function memberStateLabel(s){return MEMBER_STATE_LABEL[s]||s||'승인대기';}
+// '사이트 계정만' / '협회 회원만' 필터 값
+function memberSrc(m){return m.isAssoc?'assoc':(m.src||'site');}
 function renderMembers(){
  const tb=document.getElementById('tMember'); if(!tb) return;
- const pending=MEMBERS.map((m,i)=>({m,i})).filter(({m})=>m.status==='승인대기');
- document.getElementById('admPending').innerHTML=pending.length?'<strong>가입 승인 대기 '+pending.length+'건</strong>'+pending.map(({m,i})=>'<div class="adm-pending-row"><span><b>'+esc(m.name)+'</b> · '+esc(m.type)+'</span><button class="abtn sm pri" type="button" data-mok="'+i+'">승인</button></div>').join(''):'';
+ const pending=MEMBERS.map((m,i)=>({m,i})).filter(({m})=>memberStateLabel(m.status)==='승인대기');
+ document.getElementById('admPending').innerHTML=pending.length?'<strong>가입 승인 대기 '+pending.length+'건</strong>'+pending.map(({m,i})=>'<div class="adm-pending-row"><span><b>'+esc(m.name)+'</b> · '+esc(memberTypeLabel(m.type))+' · '+esc(m.isAssoc?'협회 회원':'사이트 계정')+'</span><button class="abtn sm pri" type="button" data-mok="'+i+'">승인</button></div>').join(''):'';
  const kw=(document.getElementById('qMember')?.value||'').toLowerCase();
  const ty=document.getElementById('fType')?.value||''; const st=document.getElementById('fStatus')?.value||'';
+ const src=document.getElementById('fSrc')?.value||'';
+ const hit=s=>String(s==null?'':s).toLowerCase();
  const rows=MEMBERS.map((m,i)=>({m,i})).filter(({m})=>
-   (!kw||m.name.toLowerCase().includes(kw)||m.email.toLowerCase().includes(kw)||m.id.toLowerCase().includes(kw))
-   &&(!ty||m.type===ty)&&(!st||m.status===st));
- tb.innerHTML=rows.map(({m,i})=>'<tr><td class="mono" style="font-size:12px">'+esc(m.id)+'</td><td><b>'+esc(m.name)+'</b></td><td>'+esc(m.type)+'</td><td style="font-size:12.5px">'+esc(m.email)+'<br><span style="color:var(--faint)">'+esc(m.tel)+'</span></td><td>'+esc(m.join)+'</td><td>'+esc(m.certs)+'</td><td>'+chip(m.status)+'</td><td><div class="acts2"><button class="abtn sm" data-mv="'+i+'">상세</button>'+(m.status==='승인대기'?'<button class="abtn sm" data-mok="'+i+'">승인</button>':'')+'<button class="abtn sm dgr" data-del="member" data-i="'+i+'">삭제</button></div></td></tr>').join('')
-   ||'<tr><td colspan="8" class="emptyrow">조건에 맞는 회원이 없습니다.</td></tr>';
+   (!kw||hit(m.name).includes(kw)||hit(m.email).includes(kw)||hit(m.id).includes(kw)||hit(m.org).includes(kw))
+   &&(!ty||memberTypeLabel(m.type)===ty)&&(!st||memberStateLabel(m.status)===st)
+   &&(!src||memberSrc(m)===src));
+ tb.innerHTML=rows.map(({m,i})=>{
+  const label=m.isAssoc?'<b>협회 회원</b>':'사이트 계정';
+  const sub=m.isAssoc&&m.src==='join'?' <span class="chip rev">신청만</span>':'';
+  return '<tr><td class="mono" style="font-size:12px">'+esc(m.no||'-')+'</td>'
+  +'<td><b>'+esc(m.name)+'</b>'+(m.org?'<div style="font-size:12px;color:var(--sub)">'+esc(m.org)+'</div>':'')+'</td>'
+  +'<td>'+esc(memberTypeLabel(m.type))+'</td>'
+  +'<td>'+label+sub+'</td>'
+  +'<td style="font-size:12.5px">'+(m.email?esc(m.email):'<span style="color:var(--faint)">-</span>')+'<br><span style="color:var(--faint)">'+esc(m.phone||'-')+'</span></td>'
+  +'<td>'+esc(m.joined)+'</td><td>'+esc(m.certs||'-')+'</td>'
+  +'<td>'+chip(memberStateLabel(m.status))+'</td>'
+  +'<td><div class="acts2"><button class="abtn sm" data-mv="'+i+'">상세</button>'
+  +(memberStateLabel(m.status)==='승인대기'?'<button class="abtn sm pri" data-mok="'+i+'">승인</button>':'')
+  +'<button class="abtn sm dgr" data-del="member" data-i="'+i+'">삭제</button></div></td></tr>';
+ }).join('')
+   ||'<tr><td colspan="9" class="emptyrow">조건에 맞는 회원이 없습니다.</td></tr>';
 }
 /* ---- 공용 에디터 ---- */
 let aeSaveFn=null;
@@ -399,7 +488,7 @@ const F={
  notice:[{k:'cat',l:'분류',t:'select',o:['공지','모집','보도','행사']},{k:'title',l:'제목'},{k:'date',l:'게시일 (YYYY.MM.DD)'},{k:'body',l:'본문',t:'textarea'}],
  press:[{k:'title',l:'제목'},{k:'media',l:'매체'},{k:'date',l:'일자'},{k:'url',l:'원문 링크'}],
  lib:[{k:'name',l:'문서명'},{k:'type',l:'형식',t:'select',o:['PDF','DOCX','XLSX','HWP']},{k:'description',l:'설명',t:'textarea'},{k:'file_url',l:'다운로드 URL (https://)'}],
- member:[{k:'id',l:'회원번호'},{k:'name',l:'이름 / 기관명'},{k:'type',l:'유형',t:'select',o:['개인','기업(회원사)','교육기관']},{k:'email',l:'이메일'},{k:'tel',l:'연락처'},{k:'join',l:'가입일'},{k:'certs',l:'보유 자격'},{k:'status',l:'상태',t:'select',o:['활성','승인대기','정지']},{k:'note',l:'비고',t:'textarea'}]
+ member:[{k:'no',l:'회원번호'},{k:'name',l:'이름 / 기관명'},{k:'org',l:'소속 / 기관명'},{k:'type',l:'유형',t:'select',o:['개인','기업(회원사)','교육기관']},{k:'email',l:'이메일'},{k:'phone',l:'연락처'},{k:'joined',l:'가입일'},{k:'certs',l:'보유 자격'},{k:'status',l:'상태',t:'select',o:['활성','승인대기','정지']},{k:'note',l:'비고',t:'textarea'}]
 };
  const STORE={banner:()=>SITE.banners,stat:()=>SITE.stats,officer:()=>SITE.officers,book:()=>SITE.books,cert:()=>SITE.certs,
  exam:()=>SITE.exams,notice:()=>SITE.notices,press:()=>SITE.press,lib:()=>SITE.library,
@@ -443,6 +532,33 @@ function editItem(type,i){
     o.title=o.title.trim();
     if(!o.title||!bookCover(o.cover)||!/^https:\/\//.test(o.url)||!bookUrl(o.url)){alert('도서명, 표지 사진 또는 이미지 주소, https:// 도서 링크를 입력해 주세요.');return;}
    }
+   if(type==='member'){
+    // 편집기는 한국어 라벨을 쓰고 DB 는 영문 값을 쓰므로 되돌립니다 (member 는 DB 저장이 아닌 메모리 갱신).
+    var T2V={'개인':'individual','기업(회원사)':'company','교육기관':'institute'};
+    var V2T={individual:'개인',company:'기업(회원사)',institute:'교육기관'};
+    var S2V={'활성':'active','승인대기':'pending','정지':'suspended'};
+    var V2S={active:'활성',pending:'승인대기',suspended:'정지'};
+    o.type=T2V[o.type]||o.type||'individual';
+    o.status=S2V[o.status]||o.status||'active';
+    if(isNew){
+     // members.id 는 auth.users 를 가리키는 FK 라서 계정 없는 회원은 DB 행을 만들 수 없습니다.
+     // 임의로 만들었다가 새로고침하면 사라지므로, 저장 전에 명시적으로 알립니다.
+     if(!o.name){alert('이름 / 기관명을 입력해 주세요.');return;}
+     if(!confirm('members.id 는 계정(auth.users)이라 DB 행을 만들 수 없습니다.\n\n'
+      +'이 회원은 현재 브라우저 목록에만 임시로 추가되고 새로고침하면 사라집니다.\n'
+      +'실제로 등록하려면 해당 회원이 사이트에서 먼저 계정을 만든 뒤 "사이트 계정"으로 가입시켜 주세요.\n\n'
+      +'임시로 목록에 추가할까요?'))return;
+     o.id=o.id||'';o.src='site';o.email=o.email||'';o.isAssoc=false;o.joined=o.joined||'';
+    }
+    // 수정 대상이 DB 행을 가지면 실제 DB 도 함께 갱신합니다.
+    if(!isNew&&arr[i].id){
+     var mrow=await dbUpdate('members',{column:'id',value:arr[i].id},{
+      full_name:o.name||'',member_type:o.type,org_name:o.org||null,phone:o.phone||null,state:o.status
+     });
+     if(!mrow.ok){alert('DB 저장 실패: '+(mrow.error||'권한이 없거나 연결이 원활하지 않습니다.'));return;}
+    }
+    if(!isNew){o.status=V2S[o.status]||o.status;o.type=V2T[o.type]||o.type;}
+   }
    var dbInfo=DB_TABLE[type];
    if(dbInfo){
     var row=toDbRow(type,o);
@@ -456,6 +572,9 @@ function editItem(type,i){
    if(isNew) arr.push(o); else Object.assign(arr[i],o);
    if(type==='book')saveBooks();
    closeEditor(); renderAdmin();
+   // 공지/보도/자료는 저장 즉시 프런트 화면에도 반영되어야 합니다.
+   // 메모리 배열만 갱신하면 새로고침 전까지 예시 데이터로 보입니다.
+   if(type==='notice'||type==='press'||type==='lib')fetchPublicContent();
  });
 }
 function flash(id){const el=document.getElementById(id);if(!el)return;el.classList.add('on');setTimeout(()=>el.classList.remove('on'),1600);}
@@ -757,9 +876,32 @@ document.addEventListener('click',e=>{
   const addMap={addBanner:'banner',addOfficer:'officer',addBook:'book',addCert:'cert',addExam:'exam',addNotice:'notice',addPress:'press',addLib:'lib',addMember:'member'};
  for(const k in addMap){if(e.target.closest('#'+k)){editItem(addMap[k],-1);return;}}
  const ed=e.target.closest('[data-ed]'); if(ed){editItem(ed.dataset.ed,+ed.dataset.i);return;}
-  const dl=e.target.closest('[data-del]'); if(dl){if(confirm('삭제하시겠습니까?')){var dtype=dl.dataset.del;var darr=STORE[dtype]();var drow=darr[+dl.dataset.i];(async function(){if(DB_TABLE[dtype]&&drow&&drow.id){var r=await dbDelete(DB_TABLE[dtype].table,{column:'id',value:drow.id});if(!r.ok&&!r.error)return;}else if(dtype==='inq'||dtype==='appl'){if(drow&&drow.id){var r2=await dbDelete('applications',{column:'id',value:drow.id});if(!r2.ok&&!r2.error){alert('DB 삭제 실패: '+(r2.error||''));return;}}}darr.splice(+dl.dataset.i,1);if(dtype==='book')saveBooks();renderAdmin();})();}return;}
+  const dl=e.target.closest('[data-del]'); if(dl){if(confirm('삭제하시겠습니까?')){var dtype=dl.dataset.del;var darr=STORE[dtype]();var drow=darr[+dl.dataset.i];(async function(){
+   if(dtype==='member'){
+    // 회원 삭제는 DB 에도 반영되어야 합니다. members.id 와 협회 회원가입 applications.id 를 함께 지웁니다.
+    if(drow&&drow.id){var rm=await dbDelete('members',{column:'id',value:drow.id});if(!rm.ok&&rm.error){alert('DB 삭제 실패: '+rm.error);return;}}
+    if(drow&&drow.joinAppId){var ra=await dbDelete('applications',{column:'id',value:drow.joinAppId});if(!ra.ok&&ra.error){alert('DB 삭제 실패: '+ra.error);return;}}
+   }else if(DB_TABLE[dtype]&&drow&&drow.id){var r=await dbDelete(DB_TABLE[dtype].table,{column:'id',value:drow.id});if(!r.ok&&!r.error)return;}else if(dtype==='inq'||dtype==='appl'){if(drow&&drow.id){var r2=await dbDelete('applications',{column:'id',value:drow.id});if(!r2.ok&&!r2.error){alert('DB 삭제 실패: '+(r2.error||''));return;}}}
+   darr.splice(+dl.dataset.i,1);if(dtype==='book')saveBooks();renderAdmin();
+   // 공지/보도/자료 삭제는 프런트 목록에서도 즉시 사라져야 합니다.
+   if(dtype==='notice'||dtype==='press'||dtype==='lib')fetchPublicContent();
+  })();}return;}
  const mv=e.target.closest('[data-mv]'); if(mv){editItem('member',+mv.dataset.mv);return;}
- const mok=e.target.closest('[data-mok]'); if(mok){var mi=+mok.dataset.mok;var mrow=MEMBERS[mi];if(mrow&&mrow.id){dbUpdate('members',{column:'id',value:mrow.id},{state:'active'}).then(function(r){if(r.ok){MEMBERS[mi].status='활성';renderAdmin();}});}return;}
+ const mok=e.target.closest('[data-mok]'); if(mok){var mi=+mok.dataset.mok;var mrow=MEMBERS[mi];if(!mrow)return;
+  // 계정이 있으면 members.state 를, 협회 회원가입 신청이 있으면 applications.state 를 함께 '승인' 으로 올립니다.
+  // (신청만 있고 계정이 없는 행도 있으므로 둘 다 시도합니다.)
+  (async function(){
+   var jobs=[];
+   if(mrow.id)jobs.push(dbUpdate('members',{column:'id',value:mrow.id},{state:'active'}));
+   if(mrow.joinAppId)jobs.push(dbUpdate('applications',{column:'id',value:mrow.joinAppId},{state:'승인'}));
+   if(!jobs.length){alert('승인할 DB 행을 찾을 수 없습니다. 새로고침 후 다시 시도해 주세요.');return;}
+   var rs=await Promise.all(jobs);
+   if(rs.some(function(r){return !r.ok;})){
+    if(rs.some(function(r){return r.error;}))alert('승인 처리 실패: '+(rs.filter(function(r){return r.error;}).map(function(r){return r.error;}).join(' / ')));
+    return;
+   }
+   mrow.status='활성';renderAdmin();
+  })();return;}
  const ap=e.target.closest('[data-appl]'); if(ap){var ai=+ap.dataset.i;var arow=APPLS[ai];if(arow&&arow.id){dbUpdate('applications',{column:'id',value:arow.id},{state:'확인'}).then(function(r){if(r.ok){APPLS[ai].status='확인';renderAdmin();}});}return;}
  const iq=e.target.closest('[data-inq]'); if(iq){var qi=+iq.dataset.i;var qrow=INQS[qi];if(qrow&&qrow.id){dbUpdate('applications',{column:'id',value:qrow.id},{state:'답변완료'}).then(function(r){if(r.ok){INQS[qi].status='답변완료';renderAdmin();}});}return;}
  const it=e.target.closest('[data-inst]'); if(it){var ii=+it.dataset.i;var irow=INSTS[ii];var newState=it.dataset.inst==='ok'?'인증':'반려';if(irow&&irow.id){dbUpdate('applications',{column:'id',value:irow.id},{state:newState}).then(function(r){if(r.ok){INSTS[ii].status=newState;renderAdmin();}});}return;}
@@ -868,10 +1010,15 @@ window.addEventListener('popstate',restoreRoute);
 window.addEventListener('hashchange',restoreRoute);
 function today(){const d=new Date();return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');}
 function fv(id){const el=document.getElementById(id);return el?el.value:'';}
-document.addEventListener('input',e=>{if(['qMember','fType','fStatus'].includes(e.target.id))renderMembers();});
-document.addEventListener('change',e=>{if(['fType','fStatus'].includes(e.target.id))renderMembers();});
+document.addEventListener('input',e=>{if(['qMember','fType','fStatus','fSrc'].includes(e.target.id))renderMembers();});
+document.addEventListener('change',e=>{if(['fType','fStatus','fSrc'].includes(e.target.id))renderMembers();});
 renderAuth();renderPublic();featRender();ftimer=setInterval(featNext,5000);
 restoreRoute();
+// 공지사항·보도자료·자료실은 관리자 콘솔(#admin)에서만 DB 를 읽던 구조였습니다.
+// 익명 방문자도 볼 수 있는 테이블이고 RLS SELECT 이 허용되므로, 진입 시 한 번 읽어
+// 화면을 갱신합니다. restoreRoute() 뒤에 두는 이유: noticeview 직접 진입 시
+// fetchPublicContent() 안에서 목록이 준비된 뒤 다시 해석하도록 되어 있습니다.
+fetchPublicContent();
 // ForgeDB 세션이 남아 있으면(새로고침·새 탭) 로그인 상태를 그대로 복원합니다.
 restoreAuthSession();
 
