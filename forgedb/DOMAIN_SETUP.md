@@ -2,7 +2,7 @@
 
 도메인: `kvcf.kr` (가비아 / `ns.gabia.co.kr`)
 ForgeDB 호스팅 대상: `kvcf-jt1bd3.forgedb.app`
-결정: **`www.kvcf.kr` 를 연결 — apex(`kvcf.kr`)는 DNS 만으로는 불가능**
+결정: **`www.kvcf.kr` 를 먼저 연결** — apex(`kvcf.kr`)는 CNAME 이 불가능
 
 > 아래 값은 `forgedb hosting domains add` CLI 가 **방금(2026-10-05) 출력한 실값**입니다.
 > 이전 세션의 토큰이 아니라 지금 필요한 값입니다. 추가/삭제 후 값이 바뀌면
@@ -10,15 +10,13 @@ ForgeDB 호스팅 대상: `kvcf-jt1bd3.forgedb.app`
 
 ---
 
-## 왜 www 로만 되는가 (apex 는 왜 안 되는가) — 실측 근거
+## apex 와 www 의 차이 — 실측 근거
 
-두 가지가 **독립적으로** apex 를 막습니다.
+**apex 에는 CNAME 을 만들 수 없습니다** (DNS 표준, RFC 1912 §2.3.1)
+가비아도 apex 별칭(CNAME)을 제공하지 않습니다. 즉 ForgeDB 가 apex 에
+요구하는 `CNAME kvcf.kr → kvcf-jt1bd3.forgedb.app` 은 **만들 수 없습니다.**
 
-**1. apex 에는 CNAME 을 만들 수 없습니다** (DNS 표준, RFC 1912 §2.3.1)
-가비아도 apex 별칭(CNAME)을 제공하지 않습니다. 즉 ForgeDB 가 요구하는
-`CNAME kvcf.kr → kvcf-jt1bd3.forgedb.app` 을 **만들 수 없습니다.**
-
-**2. A 레코드로 우회해도 SSL 이 없습니다** (실측 — 2026-10-05)
+**apex 용 인증서는 아직 없습니다** (실측 — 2026-10-05)
 엣지 `157.180.84.28` 에 SNI 별로 접속해 인증서를 조회한 결과:
 
 | SNI | 서버가 내보내는 인증서 |
@@ -27,15 +25,18 @@ ForgeDB 호스팅 대상: `kvcf-jt1bd3.forgedb.app`
 | `kvcf.kr` | `CN=*.forgedb.app` |
 | `www.kvcf.kr` | `CN=*.forgedb.app` |
 
-SAN 은 `*.forgedb.app, forgedb.app` 뿐이고 **`kvcf.kr` 가 없습니다.**
-커스텀 도메인 인증서는 DNS 검증이 통과한 뒤에야 발급되므로,
-TXT 통과 → 인증서 발급 → 이 표가 `kvcf.kr` 로 바뀝니다. 즉 2번은
-**TXT를 넣으면 스스로 해결되고**, 막는 건 1번(DNS 표준)뿐입니다.
+SAN 이 `*.forgedb.app, forgedb.app` 뿐이라 지금은 `kvcf.kr` 로의 접속이
+인증서 이름 불일치로 실패합니다(`curl: (60) SSL: no alternative
+certificate subject name matches target host name 'kvcf.kr'`).
 
-> 이전 세션에서 "apex 는 연결 자체가 거부된다"고 적었으나 사실과 달랐습니다.
-> TCP/TLS 연결은 정상 성립하며(`curl: (60) SSL: no alternative certificate
-> subject name matches target host name 'kvcf.kr'`), **인증서가 아직 없어서**
-> 실패하는 것입니다. 검증 실패 ≠ 연결 거부입니다.
+> **이건 "apex 는 불가능하다"는 뜻이 아닙니다.** 커스텀 도메인 인증서는
+> DNS 검증이 통과한 뒤 발급되므로, apex 의 TXT 검증이 통과하면
+> `kvcf.kr` 용 인증서가 발급됩니다. TCP/TLS 연결 자체는 정상 성립합니다.
+> 이전 세션의 "연결 거부" 진단은 오진이었습니다(인증서 미발급 ≠ 연결 거부).
+
+**그래서 순서대로만 하면 됩니다:** www 의 CNAME+TXT 를 넣고 검증·SSL 을
+확보한 다음, apex TXT 를 넣고 같은 과정을 반복합니다. apex 쪽에서
+A 레코드를 바꿀 필요는 없습니다.
 
 ---
 
@@ -50,17 +51,27 @@ TXT 통과 → 인증서 발급 → 이 표가 `kvcf.kr` 로 바뀝니다. 즉 2
 
 가비아 DNS 설정에서 이름 칸에는 **`.kr` 을 빼고** 넣습니다 → `www`, `_forgedb-verify.www`
 
-### ⚠️ 기존 레코드는 건드리지 마세요
+### ⚠️ 기존 레코드 처리
 
-- `kvcf.kr` → **A** 레코드(`121.254.178.253`): **그대로 두세요.**
-  지금 그 IP 에 기존 서비스가 응답 중이라 건드리면 즉시 끊깁니다.
 - `www.kvcf.kr` → **A** 레코드(`121.254.178.253`): **삭제하세요.**
   같은 이름에 A 와 CNAME 이 공존할 수 없어 DNS 오류가 납니다.
+- `kvcf.kr` → **A** 레코드(`121.254.178.253`): **그대로 두세요.**
+  지금 그 IP 에 기존 서비스가 응답 중이라 건드리면 즉시 끊깁니다.
+  www 작업과는 무관하므로 건드리지 않습니다.
 
-> apex(`kvcf.kr`)를 www 로 넘기는 것은 DNS 가 아닌 **호스팅 계층**
-> (`forge-hosting.json` 의 `redirects`)에서 처리됩니다. apex 에 SSL 이
-> 있어야 동작하므로, www 가 먼저 살아나야 합니다. 그때는 가비아의
-> URL 포워딩(유료) 또는 기존 웹서버의 301 리다이렉트를 쓰면 됩니다.
+### 2단계 (www 가 살아난 뒤)
+
+apex 도 www 와 같은 방식으로 붙일 수 있습니다. apex 는 CNAME 이 불가능하므로
+**TXT 하나만** 추가합니다(가비아 DNS 화면의 이름 칸에 `_forgedb-verify`):
+
+| 유형 | 이름 | 값 |
+|---|---|---|
+| **TXT** | `_forgedb-verify` | `7447205a95528de6ef22b272d4c9ecec` |
+
+TXT 는 apex A 레코드와 공존하므로 충돌하지 않습니다. 이 레코드가 들어가면
+`forgedb hosting domains verify kvcf.kr` 로 apex 인증서도 발급됩니다.
+**www 를 먼저 붙이는 이유는:** apex 는 CNAME 이 없어 www 보다 SSL 발급이
+늦고, www 가 먼저 확보돼야 site 가 확실히 동작한다고 알 수 있기 때문입니다.
 
 ---
 
@@ -99,14 +110,18 @@ SSL 이 `active` 가 되면 `https://www.kvcf.kr` 로 바로 접속됩니다.
 
 ---
 
-## 4. apex 정규화 (호스팅 계층 리다이렉트)
+## 4. apex 정규화 — 아직 설정하지 않음
 
-`public/.well-known/forge-hosting.json` 에 이미 apex → www 301 규칙이
-들어 있습니다. 이 규칙은 **apex 에 SSL 이 발급된 뒤에야** 동작합니다.
-www 가 먼저 `active` 가 되고 apex 도 검증이 통과하면 함께 살아납니다.
+`public/.well-known/forge-hosting.json` 의 `redirects` 에는 현재
+`/home → /`, `/index.html → /` 두 개만 있고 **apex → www 301 규칙은 없습니다.**
+(커밋 `0a6bbd4` 에서 apex 를 메인으로 정하면서 제거됐습니다.)
 
-> apex 도 ForgeDB 에 등록해 두었으므로, apex 용 인증서가 발급되면
-> `https://kvcf.kr` 자체로도 접속됩니다.
+넣어야 하는 시점은 **apex 에 SSL 이 발급된 뒤**입니다. apex 용 인증서가 없으면
+TLS 검증 단계에서 요청이 끝나므로 301 리다이렉트까지 도달하지 않습니다.
+
+어느 주소로 고정할지는 apex 검증 결과를 본 뒤 결정하면 됩니다:
+- apex 검증 성공 → apex 를 메인으로 유지하고 리다이렉트 불필요 (권장)
+- apex 검증 실패 → 위 리다이렉트를 추가하고 www 를 메인으로
 
 ---
 
