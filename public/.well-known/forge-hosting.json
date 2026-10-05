@@ -32,9 +32,7 @@
   "trailing_slash": "always",
   "redirects": [
     { "from": "/home", "to": "/" },
-    { "from": "/index.html", "to": "/" },
-    { "from": "https://kvcf.kr/*", "to": "https://www.kvcf.kr/", "status": 301 },
-    { "from": "https://kvcf.kr", "to": "https://www.kvcf.kr/", "status": 301 }
+    { "from": "/index.html", "to": "/" }
   ],
   "environment": {
     "NEXT_PUBLIC_FORGEDB_URL": "https://forgedb.cloud",
