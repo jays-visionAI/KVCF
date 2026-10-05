@@ -27,6 +27,16 @@
 }
 /* Match account actions to the membership invitation blue. */
 .site-modern header .authbox > .linkbtn { color: #356FAF; }
+/* 관리자 로그인은 운영자용 보조 진입점이라 회원 메뉴와 시각적으로 분리합니다. */
+.site-modern header .authbox > .linkbtn.adminlink {
+  color: #6b7686;
+  font-weight: 600;
+  border-left: 1px solid #dbe5f2;
+  margin-left: 4px;
+  padding-left: 12px;
+}
+.site-modern header .authbox > .linkbtn.adminlink:hover,
+.site-modern header .authbox > .linkbtn.adminlink:focus-visible { color: #356FAF; }
 .site-modern header .authbox > .cta,
 .site-modern header .mobile-auth > .cta,
 .site-modern #p-login .login .card .b.fill { background: #356FAF; color: #fff; }

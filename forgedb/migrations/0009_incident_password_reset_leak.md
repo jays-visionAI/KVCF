@@ -40,7 +40,21 @@
 | 5 | 구 비밀번호 폐기 확인 | `Jays@Blueforge2026!` / `kvcf-admin-2026` / `kvcf-demo-2026` | 전부 **HTTP 400** |
 | 6 | 계정 무결성 확인 | 삭제·재생성이 안 일어났는지 | `id`, `created_at` 불변, `app_role=admin` 유지 |
 
-`auth-magic-link` 는 정상 동작 확인(빈 입력 → 400 `missing_email`). 손대지 않았다.
+### 후속 조치 — 매직링크 경로 전체 삭제 (2026-10-05, 운영자 지시)
+
+운영자가 **매직링크 경로를 삭제하라**고 지시해, 매직링크로 인증에 진입할 수 있는
+경로를 모두 제거했다. 남은 로그인 경로는 **이메일 + 비밀번호 단 하나**다.
+
+| # | 조치 | 방법 | 검증 |
+|---|------|------|------|
+| 7 | `auth-magic-link` 폐기 | 410 스텁으로 덮어쓰기 | POST(어드민 계정) → **410 retired** |
+| 8 | `issue-admin-magic-link` 폐기 | 410 스텁으로 덮어쓰기 | GET → **410 retired** |
+| 9 | 앱 UI 매직링크 버튼 제거 | `AdminLoginCard.tsx` — 발송 버튼·즉시 진입 링크·상태 제거 | `grep -i magic app/` 결과 0건 (주석 1줄 제외) |
+| 10 | 클라이언트 헬퍼 제거 | `app/lib/forgedb.ts` 의 `requestAdminMagicLink` 제거 | import 참조 0건 |
+| 11 | 미사용 스타일 제거 | `public/admin-shell.css` 의 `.adm-login-magic*` 규칙 제거 | 해당 클래스 렌더 0건 |
+
+폐기 스텁은 `service_role` 키를 읽지도, 인증 API 를 호출하지도 않는다.
+`GET/POST/OPTIONS` 무관하게 항상 410 만 반환하므로 우발적 capability 가 남지 않는다.
 
 ## 결론 — 왜 메일이 왔나
 
@@ -62,7 +76,9 @@ ForgeDB 는 이 프로젝트에서 사용자 이메일을 인증 메일 발신�
 
 1. **Edge Function 삭제는 "로컬 파일 삭제"가 아니다.** 반드시 원격 응답으로
    실제를 확인한다(`GET /functions/v1/<name>` → 405 = 살아 있음).
-2. **비밀번호를 다루는 함수를 만들지 않는다.** 인증은 ForgeDB 콘솔과
-   `auth-magic-link` 만 쓴다.
+2. **비밀번호를 다루는 함수를 만들지 않는다.** 어드민 인증은 앱의
+   이메일+비밀번호 로그인 폼과 ForgeDB 콘솔(`Authentication → Users`)만 쓴다.
+   매직링크 발급 함수는 폐기(`auth-magic-link` · `issue-admin-magic-link` 모두 410)되었으므로
+   되살리지 않는다.
 3. **하드코딩된 기본 비밀번호를 코드에 남기지 않는다.** 응급 복구 코드를 만들더라도
    같은 방식으로 곧바로 무력화한다.

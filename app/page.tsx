@@ -34,11 +34,10 @@ import LoginPage from "./pages/login";
 import DashboardPage from "./pages/dashboard";
 import ProfilePage from "./pages/profile";
 import AdminPage from "./pages/admin";
-import AdminShell from "./components/AdminShell";
 import ShellVisibilityBridge from "./components/ShellVisibilityBridge";
 import SiteShellRoot from "./components/SiteShellRoot";
 import LegacyRuntime from "./LegacyRuntime";
-import { UtilityBar, SiteHeader, AdminEditor, ApplicationModal, MembershipCTA, SiteFooter } from "./components/SiteChrome";
+import { UtilityBar, SiteHeader, ApplicationModal, MembershipCTA, SiteFooter } from "./components/SiteChrome";
 export default function Home() {
   return <>
     {/*
@@ -85,7 +84,6 @@ export default function Home() {
           <LoginPage />
           <DashboardPage />
           <ProfilePage />
-        <AdminEditor />
         <ApplicationModal /><MembershipCTA />
       </main>
       <SiteFooter />
@@ -97,9 +95,7 @@ export default function Home() {
       초기 hidden 속성은 SSR HTML 에만 잠깐 적용되고, ShellVisibilityBridge 가 즉시 해시 라우트에 맞춰 재적용합니다.
     */}
     <div className="admin-shell" id="adminShell">
-      <AdminShell>
-        <AdminPage />
-      </AdminShell>
+      <AdminPage />
     </div>
     <ShellVisibilityBridge />
     <LegacyRuntime />

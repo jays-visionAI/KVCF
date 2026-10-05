@@ -21,8 +21,8 @@
 //    - 계정 조회/생성/삭제 API 를 전혀 호출하지 않는다
 //    - 되돌릴 방법이 없다 — 되돌리려면 이 스텁을 지우고 새 함수를 작성해야 한다
 //
-//  계정 비밀번호를 바꾸는 정상 경로는 UI 로그인(Auth)이며, 관리자용은
-//  auth-magic-link 가 담당한다. 이 함수는 그 어떤 경로의 대체재도 아니다.
+//  계정 비밀번호를 바꾸는 정상 경로는 어드민 콘솔 UI 로그인(Auth)뿐이며,
+//  매직링크 경로는 운영자가 요청해 삭제했다. 이 함수는 그 어떤 경로의 대체재도 아니다.
 // ============================================================================
 
 function json(status: number, body: unknown) {
@@ -42,6 +42,6 @@ Deno.serve((req: Request) => {
   return json(403, {
     error: "function_disabled",
     message:
-      "reset-admin-password is permanently disabled. It used to delete and recreate the admin account with a hardcoded default password. Use UI sign-in, or auth-magic-link for admin access.",
+      "reset-admin-password is permanently disabled. It used to delete and recreate the admin account with a hardcoded default password. Use the admin console email + password sign-in.",
   });
 });

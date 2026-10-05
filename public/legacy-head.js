@@ -4,7 +4,21 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';
 window.kvcfInitialRoute=(function(){
  const pages=['home','about','greeting','org','history','contact','cert','vca','vcp','vce','consultant','schedule','rules','edu','partners','apply','verify','member','join','signup','companies','notice','recruit','noticeview','press','library','faq','inquiry','terms','privacy','noemail','login','dashboard','profile','admin'];
  let route=(location.hash||'#home').slice(1).split('?')[0];
+ // 외부에서 붙여 들어오는 해시 정규화 — 예: #/login, #/admin.
+ // 이 앱의 정식 해시는 슬래시 없는 #login / #admin 입니다. 슬래시가 붙은 채로
+ // 오면 아래 pages 목록에 없어 route 가 'home' 으로 떨어지고, 사용자가 로그인 버튼을
+ // 눌렀는데도 로그인 폼이 보이지 않는 증상이 그대로 남습니다. 첫 페인트 전에
+ // 여기서 정규화하면 이후 모든 라우터(show/restoreRoute/ShellVisibilityBridge)가
+ // 같은 값을 보게 됩니다.
+ route=route.replace(/^\/+/,'');
  if(route==='mypage')route='dashboard';
+ // 정규화한 값을 주소창에도 반영합니다. 그래야 이후 모든 라우터가 location.hash
+ // 를 직접 읽어도 동일한 정식 해시(#login / #admin)를 보게 됩니다.
+ // file:// 은 replaceState 가 거부될 수 있으므로 실패해도 조용히 넘어갑니다.
+ try{
+  var canonical='#'+route;
+  if(location.hash!==canonical)history.replaceState(history.state||{},'',canonical);
+ }catch(_){}
  if(!pages.includes(route))route='home';
  if(route==='dashboard'||route==='profile')route='login';
  // 어드민 라우트는 어드민 셸의 캔버스 배경(진한 남색)을 그대로 사용한다.

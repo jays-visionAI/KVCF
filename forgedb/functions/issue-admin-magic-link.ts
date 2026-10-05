@@ -8,12 +8,13 @@
 //   반환했기 때문이다 (DELETE 미지원).
 //
 // 현재 동작: 어떤 요청도 받지 않는다. 매직링크를 생성·발송하지 않는다.
-// 정상 어드민 인증은 `auth-magic-link` Edge Function 과 ForgeDB 콘솔을 쓴다.
+// 정상 어드민 인증은 어드민 콘솔의 이메일+비밀번호 로그인뿐이다
+// (`auth-magic-link` 도 운영자 요청으로 삭제됨).
 
 const RETIRED = {
   error: "retired",
   message: "issue-admin-magic-link 는 사용이 중단된 함수입니다. 이 엔드포인트로는 매직링크를 발급하지 않습니다.",
-  replacement: "auth-magic-link (어드민 role 확인 후 발송) 또는 ForgeDB 콘솔 → Authentication → Users",
+  replacement: "어드민 콘솔 이메일+비밀번호 로그인, 또는 ForgeDB 콘솔 → Authentication → Users",
   retired_at: "2026-10-05T00:00:00.000Z",
 };
 

@@ -24,7 +24,7 @@ export default function AdminBootCard() {
             <div className="sub">{"ADMIN CONSOLE · KVCF"}</div>
           </div>
         </div>
-        <div className="adm-login-magic-msg">
+        <div className="adm-login-status">
           {"관리자 인증 상태를 확인하고 있습니다. 잠시만 기다려 주세요."}
         </div>
       </div>

@@ -168,32 +168,6 @@ export function SiteHeader() {
   );
 }
 
-export function AdminEditor() {
-  return (
-    <>
-      <div className={"aeditor"} id={"aEditor"} hidden={true}>
-        <div className={"box"}>
-          <button className={"x"} id={"aeX"}>
-            {"×"}
-          </button>
-          <h3 id={"aeTitle"}>
-            {"편집"}
-          </h3>
-          <div className={"af"} id={"aeFields"}></div>
-          <div className={"foot"}>
-            <button className={"abtn"} id={"aeCancel"}>
-              {"취소"}
-            </button>
-            <button className={"abtn pri"} id={"aeSave"}>
-              {"저장"}
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
-
 export function ApplicationModal() {
   return (
     <>

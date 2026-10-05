@@ -1,6 +1,8 @@
 "use client";
+import { useState } from "react";
 
 export default function LoginPage() {
+  const [error, setError] = useState<string | null>(null);
   return (
     <div className="page" id="p-login" hidden={true}>
       <div className={"login"}>
@@ -49,8 +51,13 @@ export default function LoginPage() {
               onSubmit={(event) => {
                 event.preventDefault();
                 const f = event.currentTarget as HTMLFormElement;
-                const email = (f.querySelector('input[type="email"]') as HTMLInputElement | null)?.value ?? "";
+                const email = (f.querySelector('input[type="email"]') as HTMLInputElement | null)?.value.trim() ?? "";
                 const password = (f.querySelector('input[type="password"]') as HTMLInputElement | null)?.value ?? "";
+                if (!email || !password) {
+                  setError("이메일과 비밀번호를 모두 입력해 주세요.");
+                  return;
+                }
+                setError(null);
                 (window as Window & { doLogin?: (role: string, email?: string, password?: string) => void }).doLogin?.("member", email, password);
               }}
               style={{"gap": "12px", "maxWidth": "none"}}
@@ -70,6 +77,19 @@ export default function LoginPage() {
               <button className={"b fill"} type={"submit"}>
                 {"로그인"}
               </button>
+              {error ? (
+                <p
+                  role={"alert"}
+                  style={{
+                    "margin": "0",
+                    "fontSize": "14px",
+                    "color": "#c0392b",
+                    "fontWeight": "600",
+                  }}
+                >
+                  {error}
+                </p>
+              ) : null}
             </form>
             <div style={{"fontSize": "14px", "color": "var(--sub)", "marginTop": "6px"}}>
               {"계정이 없으신가요? "}
@@ -80,22 +100,6 @@ export default function LoginPage() {
               <a style={{"color": "var(--blue)", "fontWeight": "700", "cursor": "pointer"}} data-r={"join"}>
                 {"협회회원가입"}
               </a>
-            </div>
-            <div className="adm-gate-card">
-              <div className="adm-gate-head">
-                <span className="adm-gate-tag">{"ADMIN"}</span>
-                <span className="adm-gate-title">{"운영자 전용 로그인"}</span>
-              </div>
-              <p className="adm-gate-desc">
-                {"이 화면은 일반 회원 로그인 화면입니다. 운영자(ADMIN) 는 아래 전용 경로로 이동해 주세요."}
-              </p>
-              <a className="adm-gate-btn" data-r={"admin"}>
-                <span>{"관리자 콘솔 로그인"}</span>
-                <span className="adm-gate-arrow" aria-hidden="true">{"→"}</span>
-              </a>
-              <div className="adm-gate-note">
-                {"※ 어드민 콘솔은 회원 사이트와 완전히 분리된 전용 셸에서 동작하며, 권한이 없는 계정은 진입할 수 없습니다."}
-              </div>
             </div>
             <div className={"hint"}>
               {"※ 인증은 ForgeDB Auth 로 처리됩니다. 가입한 이메일과 비밀번호로 로그인해 주세요."}

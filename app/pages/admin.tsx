@@ -2,6 +2,7 @@
 
 import AdminLoginCard from "../components/AdminLoginCard";
 import AdminBootCard from "../components/AdminBootCard";
+import AdminEditor from "../components/AdminEditor";
 import { useAdminAuth } from "../components/useAdminAuth";
 
 /**
@@ -936,6 +937,8 @@ export default function AdminPage() {
           <span>{"운영자 전용 — 권한이 없는 사용자는 즉시 세션을 종료해 주세요."}</span>
         </div>
       </footer>
+      {/* 공용 CRUD 편집기 — 오직 어드민 셸 안에서만 마운트됩니다 (회원 셸에는 없습니다). */}
+      <AdminEditor />
     </div>
   );
 }

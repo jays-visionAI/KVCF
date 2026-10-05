@@ -40,6 +40,6 @@ Deno.serve((req: Request) => {
   return json(403, {
     error: "function_disabled",
     message:
-      "admin-reset-jays-password is permanently disabled. Passwords live in the ForgeDB auth pipeline, not in this database. Use UI sign-in, or auth-magic-link for admin access.",
+      "admin-reset-jays-password is permanently disabled. Passwords live in the ForgeDB auth pipeline, not in this database. Use the admin console email + password sign-in.",
   });
 });

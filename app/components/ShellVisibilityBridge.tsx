@@ -40,7 +40,7 @@ export default function ShellVisibilityBridge() {
 
 function applyShellVisibility() {
   if (typeof window === "undefined") return;
-  const raw = (window.location.hash || "#home").slice(1);
+  const raw = (window.location.hash || "#home").slice(1).replace(/^\/+/, "");
   const [page = "home"] = raw.split("?");
   const isAdmin = page === "admin";
   const siteShell = document.getElementById("siteShell");

@@ -494,28 +494,29 @@ function featNext(){fi=(fi+1)%FEATS.length;featRender();}
 function renderAuth(){
  const box=document.getElementById('authbox');
  if(!auth.role){
-  // 비로그인 헤더: 로그인 / 계정생성(무료) / 협회회원가입(유료) — 운영자용 관리자 로그인은 보조 링크로 분리.
+  // 비로그인 헤더: 로그인 / 계정생성(무료) / 협회회원가입(유료) + 운영자용 관리자 로그인.
+  // 두 로그인은 완전히 다른 화면으로 갑니다:
+  //   로그인       → #login (회원 셸, 이 파일의 doLogin)
+  //   관리자로그인 → #admin (어드민 셸, AdminLoginCard 가 SDK 를 직접 호출)
+  // 헤더 링크는 라우트만 바꾸고, 인증 판단은 각 셸이 단독으로 합니다.
   box.innerHTML='<button class="linkbtn" data-r="login">로그인</button><button class="linkbtn" data-r="signup">계정생성</button><button class="cta" data-r="join">협회가입</button><a class="linkbtn adminlink" data-r="admin" title="관리자(ADMIN) 전용 로그인" aria-label="관리자 로그인">관리자로그인</a>';
  }else{
   const safeName=String(auth.name).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  const target=auth.role==='admin'?'admin':'dashboard';
-  const label=auth.role==='admin'?'어드민':'마이페이지';
-  const tag=auth.role==='admin'?'<span class="chiprole">ADMIN</span>':'<span class="chiprole">MEMBER</span>';
+  const target='dashboard';
+  const label='마이페이지';
+  const tag='<span class="chiprole">MEMBER</span>';
   const nb=(auth.role==='member'&&notifs.length)?'<span class="nbadge">'+notifs.length+'</span>':'';
   box.innerHTML='<span class="acct"><button class="linkbtn" data-r="'+target+'">마이페이지</button><button class="linkbtn who" data-r="'+target+'" aria-label="'+safeName+'님, '+label+'로 이동"><b>'+safeName+'님</b>'+nb+'</button>'+tag+'<button class="cta ghost" id="btnLogout">로그아웃</button></span>';
  }
  const mobile=document.getElementById('mobileAuth');
  if(mobile)mobile.innerHTML=box.innerHTML.replace('id="btnLogout"','id="btnLogoutMobile"');
- // admin 대시보드 상단의 사용자명 표시 — 인증된 사용자 이름으로 동적 채움
- var admName=document.getElementById('admUserName');
- if(admName)admName.textContent=auth.name?(auth.name+' 님'):'';
 }
 
 function renderMemberProfile(){
  document.getElementById('profileName').value=auth.name||'';
  document.getElementById('profileEmail').value=auth.email||'';
  document.getElementById('profilePhone').value=auth.phone||'';
- document.getElementById('profileType').textContent=auth.role==='admin'?'관리자':'개인 회원';
+ document.getElementById('profileType').textContent='개인 회원';
 }
 document.getElementById('memberProfileForm').addEventListener('submit',e=>{
  e.preventDefault();
@@ -534,6 +535,36 @@ document.getElementById('memberProfileForm').addEventListener('submit',e=>{
 });
 document.getElementById('profileName').addEventListener('input',e=>e.target.setCustomValidity(''));
 
+// 세션 적용 — 로그인 성공과 새로고침 후 복원이 같은 코드를 씁니다(로직 중복 없음).
+// 여기서 다루는 사용자는 항상 회원 계정입니다 — 어드민 콘솔 경로와 교차하지 않습니다.
+function applyMemberSession(u){
+ var md=(u&&u.user_metadata)||{};
+ auth.role='member';
+ auth.name=md.name||((u&&u.email)||'').split('@')[0]||'회원';
+ auth.email=(u&&u.email)||'';
+ auth.phone=md.phone||'';
+ auth.userId=(u&&u.id)||'';
+ document.getElementById('memberEmail')&&(document.getElementById('memberEmail').textContent=auth.email);
+ document.getElementById('memberPhone')&&(document.getElementById('memberPhone').textContent=auth.phone||'미등록');
+ document.getElementById('profileSaved')&&(document.getElementById('profileSaved').textContent='');
+ renderAuth();
+ var dn=document.getElementById('dashName');if(dn)dn.textContent=auth.name;
+}
+
+// 새로고침해도 로그인이 유지되어야 합니다. ForgeDB 세션은 브라우저에 남아 있는데
+// 화면 상태(auth)가 메모리에만 있던 탓에 매번 로그아웃으로 보이던 문제입니다.
+async function restoreAuthSession(){
+ var fb=window.kvcfClient&&window.kvcfClient();
+ if(!fb)return;
+ var res;
+ try{res=await fb.auth.getSession();}catch(_){return;}
+ var u=res&&res.data&&res.data.session&&res.data.session.user;
+ if(!u)return;
+ applyMemberSession(u);
+ var h=(location.hash||'').replace(/^#/,'').replace(/^\/+/,'');
+ if(h===''||h==='home'){setRoute('dashboard');show('dashboard');}
+}
+
 async function doLogin(role,email,password){
  // 이메일/비밀번호 직접 입력이면 그것으로, 아니면 데모 매핑 사용.
  var idEmail=email==null?null:String(email).trim();
@@ -543,20 +574,8 @@ async function doLogin(role,email,password){
   try{
    var r=await fb.auth.signInWithPassword({email:idEmail,password:idPassword});
    if(r&&r.data&&r.data.user){
-    var u=r.data.user;
-    var md=u.user_metadata||{};
-    var isAdmin=md.role==='admin';
-    auth.role=isAdmin?'admin':(md.member_type||'member');
-    auth.name=md.name||(u.email||'').split('@')[0]||'회원';
-    auth.email=u.email||'';
-    auth.phone=md.phone||'';
-    auth.userId=u.id;
-    document.getElementById('memberEmail')&&(document.getElementById('memberEmail').textContent=auth.email);
-    document.getElementById('memberPhone')&&(document.getElementById('memberPhone').textContent=auth.phone||'미등록');
-    document.getElementById('profileSaved')&&(document.getElementById('profileSaved').textContent='');
-    renderAuth();
-    var dn=document.getElementById('dashName');if(dn)dn.textContent=auth.name;
-    var target=isAdmin?'admin':'dashboard';
+    applyMemberSession(r.data.user);
+    var target='dashboard';
     setRoute(target);show(target);
     return;
    }
@@ -567,57 +586,8 @@ async function doLogin(role,email,password){
  alert('로그인에 실패했습니다. 이메일과 비밀번호를 정확히 입력해 주세요.');
 }
 
-/**
- * 어드민 사이트 전용 로그인. 회원 사이트 로그인(doLogin)과 완전히 분리된 함수입니다.
- * - 어드민 셸 안의 AdminLoginCard 폼에서만 호출됩니다.
- * - DB 의 is_admin() 화이트리스트(jays@blueforge.space, sangky94@gmail.com) 통과시에만 콘솔로 진입합니다.
- * - 화이트리스트 미통과 시 어드민 셸 안 AdminLoginCard 가 그대로 남아 있고, 회원 사이트 로그인 페이지로 절대 리다이렉트되지 않습니다.
- */
-async function doAdminLogin(email,password){
- var idEmail=email==null?'':String(email).trim();
- var idPassword=password==null?'':String(password);
- if(!idEmail||!idPassword){alert('이메일과 비밀번호를 입력해 주세요.');return;}
- var fb=window.kvcfClient&&window.kvcfClient();
- if(!fb){alert('인증 모듈에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.');return;}
- try{
-  var r=await fb.auth.signInWithPassword({email:idEmail,password:idPassword});
-  if(!(r&&r.data&&r.data.user)){
-   alert('로그인에 실패했습니다. 이메일과 비밀번호를 확인해 주세요.');
-   return;
-  }
-  var u=r.data.user;
-  // 1차: DB 의 is_admin() 화이트리스트 RPC 호출 (0007 마이그레이션 — 이메일 기반 화이트리스트)
-  var rpcRes=await fb.rpc('is_admin').then(function(x){return x;}).catch(function(){return null;});
-  var dbIsAdmin=!(!(rpcRes&&rpcRes.data&&rpcRes.data.length&&rpcRes.data[0]&&rpcRes.data[0].is_admin===true));
-  // 2차: 사용자 메타데이터의 role=admin 도 보조 신호로 사용 (둘 중 하나라도 통과 시 허용)
-  var md=u.user_metadata||{};
-  var metaIsAdmin=md.role==='admin';
-  var isAdmin=dbIsAdmin||metaIsAdmin;
-  if(!isAdmin){
-   // 화이트리스트 미통과 — 회원 사이트로 절대 리다이렉트하지 않고 어드민 셸 안에서 메시지만 표시.
-   alert('관리자 권한이 없습니다.\n협회 사무국에서 권한을 부여한 이메일만 어드민 콘솔에 접근할 수 있습니다.');
-   // 세션이 남아 있으면 정리 (어드민 셸 안 AdminLoginCard 가 다시 보이도록)
-   try{await fb.auth.signOut();}catch(_){}
-   auth={role:null,name:null};
-   return;
-  }
-  // 화이트리스트 통과 — 어드민 셸 안 어드민 콘솔로 진입. 회원 사이트 페이지로는 절대 가지 않습니다.
-  auth.role='admin';
-  auth.name=md.name||(u.email||'').split('@')[0]||'관리자';
-  auth.email=u.email||'';
-  auth.userId=u.id;
-  // 어드민 콘솔 사용자명 표시 갱신
-  var admName=document.getElementById('admUserName');
-  if(admName)admName.textContent=(auth.name+' 님');
-  // 어드민 셸이 보이는 상태에서 어드민 콘솔만 다시 렌더 (회원 사이트 셸은 절대 열지 않음)
-  setRoute('admin');show('admin');
-  // auth.role 이벤트 폴링이 admin 으로 전환되도록 window 이벤트 발생 (React useAdminAuth 가 인식)
-  window.dispatchEvent(new HashChangeEvent('hashchange'));
- }catch(err){
-  alert('로그인 실패: '+(err&&err.message?err.message:'이메일·비밀번호를 확인하세요.'));
- }
-}
-window.doAdminLogin=doAdminLogin;
+// 어드민 로그인은 어드민 셸 안 AdminLoginCard 가 SDK 를 직접 호출합니다.
+// 여기에는 어드민 로그인 진입점이 두어지지 않습니다 (회원 로그인 경로와 완전 분리).
 
 async function doSignup(name,email,password){
  // /#signup 폼에서 호출 — 입력된 이메일/비밀번호로만 ForgeDB Auth signUp 시도.
@@ -633,18 +603,21 @@ async function doSignup(name,email,password){
   return;
  }
  try{
+  // ForgeDB SDK 의 signUp 은 user_metadata 를 받습니다 (Supabase 스타일 options.data 가 아님).
+  // name / role 을 여기서 넘겨야 가입 직후 표시 이름과 회원 권한이 붙습니다.
   var r=await fb.auth.signUp({
    email:idEmail,
    password:idPassword,
-   options:{ data:{ name:name||'', role:'member', member_type:'individual' } }
+   display_name:name||'',
+   user_metadata:{ name:name||'', role:'member', member_type:'individual' }
   });
+  if(r&&r.error){
+   alert('계정생성에 실패했습니다: '+(r.error.message||'알 수 없는 오류'));
+   return;
+  }
   if(r&&r.data&&r.data.user){
    alert('계정이 생성되었습니다. 가입한 이메일로 발송된 인증 메일을 확인해 주세요.');
    setRoute('home');show('home');
-   return;
-  }
-  if(r&&r.error){
-   alert('계정생성에 실패했습니다: '+(r.error.message||'알 수 없는 오류'));
    return;
   }
   alert('계정생성 응답을 확인할 수 없습니다. 다시 시도해 주세요.');
@@ -706,40 +679,62 @@ function setRoute(r){
  else history.pushState({r},'','#'+r);
 }
 function show(r){
+ // 해시 정규화 — 외부 링크로 #/login , #/admin 처럼 슬래시가 붙어 들어와도
+ // 이 라우터는 항상 슬래시 없는 정규 이름만 다룬다. 정규화하지 않으면
+ // PAGES 검사에 걸려 홈으로 되돌아가 로그인 폼이 보이지 않는다.
+ r=String(r==null?'':r).replace(/^\/+/,'');
  if(r==='mypage')r='dashboard';
  if(!PAGES.includes(r))r='home';
  if(GUARD[r]&&!GUARD[r].includes(auth.role))r='login';
- if(r==='login'&&auth.role)r=auth.role==='admin'?'admin':'dashboard';
- if(r==='admin'&&auth.role&&auth.role!=='admin'){
-     // 어드민 라우트에 일반 회원(role='member' 등)이 들어왔을 때 — 회원 페이지로 돌려보내지 않고
-     // 어드민 셸 안에 AdminLoginCard 를 다시 마운트되도록 그냥 admin 으로 둡니다 (게이트는 React 측 useAdminAuth 가 처리).
-     // 단, 회원 사이트 셸은 절대 보이면 안 됩니다 (admin-mode CSS 가 보장).
-   }
- // #admin 은 단일 라우트: 인증된 admin 만 콘솔로, 그 외는 React 가 마운트한 로그인 카드를 표시합니다.
+ // 최초 페인트 전용 라우트 핀을 해제합니다. 주입처가 두 군데입니다:
+ //   - app/layout.tsx 인라인 스크립트  → #initial-route-style-v2
+ //   - public/legacy-head.js           → #initial-route-style
+ // 이 CSS 는 .page 를 !important 로 숨기고 라우트 하나만 강제 표시합니다.
+ // 남겨두면 이후 해시 이동(예: 홈 → 로그인)에서 어떤 코드도 로그인 폼을 다시
+ // 표시할 수 없습니다 — 실제로 그 증상이 보고되었습니다. 반드시 둘 다 지웁니다.
+ // 어드민 조기 반환보다 앞에서 실행해야 어드민 라우트에서도 정리됩니다.
+ ['initial-route-style','initial-route-style-v2'].forEach(function(id){var s=document.getElementById(id);if(s)s.remove();});
+ // 회원 셸 라우터는 여기서 멈춥니다. 어드민 경로는 어드민 셸만 다룹니다:
+ // 진입 게이트는 어드민 셸 안 useAdminAuth 가 단독으로 처리하고(비-admin 은 로그인 카드),
+ // 여기서는 어드민 콘솔 데이터만 채웁니다. 회원 셸 DOM 은 어디서도 건드리지 않습니다.
+ if(r==='admin'){
+  // 어드민 경로는 어드민 셸만 다룹니다. 진입 게이트(권한 판정)는 어드민 셸 안의
+  // useAdminAuth 가 단독으로 하고, 여기는 셸 가시성만 전환합니다.
+  //
+  // 주의: setRoute() 는 history.pushState 를 쓰므로 hashchange 가 자동으로 발생하지
+  // 않습니다. 그 결과 ShellVisibilityBridge 가 실행되지 않아 body.admin-mode 가 켜지지
+  // 않고, admin-shell.css 의 `body:not(.admin-mode) .admin-shell{display:none!important}`
+  // 가 그대로 적용되어 어드민 로그인 폼이 화면에서 사라졌습니다. 여기서 직접 전환합니다.
+  document.body.classList.add('admin-mode');
+  document.body.classList.remove('site-modern');
+  document.body.classList.remove('home-modern');
+  document.documentElement.style.backgroundColor='#0a1024';
+  document.documentElement.classList.remove('home-background');
+  // 회원 페이지(.page) 는 전부 숨기고 어드민 페이지만 남깁니다.
+  PAGES.forEach(p=>{const el=document.getElementById('p-'+p);if(el)el.hidden=(p!=='admin');});
+  const shell=document.getElementById('adminShell');
+  if(shell)shell.hidden=false;
+  const pAdmin=document.getElementById('p-admin');
+  if(pAdmin)pAdmin.hidden=false;
+  // 콘솔 데이터는 이미 admin 인 경우에만 읽습니다 — 비관리자가 콘솔 fetch 를 돌리지 않도록.
+  if(auth.role==='admin')fetchAllAdminData().then(renderAdmin);
+  window.scrollTo({top:0});
+  return;
+ }
  PAGES.forEach(p=>{const el=document.getElementById('p-'+p);if(el)el.hidden=(p!==r);});
  document.querySelectorAll('.nav nav a').forEach(a=>a.classList.toggle('on',a.dataset.r===r));
  const nv=document.querySelector('.nav nav');if(nv)nv.classList.remove('open');const burger=document.querySelector('.burger');if(burger)burger.setAttribute('aria-expanded','false');
  if(r==='dashboard')renderNotifs();
  if(r==='profile')renderMemberProfile();
- if(r==='admin'){fetchAllAdminData().then(renderAdmin);}
- document.body.classList.toggle('admin-mode',r==='admin');
- document.body.classList.toggle('site-modern',r!=='admin');
+ // 어드민 라우트는 위에서 return 했다. 여기서는 회원 셸만 다룹니다.
+ document.body.classList.toggle('admin-mode',false);
+ document.body.classList.toggle('site-modern',true);
  document.body.classList.toggle('home-modern',r==='home');
  document.documentElement.style.backgroundColor=r==='home'?'':'#ffffff';
  document.documentElement.classList.toggle('home-background',r==='home');
- // 어드민 라우트일 때 회원 사이트 셸(.site-shell)은 CSS 가 숨기고, 어드민 셸(.admin-shell)은 표시합니다.
- // 어드민 라우트가 아닐 때는 어드민 셸을 hidden 처리해 절대 보이지 않게 합니다.
+ // 어드민 셸은 어드민 라우트에서만 — 여기서는 항상 닫아 둡니다.
  const adminShell=document.getElementById('adminShell');
- if(adminShell){adminShell.hidden=(r!=='admin');}
- if(r==='admin'){
-   // 회원 사이트 셸에 어떤 페이지가 잠김이든, 어드민 모드에서는 회원 사이트 페이지의 어떤 부분도 보이면 안 됩니다.
-   // CSS 가 .site-shell{display:none} 으로 보장하지만, 혹시 모를 누수를 막기 위해 명시적으로 비웁니다.
-   try{window.scrollTo({top:0,behavior:'instant'});}catch(_){window.scrollTo(0,0);}
-   // 회원 사이트 페이지들의 hidden 상태를 강제로 모두 켜고, 어드민 페이지만 표시 — DOM 상의 어떤 잔재도 보이지 않게.
-   document.querySelectorAll('#siteShell .page').forEach(function(el){el.hidden=true;});
-   const admP=document.getElementById('p-admin');if(admP)admP.hidden=false;
-   document.documentElement.style.backgroundColor='#0a1024';
- }
+ if(adminShell)adminShell.hidden=true;
  const initialStyle=document.getElementById('initial-route-style');if(initialStyle)initialStyle.remove();
  window.scrollTo({top:0});
 }
@@ -877,6 +872,8 @@ document.addEventListener('input',e=>{if(['qMember','fType','fStatus'].includes(
 document.addEventListener('change',e=>{if(['fType','fStatus'].includes(e.target.id))renderMembers();});
 renderAuth();renderPublic();featRender();ftimer=setInterval(featNext,5000);
 restoreRoute();
+// ForgeDB 세션이 남아 있으면(새로고침·새 탭) 로그인 상태를 그대로 복원합니다.
+restoreAuthSession();
 
 // React 마운트 페이지(/#admin AdminLoginCard, /#login LoginPage) 가 호출하는
 // 전역 핸들러를 window 에 노출합니다. doLogin 만 React 측에서 참조합니다.
