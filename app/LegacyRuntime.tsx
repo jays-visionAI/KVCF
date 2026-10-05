@@ -9,7 +9,7 @@ declare global {
     applyFooterOrg?: typeof applyFooterOrg;
   }
 }
-const scripts = ["/legacy-app.js?v=3", "/scroll-scene.js?v=93", "/hero-motion-v21.js?v=9", "/globe-guides-visibility-v19.js?v=1", "/hero-motion-control-v24.js?v=1", "/forge-card.js?v=83", "/history-motion.js?v=102", "/member-ui-v129.js", "/org-motion-preview-v40.js?v=9"];
+const scripts = ["/legacy-app.js?v=4", "/scroll-scene.js?v=93", "/hero-motion-v21.js?v=9", "/globe-guides-visibility-v19.js?v=1", "/hero-motion-control-v24.js?v=1", "/forge-card.js?v=83", "/history-motion.js?v=102", "/member-ui-v129.js", "/org-motion-preview-v40.js?v=9"];
 export default function LegacyRuntime() {
  useEffect(() => {
   // legacy-app.js 가 ForgeDB SDK 와 applyFooterOrg helper 를 직접 호출할 수 있도록 노출

@@ -2,7 +2,8 @@
 
 공식 포털의 소스 코드 저장소입니다. **Next.js 16 (정적 export) + React 19** 기반이며,
 데이터/인증은 **ForgeDB** (Supabase 호환 BaaS, https://forgedb.cloud) 로 연결됩니다.
-호스팅은 **ForgeDB Static Hosting** 으로, 도메인은 `kvcf.example.com` (예시) 으로 연결됩니다.
+호스팅은 **ForgeDB Static Hosting** 으로, 도메인은 `kvcf.kr` (가비아, apex) 으로 연결됩니다.
+도메인 연결 절차는 **[`forgedb/DOMAIN_SETUP.md`](forgedb/DOMAIN_SETUP.md)** 를 보세요.
 
 > 본 저장소는 **새 GitHub 리포**에서 시작하는 마이그레이션 결과물입니다. 정적 HTML 프로토타입
 > (`../faq-two-column-preview/index-typography-v40.html`) 을 시각 기준으로 사용해 주세요.
@@ -79,23 +80,36 @@ git push -u origin main
    - Node version: `20`
 4. **Deploy** 클릭. 첫 배포는 1~2 분, 이후 push 마다 자동 재배포.
 
-배포가 끝나면 `https://kvcf.forgedb.app` (호스트 슬러그 기반) 로 즉시 접속됩니다.
+배포가 끝나면 `https://kvcf-jt1bd3.forgedb.app` (호스트 슬러그 기반) 로 즉시 접속됩니다.
 
-### 2-4. 커스텀 도메인 연결 (예: `kvcf.example.com`)
+### 2-4. 커스텀 도메인 연결 — `kvcf.kr` (apex)
 
-1. 도메인 DNS 에 CNAME 레코드 추가:
+`kvcf.kr` 은 apex(루트) 도메인이라 DNS 표준상 CNAME 을 걸 수 없습니다.
+그래서 **TXT 검증 레코드 한 줄**로 소유권을 확인하면 apex 용 SSL 이 자동 발급됩니다.
+
+1. ForgeDB 호스팅에 도메인 등록:
+   ```bash
+   forgedb hosting domains add kvcf.kr
    ```
-   kvcf.example.com   CNAME   kvcf.forgedb.app
+2. 가비아 **도메인 관리 → DNS 설정** 에 아래 한 줄만 추가합니다 (이것이 유일한 필수 작업):
    ```
-   (apex 도메인 `example.com` 자체를 쓸 경우는 ALIAS / ANAME 또는 A 레코드. 콘솔 안내 참조)
-2. ForgeDB 콘솔 → **Hosting** → **Custom domains** → `kvcf.example.com` 추가.
-3. 자동 SSL (Let's Encrypt) 발급까지 보통 1~5 분.
-4. `public/CNAME` 에 `kvcf.example.com` 이 이미 들어가 있어, 다음 push 부터 호스팅이 도메인을 그대로 인식합니다.
+   TXT    _forgedb-verify   →   7447205a95528de6ef22b272d4c9ecec
+   ```
+   - 이름 칸에는 `.kr` 을 빼고 `_forgedb-verify` 만 입력합니다.
+   - **기존 A 레코드는 삭제하지 마세요.** TXT 는 apex A 레코드와 공존합니다.
+3. 전파 후 소유권 검증 + 자동 SSL 발급:
+   ```bash
+   dig +short TXT _forgedb-verify.kvcf.kr @1.1.1.1
+   forgedb hosting domains verify kvcf.kr
+   ```
+4. `https://kvcf.kr` 로 바로 접속됩니다. `www.kvcf.kr` 도 함께 등록해 두었습니다.
 
-도메인이 활성화되면 **반드시 한 가지 더**:
+메인 주소가 apex 이므로 apex → www 리다이렉트는 걸지 않습니다
+(`public/.well-known/forge-hosting.json`). 도메인 관련 값들은 이미 실제 값으로 반영돼 있습니다:
 
-- `public/.well-known/forge-hosting.json` 의 `domain` 필드를 실제 도메인으로 갱신 후 push.
-- KakaoTalk / Open Graph 메타의 canonical URL 도 같은 도메인으로 (현재는 `app/layout.tsx` 에 placeholder).
+- `public/CNAME`, `public/.well-known/forge-hosting.json` (`domain` / `NEXT_PUBLIC_SITE_DOMAIN`)
+- `public/robots.txt` · `public/sitemap.xml` (15개 URL)
+- `app/layout.tsx` 의 `metadataBase`
 
 ---
 
