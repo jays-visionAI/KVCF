@@ -45,49 +45,41 @@ A 레코드를 바꿀 필요는 없습니다.
 
 ---
 
-## 1. 가비아에서 추가할 레코드 (이것만 넣으세요)
+## 1. 가비아에서 추가할 레코드 — apex 가 메인 (2줄만)
 
 메뉴: **도메인 관리 → DNS 설정**
+
+apex 가 메인이므로 아래 2줄이 전부입니다. **기존 레코드는 하나도 지우지 마세요.**
+
+| 유형 | 이름 | 값 | TTL |
+|---|---|---|---|
+| **TXT** | `_forgedb-verify` | `7447205a95528de6ef22b272d4c9ecec` | 기본값 |
+
+가비아 이름 칸에는 **`.kr` 을 빼고** `_forgedb-verify` 만 넣습니다.
+TXT 는 apex A 레코드와 공존하므로 `121.254.178.253` 의 기존 서비스가 끊기지 않습니다.
+이 레코드가 들어가면 `forgedb hosting domains verify kvcf.kr` 가 통과하고
+**apex 용 SSL 이 자동 발급**됩니다. CNAME 이 필요 없습니다.
+
+### 선택: www 도 같이 붙이려면
 
 | 유형 | 이름 | 값 | TTL |
 |---|---|---|---|
 | **CNAME** | `www` | `kvcf-jt1bd3.forgedb.app` | 기본값 |
 | **TXT** | `_forgedb-verify.www` | `61c7fe8ef95147b1bfe3b2556cc43cac` | 기본값 |
 
-가비아 DNS 설정에서 이름 칸에는 **`.kr` 을 빼고** 넣습니다 → `www`, `_forgedb-verify.www`
-
-### ⚠️ 기존 레코드 처리
-
-- `www.kvcf.kr` → **A** 레코드(`121.254.178.253`): **삭제하세요.**
-  같은 이름에 A 와 CNAME 이 공존할 수 없어 DNS 오류가 납니다.
-- `kvcf.kr` → **A** 레코드(`121.254.178.253`): **그대로 두세요.**
-  지금 그 IP 에 기존 서비스가 응답 중이라 건드리면 즉시 끊깁니다.
-  www 작업과는 무관하므로 건드리지 않습니다.
-
-### 2단계 (www 가 살아난 뒤)
-
-apex 도 www 와 같은 방식으로 붙일 수 있습니다. apex 는 CNAME 이 불가능하므로
-**TXT 하나만** 추가합니다(가비아 DNS 화면의 이름 칸에 `_forgedb-verify`):
-
-| 유형 | 이름 | 값 |
-|---|---|---|
-| **TXT** | `_forgedb-verify` | `7447205a95528de6ef22b272d4c9ecec` |
-
-TXT 는 apex A 레코드와 공존하므로 충돌하지 않습니다. 이 레코드가 들어가면
-`forgedb hosting domains verify kvcf.kr` 로 apex 인증서도 발급됩니다.
-**www 를 먼저 붙이는 이유는:** apex 는 CNAME 이 없어 www 보다 SSL 발급이
-늦고, www 가 먼저 확보돼야 site 가 확실히 동작한다고 알 수 있기 때문입니다.
+- 기존 `www` → A 레코드(`121.254.178.253`)는 **삭제**해야 합니다
+  (같은 이름에 A 와 CNAME 이 공존할 수 없습니다).
+- apex 메인이므로 www 는 보조 주소로만 씁니다 (리다이렉트 없음).
 
 ---
 
 ## 2. 전파 확인
 
 ```bash
-dig +short CNAME www.kvcf.kr @1.1.1.1
-dig +short TXT   _forgedb-verify.www.kvcf.kr @1.1.1.1
+dig +short TXT _forgedb-verify.kvcf.kr @1.1.1.1
 ```
 
-둘 다 위 값으로 조회되면 전파 완료입니다. 가비아 NS 기준 전파는 보통
+위 값이 조회되면 전파 완료입니다. 가비아 NS 기준 전파는 보통
 10분~수 시간이며, ForgeDB 검증은 최대 48시간 걸릴 수 있습니다.
 
 ---
@@ -95,23 +87,23 @@ dig +short TXT   _forgedb-verify.www.kvcf.kr @1.1.1.1
 ## 3. ForgeDB 소유권 검증 + SSL 발급
 
 ```bash
-forgedb hosting domains verify www.kvcf.kr
+forgedb hosting domains verify kvcf.kr
 ```
 
 성공 시 `Domain verified!` 가 출력되고 SSL 인증서가 자동 발급됩니다.
 상태 확인:
 
 ```bash
-forgedb hosting domains list
+forgedb hosting status
 ```
 
 기대 출력:
 
 ```
-www.kvcf.kr    DNS verified    SSL: active
+kvcf.kr    DNS verified    SSL: active
 ```
 
-SSL 이 `active` 가 되면 `https://www.kvcf.kr` 로 바로 접속됩니다.
+SSL 이 `active` 가 되면 `https://kvcf.kr` 로 바로 접속됩니다.
 
 ---
 
@@ -125,8 +117,22 @@ SSL 이 `active` 가 되면 `https://www.kvcf.kr` 로 바로 접속됩니다.
 TLS 검증 단계에서 요청이 끝나므로 301 리다이렉트까지 도달하지 않습니다.
 
 어느 주소로 고정할지는 apex 검증 결과를 본 뒤 결정하면 됩니다:
-- apex 검증 성공 → apex 를 메인으로 유지하고 리다이렉트 불필요 (권장)
+- apex 검증 성공 → apex 를 메인으로 유지하고 리다이렉트 불필요 (권장, 현재 기본값)
 - apex 검증 실패 → 위 리다이렉트를 추가하고 www 를 메인으로
+
+## 4-1. clean path 자산 경로 (수정 완료)
+
+`/about` 같은 clean path 로 진입하면 문서 기준 상대 경로(`assets/...`)가
+`/about/assets/...` 로 해석되어 404 가 났습니다. 이 결함은 커밋 `d1cecb3` 에서
+루트 절대 경로(`/assets/...`)로 전부 교체해 해결했습니다.
+- `app/components/SiteChrome.tsx` (로고 2곳)
+- `app/pages/home.tsx` (히어로 비디오 · 포스터)
+- `app/pages/about.tsx`, `app/pages/history.tsx` (MOU 사진)
+- `public/legacy-app.js` (임원 사진 4명), `public/forge-card.js` (iOS .mov)
+
+CSS 의 `url("assets/...")` 은 **스타일시트 경로 기준**이라 정상 동작하므로
+의도적으로 그대로 두었습니다. 신규 자산 추가 시 JS/TSX 는 절대 경로,
+CSS 는 상대 경로를 쓰세요.
 
 ---
 

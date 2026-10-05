@@ -102,7 +102,7 @@ git push -u origin main
    dig +short TXT _forgedb-verify.kvcf.kr @1.1.1.1
    forgedb hosting domains verify kvcf.kr
    ```
-4. `https://kvcf.kr` 로 바로 접속됩니다. `www.kvcf.kr` 도 함께 등록해 두었습니다.
+4. `https://kvcf.kr` 로 바로 접속됩니다.
 
 메인 주소가 apex 이므로 apex → www 리다이렉트는 걸지 않습니다
 (`public/.well-known/forge-hosting.json`). 도메인 관련 값들은 이미 실제 값으로 반영돼 있습니다:
@@ -110,6 +110,16 @@ git push -u origin main
 - `public/CNAME`, `public/.well-known/forge-hosting.json` (`domain` / `NEXT_PUBLIC_SITE_DOMAIN`)
 - `public/robots.txt` · `public/sitemap.xml` (15개 URL)
 - `app/layout.tsx` 의 `metadataBase`
+
+### 2-5. 자산 경로 규칙 (clean path 대응)
+
+`/about` · `/books` 처럼 clean path 로 진입할 수 있는 구조이므로 자산을
+**루트 절대 경로**로만 참조해야 합니다.
+
+- ✅ `app/**/*.tsx` , `public/*.js` → `"/assets/..."` (절대 경로)
+- ✅ `public/*.css` 의 `url("assets/...")` → 상대 경로 (스타일시트 경로 기준이라 정상)
+
+상대 경로(`assets/...`)로 넣으면 `/about/assets/...` 로 해석되어 404 가 납니다.
 
 ---
 
@@ -202,6 +212,10 @@ select * from public.v_admin_accounts;
 
 - 해시 라우팅을 그대로 사용 중 (`/login` 같은 정적 경로가 아닌 `/#login`). 호스팅의
   `spa_fallback: "index.html"` + `clean_urls: true` 설정으로 새 정적 경로 추가 시 그대로 동작.
+  추가로 `public/legacy-head.js` 와 `app/layout.tsx` 의 인라인 라우터가 `location.pathname` 을
+  읽어 clean path(`/about`)를 해시 라우트(`/#about`)로 정규화합니다. 그 결과
+  `sitemap.xml` 의 15개 URL이 각자 올바른 페이지를 엽니다.
+  **단, 자산을 절대 경로로만 참조해야 합니다** (2-5 절). 상대 경로는 404 가 됩니다.
 - 신청/회원/문의 폼은 데모용 — 실제 운영 데이터로 취급하지 마세요.
 - `legacy-app.js` (한 줄 압축) 가 인증·관리자 핸들러를 들고 있어, 신규 코드는 가급적
   `app/` 트리에 React 컴포넌트 단위로 추가하고 `LegacyRuntime` 의 import 목록으로 주입하는 것을 권장.
