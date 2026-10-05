@@ -1,0 +1,136 @@
+/* 히어로 우측 회원 로그인 패널 — 구 그래픽 위에 얹는 오버레이.
+   #p-home .nh-art 는 position:relative 이고, 좌표 앵커(#nh-particle-globe)는
+   그대로 둔 채 그 위에 absolute 로 얹어 스크롤 씬 좌표 계산을 건드리지 않는다. */
+#p-home .nh-hero-login {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(360px, 100%);
+  box-sizing: border-box;
+  padding: 30px 30px 26px;
+  border: 1px solid rgba(176, 207, 246, .26);
+  border-radius: 14px;
+  background: rgba(9, 19, 39, .82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 24px 60px rgba(2, 6, 18, .48);
+  color: #eaf2ff;
+  font-family: 'Pretendard', system-ui, -apple-system, 'Apple SD Gothic Neo', sans-serif;
+}
+#p-home .nh-hero-login-tag {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.6px;
+  color: #8fb2e6;
+  margin-bottom: 12px;
+}
+#p-home .nh-hero-login-head h2 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 1.25;
+  color: #fff;
+  margin: 0 0 12px;
+}
+#p-home .nh-hero-login-head p {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: #c4d6f2;
+  margin: 0;
+}
+#p-home .nh-hero-login-form {
+  display: grid;
+  gap: 12px;
+  margin: 22px 0 0;
+}
+#p-home .nh-hero-login-row {
+  display: grid;
+  gap: 6px;
+}
+#p-home .nh-hero-login-row label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #a9c2e8;
+}
+#p-home .nh-hero-login-row input {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 46px;
+  padding: 0 14px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #fff;
+  background: rgba(4, 11, 26, .7);
+  border: 1px solid rgba(150, 186, 236, .34);
+  border-radius: 8px;
+}
+#p-home .nh-hero-login-row input::placeholder {
+  color: #7f95b8;
+}
+#p-home .nh-hero-login-row input:focus-visible {
+  outline: 2px solid #7ea8f0;
+  outline-offset: 1px;
+  border-color: #7ea8f0;
+}
+#p-home .nh-hero-login-submit {
+  min-height: 48px;
+  margin-top: 4px;
+  border: 0;
+  border-radius: 8px;
+  background: #356faf;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .18s;
+}
+#p-home .nh-hero-login-submit:hover { background: #4279bd; }
+#p-home .nh-hero-login-submit:focus-visible {
+  outline: 2px solid #a7c7ff;
+  outline-offset: 3px;
+}
+#p-home .nh-hero-login-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #7f95b8;
+}
+#p-home .nh-hero-login-links a {
+  color: #a9c8f5;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+#p-home .nh-hero-login-links a:hover { color: #d6e7ff; text-decoration: underline; }
+/* 관리자 진입점은 운영자용이라 회원 항목보다 조용하게, 경계선 하나로만 구분한다. */
+#p-home .nh-hero-login-links .nh-hero-login-admin {
+  color: #94a9c9;
+  border-left: 1px solid rgba(150, 186, 236, .34);
+  padding-left: 10px;
+}
+#p-home .nh-hero-login-links .nh-hero-login-admin:hover { color: #d6e7ff; }
+
+@media (max-width: 1200px) {
+  #p-home .nh-hero-login { width: min(330px, 100%); padding: 24px 24px 22px; }
+  #p-home .nh-hero-login-head h2 { font-size: 23px; }
+  #p-home .nh-hero-login-head p { font-size: 12.5px; }
+}
+@media (max-width: 900px) {
+  /* 모바일에서는 그래픽 아래로 떨어지므로 패널은 정적 흐름에 둔다. */
+  #p-home .nh-hero-login {
+    position: static;
+    transform: none;
+    width: 100%;
+    max-width: 420px;
+    margin: 22px auto 0;
+    padding: 24px 22px 20px;
+  }
+  #p-home .nh-hero-login-head h2 { font-size: 22px; }
+  #p-home .nh-hero-login-head p { font-size: 13px; }
+}

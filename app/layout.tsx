@@ -55,8 +55,9 @@ export default function RootLayout({children}:{children:React.ReactNode}) {
         <link rel="stylesheet" href="/home-readability-preview-v22.css?v=1" />
         <link rel="stylesheet" href="/hero-control-preview-v24.css?v=1" />
         <link rel="stylesheet" href="/membership-cta-preview-v38.css?v=1" />
-        <link rel="stylesheet" href="/brand-login-preview-v39.css?v=1" />
+        <link rel="stylesheet" href="/brand-login-preview-v39.css?v=2" />
         <link rel="stylesheet" href="/org-motion-preview-v40.css?v=46" />
+        <link rel="stylesheet" href="/hero-login-panel-preview-v41.css?v=1" />
         <link rel="stylesheet" href="/legacy-post.css" />
         <link rel="stylesheet" href="/member-ui-v129.css" />
         <link rel="stylesheet" href="/admin-shell.css?v=1" />

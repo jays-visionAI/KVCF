@@ -1,3 +1,5 @@
+import HeroLoginPanel from "../components/HeroLoginPanel";
+
 export default function HomePage() {
   return (
     <div className="page" id="p-home" hidden={false}>
@@ -29,6 +31,12 @@ export default function HomePage() {
               <span className={"nh-guide-br"}></span>
             </div>
             <canvas id={"nh-particle-globe"} width={560} height={560} aria-hidden={"true"}></canvas>
+            {/*
+              로그인 패널은 구 그래픽 위에 얹는 오버레이입니다. #nh-particle-globe
+              는 visibility:hidden 인 순수 좌표 앵커(스크롤 씬이 좌표를 읽습니다)라
+              손대면 안 되고, 패널도 absolute 로 그 위에 올려 앵커 크기를 바꾸지 않습니다.
+            */}
+            <HeroLoginPanel />
             <button className={"nh-motion-toggle"} type={"button"} aria-label={"그래픽 모션 일시 정지"} aria-pressed={"false"}>
               {"Ⅱ"}
             </button>
