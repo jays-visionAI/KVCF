@@ -4,7 +4,7 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';
 window.kvcfInitialRoute=(function(){
  const pages=['home','about','greeting','org','history','contact','books','cert','vca','vcp','vce','consultant','schedule','rules','edu','partners','apply','verify','member','join','signup','companies','notice','recruit','noticeview','press','library','faq','inquiry','terms','privacy','noemail','login','dashboard','profile','admin'];
  // 정적 호스팅은 없는 경로를 index.html 로 폴백시킵니다(spa_fallback).
- // 그래서 https://kvcf.kr/about 처럼 해시가 없는 clean path 로 진입하면
+ // 그래서 https://www.kvcf.kr/about 처럼 해시가 없는 clean path 로 진입하면
  // location.hash 가 빈 문자열이라 그대로 'home' 으로 떨어집니다. sitemap.xml 과
  // robots.txt 는 clean path 를 노출하므로 그 URL 은 실제 페이지가 아닌 홈을
  // 보여줍니다(소프트 404). pathname 을 해시로 옮겨 첫 페인트 전에 해결합니다.
