@@ -2,7 +2,7 @@
 
 공식 포털의 소스 코드 저장소입니다. **Next.js 16 (정적 export) + React 19** 기반이며,
 데이터/인증은 **ForgeDB** (Supabase 호환 BaaS, https://forgedb.cloud) 로 연결됩니다.
-호스팅은 **ForgeDB Static Hosting** 으로, 도메인은 `kvcf.kr` (가비아, apex) 으로 연결됩니다.
+호스팅은 **ForgeDB Static Hosting** 으로, 도메인은 `www.kvcf.kr` (가비아 구매 `kvcf.kr` 의 www) 로 연결되어 있습니다.
 도메인 연결 절차는 **[`forgedb/DOMAIN_SETUP.md`](forgedb/DOMAIN_SETUP.md)** 를 보세요.
 
 > 본 저장소는 **새 GitHub 리포**에서 시작하는 마이그레이션 결과물입니다. 정적 HTML 프로토타입
@@ -82,7 +82,23 @@ git push -u origin main
 
 배포가 끝나면 `https://kvcf-jt1bd3.forgedb.app` (호스트 슬러그 기반) 로 즉시 접속됩니다.
 
-### 2-4. 커스텀 도메인 연결 — `kvcf.kr` (apex)
+### 2-4. 커스텀 도메인 연결 — `www.kvcf.kr` (현재 활성 주소)
+
+**현재 사이트 주소는 `https://www.kvcf.kr` 입니다.** CNAME + TXT 검증이
+통과했고 Let's Encrypt SSL 이 발급되어 200 으로 서빙됩니다.
+SEO 표면(`public/CNAME` · `robots.txt` · `sitemap.xml` · `metadataBase`)도
+전부 이 주소로 통일돼 있습니다.
+
+```
+CNAME   www                 →   kvcf-jt1bd3.forgedb.app
+TXT     _forgedb-verify.www →   61c7fe8ef95147b1bfe3b2556cc43cac
+```
+
+> apex `kvcf.kr` 는 아직 가비아에 A 레코드가 없어 DNS 에서 해석되지 않습니다
+> (`https://kvcf.kr` → `Could not resolve host`). apex 를 메인으로 전환하는
+> 절차와 실측 근거는 [`forgedb/DOMAIN_SETUP.md`](forgedb/DOMAIN_SETUP.md) 를 보세요.
+
+### 2-4-1. apex `kvcf.kr` 를 메인으로 전환하려면 (선택)
 
 `kvcf.kr` 은 apex(루트) 도메인이라 DNS 표준상 CNAME 을 걸 수 없습니다.
 그래서 **엣지 IP 로 A 레코드를 직접 걸고**, TXT 검증으로 소유권을 확인합니다.
@@ -101,19 +117,19 @@ apex 용 SSL 은 검증 통과 후 자동 발급됩니다.
    - TXT 는 `.kr` 을 빼고 `_forgedb-verify` 만 입력합니다.
    - ⚠️ A 레코드를 빠뜨리면 apex 가 DNS 에서 사라져 `https://kvcf.kr` 이
      `Could not resolve host` 로 열리지 않습니다. **둘 다 반드시 넣으세요.**
+   - ⚠️ `www` 의 CNAME·TXT 레코드는 삭제하지 마세요. www → apex 301 리다이렉트에 필요합니다.
 3. 전파 후 소유권 검증 + 자동 SSL 발급:
    ```bash
    dig +short A   kvcf.kr                 @1.1.1.1   # → 157.180.84.28
    dig +short TXT _forgedb-verify.kvcf.kr @1.1.1.1
    forgedb hosting domains verify kvcf.kr
+   forgedb hosting status                  # → kvcf.kr  DNS verified  SSL: active
    ```
-4. `https://kvcf.kr` 로 바로 접속됩니다.
+4. SSL 이 `active` 가 된 **다음에** SEO 표면을 apex 로 되돌리고,
+   `forge-hosting.json` 의 `redirects` 에 www → apex 301 을 추가합니다.
+   되돌려야 할 파일 5곳은 `forgedb/DOMAIN_SETUP.md` §4 에 정리돼 있습니다.
 
-보조 경로인 `www.kvcf.kr` 는 CNAME(`kvcf-jt1bd3.forgedb.app`) + TXT 로
-**이미 연결·검증·SSL 발급이 완료**되어 `https://www.kvcf.kr` 로 접속됩니다.
-
-메인 주소가 apex 이므로 apex → www 리다이렉트는 걸지 않습니다
-(`public/.well-known/forge-hosting.json`). 도메인 관련 값들은 이미 실제 값으로 반영돼 있습니다:
+도메인 관련 값은 이미 실제 값(`www.kvcf.kr`)으로 반영돼 있습니다:
 
 - `public/CNAME`, `public/.well-known/forge-hosting.json` (`domain` / `NEXT_PUBLIC_SITE_DOMAIN`)
 - `public/robots.txt` · `public/sitemap.xml` (15개 URL)

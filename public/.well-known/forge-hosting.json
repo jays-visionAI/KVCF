@@ -1,6 +1,6 @@
 {
   "host": "kvcf-jt1bd3",
-  "domain": "kvcf.kr",
+  "domain": "www.kvcf.kr",
   "branch": "main",
   "build_command": "npm run build",
   "output_dir": "out",
@@ -37,6 +37,6 @@
   "environment": {
     "NEXT_PUBLIC_FORGEDB_URL": "https://forgedb.cloud",
     "NEXT_PUBLIC_FORGEDB_PROJECT_ID": "kvcf-jt1bd3",
-    "NEXT_PUBLIC_SITE_DOMAIN": "kvcf.kr"
+    "NEXT_PUBLIC_SITE_DOMAIN": "www.kvcf.kr"
   }
 }

@@ -4,4 +4,4 @@ Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /profile/
 
-Sitemap: https://kvcf.kr/sitemap.xml
+Sitemap: https://www.kvcf.kr/sitemap.xml
